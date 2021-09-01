@@ -1,11 +1,5 @@
 import * as api from '../Api/prenotazioni';
 
-//Nuova Prenotazione
-export const newBooking = (userData) => (dispatch) => {
-        dispatch({type:'SET_BOOKING', payload: userData});
-        window.location.href="/SceltaVeicolo"
-}
-
 //Lista Veicoli
 export const listVehicle = (userData) => async (dispatch) => {
         await api.getListVehicle(userData).then((res)=>{
@@ -43,16 +37,26 @@ export const getPrenotazioniCliente = (userData) => async (dispatch) => {
 
 //Add prenotazione
 export const addPrenotazione = (userData) => async (dispatch) => {
-        if(userData.autista==true){
+        
             await api.addPrenotazione(userData).then((res)=>{
-            dispatch({type:'SET_BOOKING', payload:""});
-            window.location.href="/HomePage"
-            })
-        }
+                dispatch({type:'SET_BOOKING', payload:""});
+                if(userData.autista==true){
+                        window.location.href="/HomePage"
+                }else {
+                        console.log(res.data)
+                }
+        })
+         
 }
 
-//Utilizzato per settare le informazioni aggiunti sulla nuova prenotazione
+//Nuova Prenotazione
 export const newInformation = (userData) => (dispatch) => {
         dispatch({type:'SET_BOOKING', payload: userData});
-        window.location.href="/SceltaParcheggi"
+}
+
+//Get Tariffe
+export const getTariffe = (userData) => async (dispatch) => {
+        await api.getTariffe(userData).then((res)=>{
+                dispatch({type:"SET_RATE", payload: res.data});
+        }).catch((err)=>{console.log(err.message)})
 }

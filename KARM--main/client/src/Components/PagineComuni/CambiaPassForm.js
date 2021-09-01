@@ -72,7 +72,7 @@ function CambiaPassForm (){
                 <form onSubmit={onSubmit}>
                     <br/>
                     <Row>
-                        <Button type="submit" variant="success">
+                        <Button type="submit" size="lg" variant="success">
                             Conferma
                         </Button>{' '}
                     </Row>
@@ -100,7 +100,7 @@ function CambiaPassForm (){
                         <br/><br/>
                     </Row>
                     <Row>
-                        <Button type="submit" variant="success">
+                        <Button type="submit" size="lg" variant="success">
                             Conferma
                         </Button>{' '}
                     </Row>

@@ -93,7 +93,7 @@ function AggiornaPatForm (){
                 <form onSubmit={onSubmit}>
                 <br/>
                     <Row>
-                        <Button type="submit" variant="success">Conferma</Button>{' '}         
+                        <Button type="submit" size="lg" variant="success">Conferma</Button>{' '}         
                     </Row>
                     <br/>
                     <Row>
@@ -131,7 +131,7 @@ function AggiornaPatForm (){
                     </Row>
 
                     <Row>
-                        <Button type="submit" variant="success">Conferma</Button>{' '}         
+                        <Button type="submit" size="lg" variant="success">Conferma</Button>{' '}         
                         <br/>
                     </Row>
                     <br/>    

@@ -25,12 +25,19 @@ function SchermataParcheggioAssociato (){
     },[])
     
     return (
-        <Container style={{marginTop:"20px"}}>
+        <Container className="container parch" style={{marginTop:"20px"}}>
             <div>
                 <br/>
+
                     <form onSubmit={onSubmit}>
-                        <fieldset>
-                            <legend>Seleziona il nuovo parcheggio in cui lavori</legend>
+                            <Row>
+                                <Button variant="secondary" size="lg" type="submit">
+                                    Avanti
+                                </Button>
+                            </Row><br/>
+
+                            <h3>Seleziona il nuovo parcheggio in cui lavori</h3>
+
                             <Row>
                                 <br/>
                                 <select type="text" id="parcheggio" name="parcheggio" onChange={(e)=>setParcheggioID(e.target.value)} title="Seleziona il parcheggio in cui lavori"> <br/>
@@ -44,12 +51,12 @@ function SchermataParcheggioAssociato (){
                                 <br/><br/>
                             </Row>
                             <Row>
-                                <Button type="submit">
+                                <Button variant="secondary" size="lg" type="submit">
                                     Avanti
                                 </Button>
                             </Row>
+
                             <br/><br/>
-                        </fieldset>
                     </form>
             </div>
         </Container>

@@ -153,6 +153,12 @@ function SchermataMetodiPag (){
                     </Modal.Body>
                 </Modal>
 
+                <Row style={{marginTop:"20px"}}>
+                    <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
+                        Inserisci Nuovo Metodo di Pagamento
+                    </Button>
+                </Row>
+                
                 <br/>
                 <h5>Metodi di Pagamento</h5>
                 <br/>
@@ -192,11 +198,9 @@ function SchermataMetodiPag (){
                 </Row>
 
                 <Row style={{marginTop:"20px"}}>
-                    <Col style={{display:"flex", justifyContent:"end"}}>
-                        <Button variant="secondary" onClick={()=>setShow(true)}>
-                            Inserisci Nuovo Metodo di Pagamento
-                        </Button>
-                    </Col>
+                    <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
+                        Inserisci Nuovo Metodo di Pagamento
+                    </Button>
                 </Row>
                 <br/>
             </Container>

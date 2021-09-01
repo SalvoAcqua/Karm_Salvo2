@@ -23,15 +23,14 @@ function SchermataVisualizzaDipendenti () {
     
     return(
         <div>
-            <Container style={{marginTop:"20px"}}>
-                
+            <Container className="container pag" style={{marginTop:"20px"}}>
                 <Modal show={confermaEliminazione.show} onHide={()=>setConfermaEliminazione({...confermaEliminazione, show:false})} centered backdrop="static">
                     <Modal.Header >
                              <Modal.Title>Sei sicuro di voler eliminare questo dipendente?</Modal.Title>
                     </Modal.Header>
                     <ModalBody>
                             <Row>
-                                <div style={{backgroundColor:"deepskyblue", border:"1px dotted", marginBottom:"10px"}}>
+                                <div style={{ background: "white", border:"1px dotted", marginBottom:"10px"}}>
                                     <span>{confermaEliminazione.dipendente.ruolo} : {confermaEliminazione.dipendente.nome} {confermaEliminazione.dipendente.cognome}</span> <br/>
                                     <span>Codice Fiscale : {confermaEliminazione.dipendente.CF}</span>
                                 </div>
@@ -54,14 +53,16 @@ function SchermataVisualizzaDipendenti () {
                             </Row>
                     </ModalBody>
                 </Modal>
+
+                <br/>
+                <h3>Dipendenti</h3>
                 
                 <Row  style={{marginTop:"20px"}}>
-                    <Col style={{display:"flex", justifyContent:"end"}}>
-                        <Button href="/InserisciDipendente">
-                            Inserisci dipendente
-                        </Button>
-                    </Col>
+                    <Button variant="secondary" size="lg" href="/InserisciDipendente">
+                        Inserisci dipendente
+                    </Button>
                 </Row>
+                <br/>
                 <Row>
                     <Col> 
                         <Table striped bordered hover size="sm" responsive>
@@ -99,7 +100,7 @@ function SchermataVisualizzaDipendenti () {
                                     <td>{dipendente.nomeParcheggio==undefined ? "//" : dipendente.nomeParcheggio}</td>
                                     <td>{dipendente.email}</td>
                                     <td>
-                                        <Button onClick={()=>setConfermaEliminazione({...confermaEliminazione, show:true, dipendente:dipendente})}>
+                                        <Button variant="secondary" onClick={()=>setConfermaEliminazione({...confermaEliminazione, show:true, dipendente:dipendente})}>
                                             <DeleteIcon/>
                                         </Button>
                                     </td>
@@ -108,6 +109,12 @@ function SchermataVisualizzaDipendenti () {
                         </tbody>
                         </Table>
                     </Col>
+                </Row>
+
+                <Row  style={{marginTop:"20px"}}>
+                    <Button variant="secondary" size="lg" href="/InserisciDipendente">
+                        Inserisci dipendente
+                    </Button>
                 </Row>
             </Container>
         </div>

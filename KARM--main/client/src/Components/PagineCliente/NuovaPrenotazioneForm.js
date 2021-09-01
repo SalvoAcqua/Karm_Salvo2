@@ -2,7 +2,7 @@ import React from "react";
 import {Container,Row,Col, Button} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {newBooking} from '../../Actions/prenotazioni';
+import {newInformation} from '../../Actions/prenotazioni';
 import classnames from "classnames";
 import {convertiData, getOra, emptyDate} from '../gestioneDateTime';
 
@@ -35,7 +35,8 @@ function NuovaPrenotazioneForm (){
             setErrDataPartenza({...errDataPartenza,val:true,mess:"Puoi richiedere la presenza di un autista inserendo una data di partenza distante almeno 3gg dalla data attuale"});
         }else if(!errTipoVeicolo && !errDataPartenza.val && !errDataArrivo.val && !errOraPartenza.val &&
             !errOraArrivo.val && !altriErrori.indirizzoPa && !altriErrori.indirizzoArr && !altriErrori.disp) {
-                dispatch(newBooking(prenotazione));
+                dispatch(newInformation(prenotazione));
+                window.location.href="/SceltaVeicolo"
         }
     }
 
@@ -258,7 +259,7 @@ function NuovaPrenotazioneForm (){
                     <h5> Inserisci i dati per la tua nuova prenotazione </h5>
                     <Row>
                         <fieldset className="fieldstyle">
-                            <legend>Tipologia Veicolo:</legend>
+                            <legend class="h4">Tipologia Veicolo:</legend>
                             <select type="text" id="tipoVeicolo" name="tipoVeicolo" onChange={(e)=>setPrenotazione({...prenotazione,tipoVeicolo: e.target.value})} title="Scegli il tipo di veicolo da noleggiare" required>
                                 <option value="" disabled selected>Tipo veicolo</option>
                                 <option value="Autovettura">Autovettura</option>
@@ -272,9 +273,9 @@ function NuovaPrenotazioneForm (){
                     <br/>
                     <Row>
                         <fieldset className="fieldstyle">
-                            <legend>Partenza: </legend>
+                            <legend class="h4">Partenza: </legend>
                             <label htmlFor="indirizzoPa">Indirizzo: </label> <br/>
-                            <input type="text" id="indirizzoPa" name="indirizzoPa" onChange={(e)=>setPrenotazione({...prenotazione,indirizzoPa: e.target.value})} placeholder="Via Rossi, 25" title="Inserisci un indirizzo di partenza" required /> <br/>
+                            <input type="text" id="indirizzoPa" name="indirizzoPa" size="30" onChange={(e)=>setPrenotazione({...prenotazione,indirizzoPa: e.target.value})} placeholder="Via Rossi, 25" title="Inserisci un indirizzo di partenza" required /> <br/>
                             <span className={classnames({'green-convalid':!altriErrori.indirizzoPa, 'red-convalid':altriErrori.indirizzoPa})}> {altriErrori.indirizzoPa ? "Inserisci un indirizzo di partenza" : "OK"} </span>
                             <br/>
                         
@@ -292,9 +293,9 @@ function NuovaPrenotazioneForm (){
                     <br/>
                     <Row>
                         <fieldset className="fieldstyle">
-                            <legend>Arrivo: </legend>
+                            <legend class="h4">Arrivo: </legend>
                             <label htmlFor="indirizzoArr">Indirizzo: </label> <br/>
-                            <input type="text" id="indirizzoArr" name="indirizzoArr" onChange={(e)=>setPrenotazione({...prenotazione,indirizzoArr: e.target.value})} placeholder="Via Rossi, 25" title="Inserisci un indirizzo d'arrivo" required /> <br/>
+                            <input type="text" id="indirizzoArr" name="indirizzoArr" size="30" onChange={(e)=>setPrenotazione({...prenotazione,indirizzoArr: e.target.value})} placeholder="Via Rossi, 25" title="Inserisci un indirizzo d'arrivo" required /> <br/>
                             <span className={classnames({'green-convalid':!altriErrori.indirizzoArr, 'red-convalid':altriErrori.indirizzoArr})}> {altriErrori.indirizzoArr ? "Inserisci un indirizzo d'arrivo" : "OK"} </span>
                             <br/>
                         

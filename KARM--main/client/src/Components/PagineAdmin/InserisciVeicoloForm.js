@@ -87,7 +87,7 @@ function InserisciVeicoloForm (){
                     } else if (element.getElementsByTagName("select").length!=0) {
                         var select=element.getElementsByTagName("select")[0];
                         select.removeAttribute("selected");
-                        document.getElementById("preselected").selected=true;
+                        select.options[0].selected=true;
                     }
                 }
                 break;
@@ -101,7 +101,7 @@ function InserisciVeicoloForm (){
                     } else if (element.getElementsByTagName("select").length!=0) {
                         var select=element.getElementsByTagName("select")[0];
                         select.removeAttribute("selected");
-                        document.getElementById("preselected").selected=true;
+                        select.options[0].selected=true;
                     }
                 }
                 for (var element of document.getElementsByClassName("biciMono")){
@@ -122,7 +122,7 @@ function InserisciVeicoloForm (){
                     } else if (element.getElementsByTagName("select").length!=0) {
                         var select=element.getElementsByTagName("select")[0];
                         select.removeAttribute("selected");
-                        document.getElementById("preselected").selected=true;
+                        select.options[0].selected=true;
                     }
                 }
                 for (var element of document.getElementsByClassName("moto")){
@@ -262,11 +262,18 @@ function InserisciVeicoloForm (){
 
     return (
         <div>
-           <Container>
-                <h1> Inserisci i dati per la registrazione del nuovo veicolo </h1>
+           <Container class="container">
+                <br/>
+                <h5> Inserisci i dati per la registrazione del nuovo veicolo </h5>
+                <br/>
+
                 <form onSubmit={onSubmit}>
+                    <Row>
+                        <Button type="submit" variant="success" size="lg" >Avanti</Button>{' '}
+                    </Row>
+                    <br/>
                     <fieldset className="fieldstyle">
-                        <legend>Tipologia Veicolo:</legend>
+                        <legend class="h4">Tipologia Veicolo:</legend>
                         <select type="text" id="tipo" name="tipo" onChange={(e)=>setVeicolo({...veicolo,tipo: e.target.value})} title="Seleziona il tipo di veicolo" >
                             <option value="" disabled selected>Tipo veicolo</option>
                             <option value="Autovettura">Autovettura</option>
@@ -277,93 +284,96 @@ function InserisciVeicoloForm (){
                         <span className={classnames({'green-convalid':!errTipoVeicolo, 'red-convalid':errTipoVeicolo})}> {errTipoVeicolo? "Seleziona il tipo di veicolo" : "OK"} </span>
                         <br/>
                     </fieldset>
-                    <br/><br/>
+                    <br/>
                     <fieldset className="fieldstyle">
-                        <legend>Inserisci i dati: </legend>
+                        <legend class="h4">Inserisci i dati: </legend>
                         <div class="auto moto">
                             <label htmlFor="modello">Modello: </label> <br/>
                             <select type="text" id="modello" name="modello" onChange={(e)=>setVeicolo({...veicolo,modello: e.target.value})} title="Inserisci il modello del veicolo" > 
-                            <option value="" id="preselected" disabled selected>Modello</option>
-                            <option value="Sportiva">Sportiva</option>
-                            <option value="Lusso">Lusso</option>
-                            <option value="Classica">Classica</option>
-                            <option value="Altro">Altro</option>
+                                <option value="" disabled selected>Modello</option>
+                                <option value="Sportiva">Sportiva</option>
+                                <option value="Lusso">Lusso</option>
+                                <option value="Classica">Classica</option>
+                                <option value="Altro">Altro</option>
                             </select><br/>
                             <span className={classnames({'green-convalid':!errModello, 'red-convalid':errModello})}> {errModello ? "Inserisci il modello del veicolo" : "OK"} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
 
                         <div class="auto moto">
                             <label htmlFor="marca">Marca: </label> <br/>
-                            <input type="text" id="marca" name="marca" onChange={(e)=>setVeicolo({...veicolo,marca: e.target.value})} title="Inserisci la marca del veicolo" /> <br/>
+                            <input type="text" id="marca" name="marca" size="30" onChange={(e)=>setVeicolo({...veicolo,marca: e.target.value})} title="Inserisci la marca del veicolo" /> <br/>
                             <span className={classnames({'green-convalid':!errMarca, 'red-convalid':errMarca})}> {errMarca ? "Inserisci la marca del veicolo" : "OK"} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
 
                         <div class="auto moto">
                             <label htmlFor="cilindrata">Cilindrata: </label> <br/>
-                            <input type="number" id="cilindrata" name="cilindrata" onChange={(e)=>setVeicolo({...veicolo,cilindrata: e.target.value})} title="Inserisci la cilindrata del veicolo" min="0"  /> <br/>
+                            <input type="number" id="cilindrata" name="cilindrata" size="30" onChange={(e)=>setVeicolo({...veicolo,cilindrata: e.target.value})} title="Inserisci la cilindrata del veicolo" min="0"  /> <br/>
                             <span className={classnames({'green-convalid':!errCilindrata, 'red-convalid':errCilindrata})}> {errCilindrata && veicolo.cilindrata=="" ? "Inserisci la cilindrata del veicolo" : (errCilindrata ? "Non puoi inserire una cilindrata minore di 0" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                         
                         <div class="auto">
                             <label htmlFor="nPosti">Numero di posti: </label> <br/>
-                            <input type="number" id="nPosti" name="nPosti" onChange={(e)=>setVeicolo({...veicolo,posti: e.target.value})} title="Inserisci il numero di posti del veicolo" min="2" max="9"  />  <br/>
+                            <input type="number" id="nPosti" name="nPosti" size="30" onChange={(e)=>setVeicolo({...veicolo,posti: e.target.value})} title="Inserisci il numero di posti del veicolo" min="2" max="9"  />  <br/>
                             <span className={classnames({'green-convalid':!errNPosti, 'red-convalid':errNPosti})}> {errNPosti && veicolo.posti=="" ? "Inserisci il numero di posti del veicolo" : (errNPosti ? "Non puoi inserire un valore minore di 2 o maggiore di 9" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                         
                         <div class="auto">
                             <label htmlFor="nPorte">Numero di porte: </label> <br/>
-                            <input type="number" id="nPorte" name="nPorte" onChange={(e)=>setVeicolo({...veicolo,porte: e.target.value})} title="Inserisci il numero di porte del veicolo" min="3" max="7"  /> <br/>
+                            <input type="number" id="nPorte" name="nPorte" size="30" onChange={(e)=>setVeicolo({...veicolo,porte: e.target.value})} title="Inserisci il numero di porte del veicolo" min="3" max="7"  /> <br/>
                             <span className={classnames({'green-convalid':!errNPorte, 'red-convalid':errNPorte})}> {errNPorte && veicolo.porte=="" ? "Inserisci il numero di porte del veicolo" : (errNPorte ? "Non puoi inserire un valore minore di 3 o maggiore di 7" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                         
                         <div class="auto moto">
                             <label htmlFor="targa">Targa: </label> <br/>
-                            <input type="text" id="targa" name="targa" onChange={(e)=>setVeicolo({...veicolo,targa: e.target.value.toUpperCase()})} title="Inserisci la targa del veicolo" pattern="^[A-Z]{2}[\d]{3}[A-Z]{2}$" placeholder="AA000AA"  /> <br/>
+                            <input type="text" id="targa" name="targa" size="30" onChange={(e)=>setVeicolo({...veicolo,targa: e.target.value.toUpperCase()})} title="Inserisci la targa del veicolo" pattern="^[A-Z]{2}[\d]{3}[A-Z]{2}$" placeholder="AA000AA"  /> <br/>
                             <span className={classnames({'green-convalid':!errTarga, 'red-convalid':errTarga})}> {errTarga && veicolo.targa=="" ? "Inserisci la targa del veicolo" : (errTarga ? "Devi inserire 2 lettere, seguite da 3 cifre e infine altre 2 lettere" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                         
                         <div class="auto moto biciMono">
                             <label htmlFor="parcAssociato">Parcheggio Associato: </label> <br/>
                             <select type="text" id="parcAssociato" name="parcAssociato" onChange={(e)=>setVeicolo({...veicolo,parcAssociato: e.target.value})} title="Inserisci il parcheggio in cui si trova il veicolo" > 
-                                <option value="" id="preselected" disabled selected>Nome Parcheggio</option>
+                                <option value="" disabled selected>Nome Parcheggio</option>
                                 {listaParcheggiDisp.length==0 ? <option value="-1" disabled>Nessun parcheggio disponibile</option> :
                                 listaParcheggiDisp.map((parcheggio)=>
                                     <option value={parcheggio._id}>{parcheggio.nome}-{parcheggio.indirizzo},{parcheggio.nCivico}</option>
                                 )}
                             </select><br/>
                             <span className={classnames({'green-convalid':!errParcAssociato, 'red-convalid':errParcAssociato})}> {errParcAssociato ? "Inserisci il parcheggio in cui si trova il veicolo" : "OK"} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                         
                         <div class="auto moto biciMono">
                             <label htmlFor="descrizione">Descrizione: </label> <br/>
-                            <textarea type="text" id="descrizione" name="descrizione" onChange={(e)=>setVeicolo({...veicolo,descrizione: e.target.value})} title="Inserisci una breve descrizione per il veicolo"  /> <br/>
+                            <textarea type="text" id="descrizione" name="descrizione" size="30" onChange={(e)=>setVeicolo({...veicolo,descrizione: e.target.value})} title="Inserisci una breve descrizione per il veicolo"  /> <br/>
                             <span className={classnames({'green-convalid':!errDescrizione, 'red-convalid':errDescrizione})}> {errDescrizione ? "Inserisci una breve descrizione per il veicolo" : "OK"} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
 
                         <div class="auto moto biciMono">
                             <label htmlFor="prFestivo">Prezzo Festivo: </label> <br/>
-                            <input type="number" id="prFestivo" name="prFestivo" onChange={(e)=>setVeicolo({...veicolo,prFestivo: e.target.value})} title="Inserisci il prezzo del veicolo nei giorni festivi" min="0"  /> <br/>
+                            <input type="number" id="prFestivo" name="prFestivo" size="30" onChange={(e)=>setVeicolo({...veicolo,prFestivo: e.target.value})} title="Inserisci il prezzo del veicolo nei giorni festivi" min="0"  /> <br/>
                             <span className={classnames({'green-convalid':!errPrFestivo, 'red-convalid':errPrFestivo})}> {errPrFestivo && veicolo.prFestivo=="" ? "Inserisci il prezzo del veicolo nei giorni festivi" : (errPrFestivo ? "Non puoi inserire un prezzo minore di 0" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
 
                         <div class="auto moto biciMono">
                             <label htmlFor="prFeriale">Prezzo Feriale: </label> <br/>
-                            <input type="number" id="prFeriale" name="prFeriale" onChange={(e)=>setVeicolo({...veicolo,prFeriale: e.target.value})} title="Inserisci il prezzo del veicolo nei giorni feriali" min="0"  /> <br/>
+                            <input type="number" id="prFeriale" name="prFeriale" size="30" onChange={(e)=>setVeicolo({...veicolo,prFeriale: e.target.value})} title="Inserisci il prezzo del veicolo nei giorni feriali" min="0"  /> <br/>
                             <span className={classnames({'green-convalid':!errPrFeriale, 'red-convalid':errPrFeriale})}> {errPrFeriale && veicolo.prFeriale=="" ? "Inserisci il prezzo del veicolo nei giorni feriali" : (errPrFeriale ? "Non puoi inserire un prezzo minore di 0" : "OK")} </span>
-                            <br/><br/>
+                            <br/>
                         </div>
                     </fieldset>
                     <br/><br/>
-                    <Button type="submit" variant="success" >Avanti</Button>{' '}
+                    <Row>
+                    <Button type="submit" variant="success" size="lg"> Avanti </Button>{' '}
+                </Row>
+                <br/>
                 </form>
             </Container>
         </div>

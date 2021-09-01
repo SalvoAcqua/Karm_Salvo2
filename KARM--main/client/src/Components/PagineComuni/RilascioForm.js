@@ -1,87 +1,168 @@
 import React from "react";
-import {Container,Row,Col, Button} from "react-bootstrap";
+import {Container,Row,Col,Button,Alert,Modal,ModalBody} from "react-bootstrap";
 import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {getListaParcheggiDisp} from '../../Actions/corsa';
+import {useDispatch, useSelector} from 'react-redux';
+import {pagamentoAggiuntivo, assegnaLuogo, completaRilascio} from '../../Actions/corsa';
+import {getListaParcheggi} from '../../Actions/admin';
+import {getTariffe} from '../../Actions/prenotazioni';
 import classnames from "classnames";
 
 function RilascioForm (){
-    const [rilascio,setRilascio] = useState({email:'',codVeicolo:'',integrita:'',luogo:''});
-    const [errRilascio,setErrRilascio] = useState({email:false,codVeicolo:false,integrita:false,luogo:false});
+    const [visibility,setVisibility] = useState({alert:false, modalCalcola:false, modalRiepilogo:false});
+    const [rilascio,setRilascio] = useState({codPrenotazione:'',integrita:'',luogoInd:'',luogoParch:''});
+    const [importo,setImporto] = useState('');
+    const [errCodice,setErrCodice] = useState(true);
+    const [errIntegrita,setErrIntegrita] = useState(true);
+    const [errInd,setErrInd] = useState(true);
+    const [errParch,setErrParch] = useState(true);
+    const prenotazioneInCorso = useSelector((state)=>state.PrenotazioneInCorso.corsa);
+    const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
+    const tariffe = useSelector ((state)=>state.Prenotazioni.tariffe);
     const dispatch = useDispatch();
     
     const onSubmit = (event) => {
         event.preventDefault();
+        if (!errCodice && !errIntegrita && !errInd && !errParch) {
+            if(prenotazioneInCorso._id==rilascio.codPrenotazione) {
+                setVisibility({...visibility, modalCalcola: true});
+            } else {
+                setVisibility({...visibility, alert: true});
+            }
+        }
     }
 
-    useEffect(()=>{
-        if(rilascio.email==""){
-            setErrRilascio({...errRilascio, email:true});
-            document.getElementById("email").style.borderColor="red";
-        }else{
-            setErrRilascio({...errRilascio, email:false});
-            document.getElementById("email").style.borderColor="green";
+    const clickPagamento = () => {
+        setVisibility({...visibility,modalCalcola:false});
+        dispatch(getTariffe(prenotazioneInCorso));
+        let sovrapprezzo="";
+        switch (rilascio.integrita) {
+            case "0":
+                setImporto('0');
+                break;
+            case "1":
+                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
+                setImporto(sovrapprezzo);
+                break;
+            case "2":
+                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
+                setImporto(sovrapprezzo);
+                break;
+            default:
+                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
+                setImporto(sovrapprezzo);
+                break;
         }
-    },[rilascio.email]);
+        const Dati = {importo: importo, prenotazione: prenotazioneInCorso};
+        dispatch(pagamentoAggiuntivo(Dati)); //ritira i soldi dalla carta di credito
+        setVisibility({...visibility,modalRiepilogo:true});
+    }
 
+    const clickConferma = () => {
+        let Dati = {idVeicolo: prenotazioneInCorso.idVeicolo, parch: rilascio.luogoParch, ind: rilascio.luogoInd};
+        dispatch(assegnaLuogo(Dati));
+        dispatch(completaRilascio(prenotazioneInCorso));
+    }
+
+    useEffect(()=>{    
+        dispatch(getListaParcheggi());
+    },[]);
+    
     useEffect(()=>{
-        if(rilascio.codVeicolo==""){
-            setErrRilascio({...errRilascio, codVeicolo:true});
-            document.getElementById("codVeicolo").style.borderColor="red";
+        if(rilascio.codPrenotazione==""){
+            setErrCodice(true);
+            document.getElementById("codPrenotazione").style.borderColor="red";
         }else{
-            setErrRilascio({...errRilascio, codVeicolo:false});
-            document.getElementById("codVeicolo").style.borderColor="green";
+            setErrCodice(false);
+            document.getElementById("codPrenotazione").style.borderColor="green";
         }
-    },[rilascio.codVeicolo]);
+    },[rilascio.codPrenotazione]);
 
     useEffect(()=>{
         if(rilascio.integrita==""){
-            setErrRilascio({...errRilascio, integrita:true});
+            setErrIntegrita(true);
             document.getElementById("integrita").style.borderColor="red";
         }else{
-            setErrRilascio({...errRilascio, integrita:false});
+            setErrIntegrita(false);
             document.getElementById("integrita").style.borderColor="green";
         }
     },[rilascio.integrita]);
 
     useEffect(()=>{
-        if(rilascio.luogo==""){
-            setErrRilascio({...errRilascio, luogo:true});
-            document.getElementById("luogo").style.borderColor="red";
-        }else{
-            setErrRilascio({...errRilascio, luogo:false});
-            document.getElementById("luogo").style.borderColor="green";
+        if((rilascio.luogoParch=="" && rilascio.luogoInd=="")||(rilascio.luogoParch!="" && rilascio.luogoInd!="")){
+            setErrInd(true);
+            setErrParch(true);
+            document.getElementById("luogoParch").style.borderColor="red";
+            document.getElementById("luogoInd").style.borderColor="red";
+        }else {
+            setErrInd(false);
+            setErrParch(false);
+            document.getElementById("luogoParch").style.borderColor="green";
+            document.getElementById("luogoInd").style.borderColor="green";
         }
-    },[rilascio.luogo]);
+    },[rilascio.luogoInd, rilascio.luogoParch]);
 
 
     return (
         <div>
            <Container>
+                <Modal show={visibility.modalCalcola} centered backdrop="static">
+                    <ModalBody>
+                        <Button onClick={()=>clickPagamento()}>Calcola pagamento aggiuntivo</Button>
+                    </ModalBody>
+                </Modal>
+                <Modal show={visibility.modalRiepilogo} centered backdrop="static">
+                    <Modal.Header> Pagamento avvenuto con successo </Modal.Header>
+                    <ModalBody>
+                        <Row>
+                            <p>Sono stati prelevati {importo}€ dalla carta di credito {prenotazioneInCorso._id} a causa dei danni provocati al veicolo</p>
+                        </Row>
+                        <Row>
+                            <Button onClick={()=>clickConferma()}>Conferma</Button>
+                        </Row>
+                    </ModalBody>
+                </Modal>
+                <Alert show={visibility.alert} variant="danger">
+                    <Alert.Heading>Errore!</Alert.Heading>
+                    <p>
+                        Il codice inserito non risulta essere il codice di una prenotazione in corso
+                    </p>
+                </Alert>
                 <h1> Rilascia il veicolo: </h1>
                 <form onSubmit={onSubmit}>
-                    <label htmlFor="email"> Email: </label> <br/>
-                    <input type="email" id="email" name="email" onChange={(e)=>setRilascio({...rilascio,email: e.target.value})} title="Inserisci l'email del cliente" required/>
-                    <br/>
-
-                    <label htmlFor="codVeicolo"> Codice Identificativo del veicolo:</label> <br/>
-                    <input type="text" id="codVeicolo" name="codVeicolo" onChange={(e)=>setRilascio({...rilascio,codVeicolo: e.target.value})} title="Inserisci il codice identificativo del veicolo" required/>
-                    <br/>
+                    <label htmlFor="codPrenotazione"> Codice Identificativo della prenotazione:</label> <br/>
+                    <input type="text" id="codPrenotazione" name="codPrenotazione" onChange={(e)=>setRilascio({...rilascio,codPrenotazione: e.target.value})} title="Inserisci il codice identificativo della prenotazione" required/> <br/>
+                    <span className={classnames({'green-convalid':!errCodice, 'red-convalid':errCodice})}> {errCodice ? "Inserisci il codice identificativo della prenotazione" : "OK"} </span>
+                    <br/><br/>
 
                     <label htmlFor="integrita"> Integrità del veicolo: </label> <br/>
                     <select type="text" id="integrita" name="integrita" onChange={(e)=>setRilascio({...rilascio,integrita: e.target.value})} title="Seleziona il grado di integrità del veicolo" required> 
-                        <option value="" id="preselected" disabled selected>Integrità</option>
-                        <option value="aaa">aaa</option>
-                        <option value="bbb">bbb</option>
-                        <option value="ccc">ccc</option>
-                        <option value="ddd">ddd</option>
+                        <option value="" disabled selected>Integrità</option>
+                        <option value="0">0 - Nessun danno</option>
+                        <option value="1">1 - Danni poco rilevanti</option>
+                        <option value="2">2 - Danni moderati</option>
+                        <option value="3">3 - Danni importanti</option>
                     </select><br/>
+                    <span className={classnames({'green-convalid':!errIntegrita, 'red-convalid':errIntegrita})}> {errIntegrita ? "Seleziona il grado di integrità del veicolo" : "OK"} </span>
+                    <br/><br/>
 
-                    <label htmlFor="luogo"> Luogo: </label> <br/>
-                    <input type="text" id="luogo" name="luogo" onChange={(e)=>setRilascio({...rilascio,luogo: e.target.value})} title="Inserisci il luogo del rilascio" required/><br />
-                    <br/>
+                    <label htmlFor="luogoParch"> Parcheggio di rilascio: </label> <br/>
+                    <select type="text" id="luogoParch" name="luogoParch" onChange={(e)=>setRilascio({...rilascio,luogoParch: e.target.value})} title="Seleziona il parcheggio in cui hai rilasciato il veicolo"> 
+                        <option value="-1" disabled selected>Parcheggio</option>
+                        <option value=""> Nessun Parcheggio </option>
+                        {listaParcheggi.length==0 ? "" :
+                                listaParcheggi.map((parcheggio)=>
+                                    <option value={parcheggio._id}>{parcheggio.nome}-{parcheggio.indirizzo},{parcheggio.nCivico}</option>
+                                )}
+                    </select><br/>
+                    <span className={classnames({'green-convalid':!errParch, 'red-convalid':errParch})}> {errParch ? "Seleziona il parcheggio di rilascio solo se non hai inserito alcun indirizzo" : "OK"} </span>
+                    <br/><br/>
 
-                    <Button type="submit" variant="success" >Avanti</Button>{' '}
+                    <label htmlFor="luogoInd"> Indirizzo di rilascio: </label> <br/>
+                    <input type="text" id="luogoInd" name="luogoInd" onChange={(e)=>setRilascio({...rilascio,luogoInd: e.target.value})} title="Inserisci l'indirizzo del luogo in cui hai rilasciato il veicolo"/> <br/>
+                    <span className={classnames({'green-convalid':!errInd, 'red-convalid':errInd})}> {errInd ? "Inserisci l'indirizzo di rilascio solo se hai selezionato 'Nessun Parcheggio'" : "OK"} </span>
+                    <br/><br/>
+
+                    <Button type="submit" variant="success" >Avanti</Button>
                 </form>
             </Container>
         </div>

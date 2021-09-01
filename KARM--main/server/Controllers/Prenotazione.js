@@ -106,9 +106,9 @@ export const listaPrenotazioniAddetto = async (req,res) => {
                 }
 
                 Prenotazione={
+                    _id: booking._id,
                     nomeCliente: nomeCliente,
                     cognomeCliente: cognomeCliente,
-                    idVeicolo: idVeicolo,
                     tipoVeicolo: tipoVeicolo,
                     targa: targa,
                     nomeAutista: nomeAutista,
@@ -183,9 +183,9 @@ export const listaPrenotazioniAdmin = async (req,res) => {
                 }
 
                 Prenotazione={
+                    _id: booking._id,
                     nomeCliente: nomeCliente,
                     cognomeCliente: cognomeCliente,
-                    idVeicolo: idVeicolo,
                     tipoVeicolo: tipoVeicolo,
                     targa: targa,
                     nomeAutista: nomeAutista,
@@ -249,9 +249,9 @@ export const listaPrenotazioniAutista = async (req,res) => {
                 }
 
                 Prenotazione={
+                    _id: booking._id,
                     nomeCliente: nomeCliente,
                     cognomeCliente: cognomeCliente,
-                    idVeicolo: idVeicolo,
                     tipoVeicolo: tipoVeicolo,
                     targa: targa,
                     dataPartenza: booking.dataPartenza,
@@ -316,7 +316,7 @@ export const listaPrenotazioniCliente = async (req,res) => {
                 }
 
                 Prenotazione={
-                    idVeicolo: idVeicolo,
+                    _id: booking._id,
                     tipoVeicolo: tipoVeicolo,
                     targa: targa,
                     nomeAutista: nomeAutista,
@@ -335,5 +335,13 @@ export const listaPrenotazioniCliente = async (req,res) => {
             }
         }
         return res.status(200).json(Prenotazioni);
+    }).catch((err)=>{return res.status(500).json(err.message)});
+}
+
+//Get Tariffe
+export const getTariffe = async (req,res) => {
+    await veicolo.findOne({_id: req.body.idVeicolo}).then((veicolo)=>{
+        let tariffe = {prFestivo: veicolo.prezzoFestivo, prFeriale: veicolo.prezzoFeriale};
+        return res.status(200).json(tariffe); 
     }).catch((err)=>{return res.status(500).json(err.message)});
 }

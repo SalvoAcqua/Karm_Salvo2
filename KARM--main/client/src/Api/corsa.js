@@ -4,3 +4,11 @@ import axios from 'axios'
 export const verifyDelivery = (dati) => {
     return axios.post('/Routers/GestioneCorsa/verifyDelivery', dati);
 }
+
+
+
+
+//Completa Rilascio
+export const completaRilascio = (dati) => {
+    return axios.post('/Routers/GestioneCorsa/completaRilascio', dati);
+}

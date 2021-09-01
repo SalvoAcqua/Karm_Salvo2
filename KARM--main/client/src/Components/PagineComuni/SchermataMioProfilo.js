@@ -1,18 +1,16 @@
 import React from 'react'
-import {Container,Row,Col,Button} from "react-bootstrap";
+import {Container,Row,Col,Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux'
-import Card from 'react-bootstrap/Card'
-import ListGroup from 'react-bootstrap/ListGroup'
-import ListGroupItem from 'react-bootstrap/ListGroupItem'
+
 
 function SchermataMioProfilo () {
     const user = useSelector((state)=>state.utenti.utente)
     
     switch(user.ruolo){
-        case "Autista":
+        case "Cliente":
             return (
-                <div class="container profilo " >
+                <div class="container profilo">
                     <Container>
                         <Row>
                             <Col>
@@ -20,7 +18,13 @@ function SchermataMioProfilo () {
                                 <h3> GESTISCI IL TUO PROFILO</h3>
                             </Col>
                         </Row>
+
+                        <br/>
                         <Row>
+                            <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
+                                <Card.Img class="img-profilo" variant="top" src={user.sesso == "M" ? "http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" : "http://www.spec-chir.it/wp-content/uploads/2016/10/Blank_woman_placeholder.svg-263x263.png"} />
+                            </Card>
+
                             <Card className="card" style={{width: '60%', backgroundColor: "rgb(214, 214, 214)" }}>
                                 <Card.Body>
                                     <Card.Title>{user.nome} {user.cognome}</Card.Title>
@@ -28,22 +32,24 @@ function SchermataMioProfilo () {
                                 <ListGroup className="list-group-flush">
                                     <ListGroupItem>Ruolo: {user.ruolo}</ListGroupItem>
                                     <ListGroupItem>Email : {user.email}</ListGroupItem>
-                                    <ListGroupItem>Numero Patente : {user.numeroPatente} </ListGroupItem>
+                                    <ListGroupItem>Numero Patente : {user.numeroPatente!=undefined ? user.numeroPatente : "Nessuna patente inserita"} <br/></ListGroupItem>
                                 </ListGroup>
                                 <br/>
                             </Card>
-
-                            <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
-                                <Card.Img class="img-profilo" variant="top" src="http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" />
-                            </Card>
                         </Row>
+
+                        <br/>
+
                         <Row>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/ModificaPassword"> Cambia Password </Button> 
-                            </Col>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/AggiornaPatenteAutista"> Inserisci o Aggiorna patente </Button>
-                            </Col>
+                                <Button className="button" size="lg" variant="secondary" href="/AggiornaPatenteCliente"> Inserisci o Aggiorna Patente </Button>
+
+                                <Button className="button" size="lg" variant="secondary" href="/MetodiDiPagamento"> I Miei Metodi di Pagamento  </Button>
+                        </Row>
+
+                        <Row>
+                            <Button className="button" size="lg" variant="secondary" href="/ModificaPassword"> Cambia Password </Button> 
+                                
+                            <Button className="button" size="lg" variant="secondary" href="/AggiornaEmail"> Cambia Email </Button>
                         </Row>
                     </Container>
                 </div>
@@ -71,13 +77,11 @@ function SchermataMioProfilo () {
                             </Card>
                             
                             <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
-                                <Card.Img class="img-profilo" variant="top" src="http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png"/>
+                                <Card.Img class="img-profilo" variant="top" src={user.sesso == "M" ? "http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" : "http://www.spec-chir.it/wp-content/uploads/2016/10/Blank_woman_placeholder.svg-263x263.png"} />
                             </Card>
                         </Row>
                         <Row >
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/ModificaPassword">Cambia Password  </Button>
-                            </Col>
+                            <Button className="button" size="lg" variant="secondary" href="/ModificaPassword">Cambia Password  </Button>
                         </Row>
                     </Container>
                 </div>
@@ -108,24 +112,23 @@ function SchermataMioProfilo () {
                             </Card>
                             
                             <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
-                                <Card.Img class="img-profilo" variant="top" src="http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png"/>
+                                <Card.Img class="img-profilo" variant="top" src={user.sesso == "M" ? "http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" : "http://www.spec-chir.it/wp-content/uploads/2016/10/Blank_woman_placeholder.svg-263x263.png"} />
                             </Card>
                         </Row>
-                        <Row>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/ModificaPassword"> Cambia Password </Button> 
-                            </Col>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/ModificaParcheggioAddetto"> Modifica Parcheggio Associato </Button> 
-                            </Col>
+                        <br/>
+                        <Row class="row text-center">
+                            <Button className="button" variant="secondary" size="lg" href="/ModificaPassword"> Cambia Password </Button> 
+
+                            <Button className="button" variant="secondary" size="lg" href="/ModificaParcheggioAddetto"> Modifica Parcheggio Associato </Button> 
                         </Row>
                     </Container>
                 </div>
             )
             break;
         default:
+            //AUTISTA
             return (
-                <div class="container profilo">
+                <div class="container profilo " >
                     <Container>
                         <Row>
                             <Col>
@@ -133,13 +136,7 @@ function SchermataMioProfilo () {
                                 <h3> GESTISCI IL TUO PROFILO</h3>
                             </Col>
                         </Row>
-
-                        <br/>
                         <Row>
-                            <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
-                                <Card.Img class="img-profilo" variant="top" src={user.sesso == null ? "http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" : "http://www.spec-chir.it/wp-content/uploads/2016/10/Blank_woman_placeholder.svg-263x263.png"} />
-                            </Card>
-
                             <Card className="card" style={{width: '60%', backgroundColor: "rgb(214, 214, 214)" }}>
                                 <Card.Body>
                                     <Card.Title>{user.nome} {user.cognome}</Card.Title>
@@ -147,28 +144,19 @@ function SchermataMioProfilo () {
                                 <ListGroup className="list-group-flush">
                                     <ListGroupItem>Ruolo: {user.ruolo}</ListGroupItem>
                                     <ListGroupItem>Email : {user.email}</ListGroupItem>
-                                    <ListGroupItem>Numero Patente : {user.numeroPatente!=undefined ? user.numeroPatente : "Nessuna patente inserita"} <br/></ListGroupItem>
+                                    <ListGroupItem>Numero Patente : {user.numeroPatente} </ListGroupItem>
                                 </ListGroup>
                                 <br/>
                             </Card>
-                        </Row>
 
-                        <Row>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/AggiornaPatenteCliente"> Inserisci o Aggiorna Patente </Button>
-                            </Col>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/MetodiDiPagamento"> I Miei Metodi di Pagamento  </Button>
-                            </Col>
+                            <Card style={{ width: '30%', backgroundColor: "rgb(214, 214, 214)" }}>
+                                <Card.Img class="img-profilo" variant="top" src={user.sesso == "M" ? "http://artischiano.it/wp-content/uploads/2015/03/765-default-avatar_4.png" : "http://www.spec-chir.it/wp-content/uploads/2016/10/Blank_woman_placeholder.svg-263x263.png"} />
+                            </Card>
                         </Row>
-
                         <Row>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/ModificaPassword"> Cambia Password </Button> 
-                            </Col>
-                            <Col class="col text-center">
-                                <Button className="button" variant="secondary" href="/AggiornaEmail"> Cambia Email </Button>
-                            </Col>
+                            <Button className="button" variant="secondary" size="lg" href="/ModificaPassword"> Cambia Password </Button> 
+
+                            <Button className="button" variant="secondary" size="lg" href="/AggiornaPatenteAutista"> Inserisci o Aggiorna patente </Button>
                         </Row>
                     </Container>
                 </div>

@@ -15,7 +15,7 @@ import storage from "redux-persist/lib/storage"
 const persistConfig = {
     key: "karm",
     storage,
-    whitelist: ["utenti","AccountCliente","AccountAdmin","Prenotazioni"],
+    whitelist: ["utenti","AccountCliente","AccountAdmin","Prenotazioni","PrenotazioneInCorso"],
     blacklist: ["errori"]
 };
 

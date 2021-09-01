@@ -1,40 +1,53 @@
 import React from "react"
-import {Container,Row,Button} from "react-bootstrap";
+import {Container,Row,Button,Alert} from "react-bootstrap";
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {verifyDelivery} from "../../Actions/corsa";
 import classnames from "classnames";
 
 function ConsegnaForm (){
     const [dati,setDati] = useState("");
+    const err = useSelector((state)=>state.errori.error);
     const dispatch = useDispatch();
 
     const onSubmit = (event) => {
         event.preventDefault();
-        const Dati = {cod: dati}
+        const Dati = {cod: dati};
         dispatch(verifyDelivery(Dati));
     }
     
     return (
-        <Container style={{marginTop:"20px"}}>
-            <div>
+        <Container classtyle={{marginTop:"20px"}}>
+            <Alert show={err.consegna!=undefined} variant="danger">
+                <Alert.Heading>Errore!</Alert.Heading>
+                <p>
+                    {err.consegna}
+                </p>
+            </Alert>
+            <div class="container pag">
                 <br/>
                     <form onSubmit={onSubmit}>
-                        <fieldset>
-                            <legend>Inserisci il codice identificativo del veicolo</legend>
-                            <Row>
-                                <br/>
-                                <input type="text" id="codVeicolo" name="codVeicolo" onChange={(e)=>setDati(e.target.value)} required/> <br/>
-                                <span className={classnames({'green-convalid':dati!="", 'red-convalid':dati==""})}> {dati=="" ? "Inserisci il codice identificativo del veicolo" : "OK"} </span>
-                                <br/><br/>
-                            </Row>
-                            <Row>
-                                <Button type="submit">
-                                    Avanti
-                                </Button>
-                            </Row>
+                        <Row>
+                            <Button variant="secondary" size="lg" type="submit">
+                                Avanti
+                            </Button>
+                        </Row>
+
+                        <br/>
+                        <h5>Inserisci il codice identificativo della prenotazione</h5>
+                        <br/>
+                        <Row>
+                            <br/>
+                            <input type="text" id="codPrenotazione" name="codPrenotazione" onChange={(e)=>setDati(e.target.value)} required/> <br/>
+                            <span className={classnames({'green-convalid':dati!="", 'red-convalid':dati==""})}> {dati=="" ? "Inserisci il codice identificativo della prenotazione" : "OK"} </span>
                             <br/><br/>
-                        </fieldset>
+                        </Row>
+                        <Row>
+                            <Button variant="secondary" size="lg" type="submit">
+                                Avanti
+                            </Button>
+                        </Row>
+                        <br/><br/>
                     </form>
             </div>
         </Container>

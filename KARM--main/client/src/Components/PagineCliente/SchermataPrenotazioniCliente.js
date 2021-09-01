@@ -20,13 +20,13 @@ function SchermataPrenotazioniCliente (){
 
     return (
         <div>
-            <Container style={{marginTop:"20px"}}>
+            <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
                             <thead>
                                 <tr>
-                                <th>Codice Veicolo</th>
+                                <th>Codice Prenotazione</th>
                                 <th>Tipo Veicolo</th>
                                 <th>Targa Veicolo</th>
                                 <th>Nome Autista</th>
@@ -50,7 +50,7 @@ function SchermataPrenotazioniCliente (){
                                         <td> Non hai effettuato ancora alcuna prenotazione</td>
                                     </tr> : listaPrenotazioni.map((prenotazione) => (
                                     <tr>
-                                        <td>{prenotazione.idVeicolo}</td>
+                                        <td>{prenotazione._id}</td>
                                         <td>{prenotazione.tipoVeicolo}</td>
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
                                         <td>{prenotazione.nomeAutista}</td>
@@ -65,12 +65,12 @@ function SchermataPrenotazioniCliente (){
                                         <td>{prenotazione.indirizzoArrivo}</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>
-                                            <Button style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
                                                 <BrushSharpIcon/>
                                             </Button>
                                         </td>
                                         <td>
-                                            <Button style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
                                                 <DeleteIcon/>
                                             </Button>
                                         </td>

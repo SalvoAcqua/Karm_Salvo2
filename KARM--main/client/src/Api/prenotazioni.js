@@ -29,3 +29,8 @@ export const getPrenotazioniCliente = (dati) => {
 export const addPrenotazione = (dati) => {
     return axios.post("/Routers/Prenotazione/AddPrenotazione", dati);
 }
+
+//Get Tariffe
+export const getTariffe = (dati) => {
+    return axios.post("/Routers/Prenotazione/GetTariffe", dati);
+}

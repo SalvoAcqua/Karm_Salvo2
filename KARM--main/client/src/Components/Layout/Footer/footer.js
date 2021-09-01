@@ -13,8 +13,8 @@ function Footer () {
           <Row>
             <Col style={{ color: "white" }}>
               <h6 style={{ fontWeight: "bold" }}>Azienda</h6>
-              <Link to="/ChiSiamo">
-                <h6>Chi Siamo</h6>
+              <Link to="/SuDiNoi">
+                <h6>Su di Noi</h6>
               </Link>
               <Link to="/Mappa">
                 <h6>I nostri parcheggi</h6>

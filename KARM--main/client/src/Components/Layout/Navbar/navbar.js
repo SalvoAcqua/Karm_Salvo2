@@ -5,9 +5,8 @@ import {useSelector, useDispatch} from 'react-redux'
 import {logoutUser} from '../../../Actions/utenti'
 import { Navbar,Nav, NavDropdown, Modal, ModalBody,Container,Row,Col,Button} from "react-bootstrap";
 import PersonIcon from "@material-ui/icons/Person";
-import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import DescriptionIcon from '@material-ui/icons/Description';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 function NAVBAR() {
     const [show,setShow]=useState(false);
@@ -50,34 +49,27 @@ function NAVBAR() {
                             <Navbar.Toggle />
                             <Navbar.Collapse className="justify-content-between">
                                 <Nav>
-                                    <NavDropdown>
-                                        <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
-                                        <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
-                                    </NavDropdown>
                                 </Nav>
         
                                 <Nav>
-                                    <Button variant="secondary" href="/SchermataPrenotazioniCliente">
-                                        Visualizza Prenotazioni
+                                    <Button variant="secondary" href="/Notifiche">
+                                        <NotificationsIcon/>
                                     </Button>
                                     
                                     <Button variant="secondary" href="/SchermataMioProfilo">
-                                        <PersonOutlineIcon/>
+                                        <NavDropdown title={<PersonIcon/>} id="dropdown-menu-align-right">
+                                            <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
+                                            <NavDropdown.Divider />
+                                            <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
+                                        </NavDropdown>
                                     </Button>
-
-                                    <Button variant="secondary" onClick={()=>setShow(true)}>
-                                        <ExitToAppIcon/>
+                                    
+                                    <Button variant="secondary" href="/SchermataPrenotazioniCliente">
+                                        <DescriptionIcon/>
                                     </Button>
                                 </Nav>
                             </Navbar.Collapse> 
-                        </Navbar>  
-        
-        
-                        <Container>
-                        <Navbar.Collapse id="responsive-navbar-nav">
-                            
-                        </Navbar.Collapse>
-                        </Container>
+                        </Navbar> 
                     </div>
                 );
                 break;
@@ -109,22 +101,21 @@ function NAVBAR() {
                                     <img width="40" height="40" src={logo}/>  
                                 </Navbar.Brand>
                                 <Navbar.Toggle />
+
                                 <Navbar.Collapse className="justify-content-between">
-                                    <Nav>
-                                        <NavDropdown>
-                                            <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
-                                            <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
-                                        </NavDropdown>
-                                    </Nav>
-                                </Navbar.Collapse> 
-                                <Navbar.Collapse className="justify-content-between">
-                                    <Nav>
-                                        <Button variant="secondary" href="/SchermataPrenotazioniAdmin">
-                                            Visualizza Prenotazioni
-                                        </Button>
-                                        
+                                    <Nav></Nav>
+
+                                    <Nav>                                        
                                         <Button variant="secondary" href="/SchermataMioProfilo">
-                                            <PersonOutlineIcon/>
+                                            <NavDropdown title={<PersonIcon/>} id="dropdown-menu-align-right">
+                                                <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
+                                                <NavDropdown.Divider />
+                                                <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
+                                            </NavDropdown>
+                                        </Button>
+
+                                        <Button variant="secondary" href="/SchermataPrenotazioniAdmin">
+                                            <DescriptionIcon/>
                                         </Button>
                                     </Nav>
                                 </Navbar.Collapse> 
@@ -159,28 +150,29 @@ function NAVBAR() {
                                 <img width="40" height="40" src={logo}/>  
                             </Navbar.Brand>
                             <Navbar.Toggle/>
-                            <Nav>
-                                <NavDropdown>
-                                    <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
-                                    <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav>
                             <Navbar.Collapse className="justify-content-between">
-                                <Nav>
-                                    <Button variant="secondary" href="/SchermataPrenotazioniAddetto">
-                                        Visualizza Prenotazioni
-                                    </Button>
-                                    
-                                    <Button variant="secondary" href="/SchermataMioProfilo">
-                                        <PersonOutlineIcon/>
-                                    </Button>
-                                </Nav>
-                            </Navbar.Collapse> 
+                                    <Nav></Nav>
+
+                                    <Nav>                                        
+                                        <Button variant="secondary" href="/SchermataMioProfilo">
+                                            <NavDropdown title={<PersonIcon/>} id="dropdown-menu-align-right">
+                                                <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
+                                                <NavDropdown.Divider />
+                                                <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
+                                            </NavDropdown>
+                                        </Button>
+
+                                        <Button variant="secondary" href="/SchermataPrenotazioniAddetto">
+                                            <DescriptionIcon/>
+                                        </Button>
+                                    </Nav>
+                                </Navbar.Collapse>  
                         </Navbar>  
                     </div>
                 );
                 break;
             default:
+                //AUTISTA
                 return(
                     <div>
                         <Modal show={show} onHide={()=>setShow(false)} centered backdrop="static">
@@ -207,21 +199,27 @@ function NAVBAR() {
                                 <img width="40" height="40" src={logo}/>  
                             </Navbar.Brand>
                             <Navbar.Toggle/>
-                            <Nav>
-                                <NavDropdown>
-                                    <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
-                                    <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav>
                             <Navbar.Collapse className="justify-content-between">
                                 <Nav>
-                                    <Button variant="secondary" href="/SchermataPrenotazioniAutista">
-                                        Visualizza Prenotazioni
+                                </Nav>
+        
+                                <Nav>
+                                    <Button variant="secondary" href="/Notifiche">
+                                        <NotificationsIcon/>
                                     </Button>
                                     
                                     <Button variant="secondary" href="/SchermataMioProfilo">
-                                        <PersonOutlineIcon/>
+                                        <NavDropdown title={<PersonIcon/>} id="dropdown-menu-align-right">
+                                            <NavDropdown.Item href="/SchermataMioProfilo">Il Mio Profilo</NavDropdown.Item>
+                                            <NavDropdown.Divider />
+                                            <NavDropdown.Item style={{color:"red"}} onClick={()=>setShow(true)}>Disconnetti </NavDropdown.Item>
+                                        </NavDropdown>
                                     </Button>
+
+                                    <Button variant="secondary" href="/SchermataPrenotazioniAutista">
+                                        <DescriptionIcon/>
+                                    </Button>
+
                                 </Nav>
                             </Navbar.Collapse> 
                         </Navbar>  

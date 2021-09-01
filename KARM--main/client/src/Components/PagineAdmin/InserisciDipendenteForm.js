@@ -363,10 +363,18 @@ function InserisciDipendenteForm (){
     return (
         <div>
            <Container>
-                <h1> Inserisci i dati per la registrazione del nuovo dipendente </h1>
                 <form onSubmit={onSubmit}>
+                    <br/>
+                    <Row>
+                            <Button type="submit" variant="success" size="lg">
+                                Avanti
+                            </Button>{' '}
+                    </Row>
+                    <br/>
+                    <h5> Inserisci i dati per la registrazione del nuovo dipendente </h5>
+                    <br/>
                     <fieldset className="fieldstyle">
-                        <legend>Ruolo Dipendente:</legend>
+                        <legend class="h4">Ruolo Dipendente:</legend>
                         <select type="text" id="ruolo" name="ruolo" onChange={(e)=>setDipendente({...dipendente,ruolo: e.target.value})} title="Seleziona il ruolo del dipendente" required>
                             <option value="" disabled selected>Ruolo Dipendente</option>
                             <option value="Autista">Autista</option>
@@ -375,24 +383,24 @@ function InserisciDipendenteForm (){
                         <span className={classnames({'green-convalid':!errRuolo, 'red-convalid':errRuolo})}> {errRuolo ? "Seleziona il ruolo del dipendente" : "OK"} </span>
                         <br/>
                     </fieldset>
-                    <br/><br/>
+                    <br/>
                     <fieldset className="fieldstyle aut add">
-                        <legend>Dati Anagrafici: </legend>
+                        <legend class="h4">Dati Anagrafici: </legend>
                         <label htmlFor="nome">Nome: </label> <br/>
-                        <input type="text" id="nome" name="nome" onChange={(e)=>setDipendente({...dipendente,nome: e.target.value})} title="Inserisci il nome del dipendente" /> <br/>
+                        <input type="text" id="nome" name="nome" size="30" onChange={(e)=>setDipendente({...dipendente,nome: e.target.value})} title="Inserisci il nome del dipendente" /> <br/>
                         <span className={classnames({'green-convalid':!errNome, 'red-convalid':errNome})}> {errNome && dipendente.nome=="" ? "Inserisci il nome del dipendente" : (errNome ? "Non puoi inserire un valore contenente un numero" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="cognome">Cognome: </label> <br/>
-                        <input type="text" id="cognome" name="cognome" onChange={(e)=>setDipendente({...dipendente,cognome: e.target.value})} title="Inserisci il cognome del dipendente" /> <br/>
+                        <input type="text" id="cognome" name="cognome" size="30" onChange={(e)=>setDipendente({...dipendente,cognome: e.target.value})} title="Inserisci il cognome del dipendente" /> <br/>
                         <span className={classnames({'green-convalid':!errCognome, 'red-convalid':errCognome})}> {errCognome && dipendente.cognome=="" ? "Inserisci il cognome del dipendente" : (errCognome ? "Non puoi inserire un valore contenente un numero" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="dataNascita">Data di Nascita: </label> <br/>
                         <input type="date" id="dataNascita" name="dataNascita" onChange={(e)=>setDipendente({...dipendente,dataNascita: new Date(e.target.value)})} title="Inserisci la data di nascita del dipendente" max={today}/> <br/>
                         <span className={classnames({'green-convalid':!errDataNascita, 'red-convalid':errDataNascita})}> {errDataNascita && emptyDate(dipendente.dataNascita) ? "Inserisci la data di nascita del dipendente" : (errDataNascita ? "Non puoi inserire una data successiva ad oggi" : "OK")} </span>
-                        <br/><br/>
-                        
+                        <br/>
+
                         <label> Sesso:  <br/>
                             <input type="radio" name="sesso" onChange={(e)=>setDipendente({...dipendente,sesso: e.target.value})} value="M"/> M 
                         </label> 
@@ -517,44 +525,44 @@ function InserisciDipendenteForm (){
                                 <option value="vt">Viterbo</option>
                             </select> <br/>
                         <span className={classnames({'green-convalid':!errProvNascita, 'red-convalid':errProvNascita})}> {errProvNascita ? "Inserisci la provincia di nascita del dipendente" : "OK"} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="luogoNascita">Luogo di Nascita: </label> <br/>
-                        <input type="text" id="luogoNascita" name="luogoNascita" onChange={(e)=>setDipendente({...dipendente,luogoNascita: e.target.value})} title="Inserisci il luogo di nascita del dipendente"/> <br/>
+                        <input type="text" id="luogoNascita" name="luogoNascita" size="30" onChange={(e)=>setDipendente({...dipendente,luogoNascita: e.target.value})} title="Inserisci il luogo di nascita del dipendente"/> <br/>
                         <span className={classnames({'green-convalid':!errLuogoNascita, 'red-convalid':errLuogoNascita})}> {errLuogoNascita && dipendente.luogoNascita=="" ? "Inserisci il luogo di nascita del dipendente" : (errDataNascita ? "Non puoi inserire un valore contenente un numero" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
                         
                         <label htmlFor="CF">Codice Fiscale: </label> <br/>
-                        <input type="text" id="CF" name="CF" onChange={(e)=>setDipendente({...dipendente,CF: e.target.value})} title="Inserisci il codice fiscale del dipendente"/> <br/>
+                        <input type="text" id="CF" name="CF" size="30" onChange={(e)=>setDipendente({...dipendente,CF: e.target.value})} title="Inserisci il codice fiscale del dipendente"/> <br/>
                         <span className={classnames({'green-convalid':!errCF, 'red-convalid':errCF})}> {errCF && dipendente.CF=="" ? "Inserisci il codice fiscale del dipendente" : (errCF ? "Il codice fiscale non combacia coi dati inseriti" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
                     </fieldset>
-                    <br/><br/>
+                    <br/>
                     <fieldset className="fieldstyle aut">
-                        <legend>Patente: </legend>
+                        <legend class="h4">Patente: </legend>
                         <label htmlFor="numeroPatente">Numero Patente: </label> <br/>
-                        <input type="text" id="numeroPatente" name="numeroPatente" onChange={(e)=>{setDipendente({...dipendente,numeroPatente: e.target.value.toUpperCase()})}}  pattern="^[A-Z]{2}[\d]{7}[A-Z]$" title="Inserisci il numero della patente" placeholder="AA0000000A"/> <br/>
+                        <input type="text" id="numeroPatente" name="numeroPatente" size="30" onChange={(e)=>{setDipendente({...dipendente,numeroPatente: e.target.value.toUpperCase()})}}  pattern="^[A-Z]{2}[\d]{7}[A-Z]$" title="Inserisci il numero della patente" placeholder="AA0000000A"/> <br/>
                         <span className={classnames({'green-convalid':!errNPatente, 'red-convalid':errNPatente})}> {errNPatente && dipendente.numeroPatente=="" ? "Inserisci il numero della patente" : (errNPatente ? "Devi inserire 2 lettere, seguite da 7 cifre e infine un'altra lettera" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
                         
                         <label htmlFor="dataRilascio">Data Rilascio: </label> <br/>
                         <input type="date" id="dataRilascio" name="dataRilascio" onChange={(e)=>setDipendente({...dipendente,dataRilascio: e.target.value})} title="Inserisci la data di rilascio della patente"/> <br/>
                         <span className={classnames({'green-convalid':!errDataRilascio, 'red-convalid':errDataRilascio})}> {errDataRilascio ? "Inserisci la data di rilascio della patente" : "OK"} </span>
-                        <br/><br/>
+                        <br/>
                     
                         <label htmlFor="dataScadenza">Data Scadenza: </label> <br/>
                         <input type="date" id="dataScadenza" name="dataScadenza" onChange={(e)=>setDipendente({...dipendente,dataScadenza: e.target.value})} title="Inserisci la data di scadenza della patente"/> <br/>
                         <span className={classnames({'green-convalid':!errDataScadenza, 'red-convalid':errDataScadenza})}> {errDataScadenza ? "Inserisci la data di scadenza della patente" : "OK"} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="enteRilascio">Ente Rilascio: </label> <br/>
-                        <input type="text" id="enteRilascio" name="enteRilascio" onChange={(e)=>setDipendente({...dipendente,enteRilascio: e.target.value})} title="Inserisci l'ente del rilascio della patente"/> <br/>
+                        <input type="text" id="enteRilascio" name="enteRilascio" size="30" onChange={(e)=>setDipendente({...dipendente,enteRilascio: e.target.value})} title="Inserisci l'ente del rilascio della patente"/> <br/>
                         <span className={classnames({'green-convalid':!errEnteRilascio, 'red-convalid':errEnteRilascio})}> {errEnteRilascio ? "Inserisci l'ente del rilascio della patente" : "OK"} </span>
-                        <br/><br/>
+                        <br/>
                     </fieldset>
-                    <br/><br/>
+                    <br/>
                     <fieldset className="fieldstyle add">
-                        <legend>Parcheggio Associato: </legend>
+                        <legend class="h4">Parcheggio Associato: </legend>
                         <select type="text" id="parcAssociato" name="parcAssociato" onChange={(e)=>setDipendente({...dipendente,parcheggioAssociato: e.target.value})} title="Seleziona il parcheggio associato all'addetto">
                             <option value="" class="preselected" disabled selected>Parcheggio Associato</option>
                                 {listaParcheggi.map((parcheggio)=>
@@ -562,32 +570,37 @@ function InserisciDipendenteForm (){
                                 )}
                         </select><br/>
                         <span className={classnames({'green-convalid':!errParcAssociato, 'red-convalid':errParcAssociato})}> {errParcAssociato ? "Inserisci il parcheggio associato all'addetto" : "OK"} </span>
-                        <br/><br/>
+                        <br/>
                     </fieldset>
-                    <br/><br/>
+                    <br/>
                     <fieldset className="fieldstyle aut add">        
-                        <legend>Credenziali:</legend>
+                        <legend class="h4">Credenziali:</legend>
                         <label htmlFor="email">E-mail </label><br/>
-                        <input type="email" id="email" name="email" onChange={(e)=>setDipendente({...dipendente,email: e.target.value})} maxLength="40" title="Inserisci l'email del dipendente"/><br/>
+                        <input type="email" id="email" name="email" size="30" onChange={(e)=>setDipendente({...dipendente,email: e.target.value})} maxLength="40" title="Inserisci l'email del dipendente"/><br/>
                         <span className={classnames({'green-convalid':!errEmail.val, 'red-convalid':errEmail.val})}> {errEmail.val && dipendente.email=="" ? "Inserisci l'email del dipendente" : (errEmail.val ? errEmail.mess : "OK")} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="password">Password </label> <br/>
-                        <input type="password" id="password" name="password" onChange={(e)=>setDipendente({...dipendente,password: e.target.value})}
+                        <input type="password" id="password" name="password" size="30" onChange={(e)=>setDipendente({...dipendente,password: e.target.value})}
                             title="Almeno 8 caratteri di cui una lettera maiuscola, un numero e un carattere speciale tra '# $ ^ + = ! * ( ) @ % &'" maxLength="40"
                             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,40}$"/>
                             <br/>
                         <span className={classnames({'green-convalid':!errPass, 'red-convalid':errPass})}> {errPass && dipendente.password=="" ? "Inserisci la password" : (errPass ? "Devi inserire almeno 8 caratteri di cui una lettera maiuscola, un numero e un carattere speciale tra '# $ ^ + = ! * ( ) @ % &'" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
 
                         <label htmlFor="confermaPassword">Conferma password </label><br/>
-                        <input type="password" id="confermaPassword" name="confermaPassword" onChange={(e)=>setDipendente({...dipendente,confermaPassword: e.target.value})}
+                        <input type="password" id="confermaPassword" name="confermaPassword" size="30" onChange={(e)=>setDipendente({...dipendente,confermaPassword: e.target.value})}
                             maxLength="40" title="Reinserisci la password"/><br/> 
                         <span className={classnames({'green-convalid':!errConfPass, 'red-convalid':errConfPass})}> {errConfPass && dipendente.confermaPassword=="" ? "Reinserisci la password" : (errConfPass ? "Le password non coincidono" : "OK")} </span>
-                        <br/><br/>
+                        <br/>
                     </fieldset>
                     <br/><br/>
-                    <Button type="submit" variant="success" >Avanti</Button>{' '}
+                    <Row>
+                            <Button type="submit" variant="success" size="lg">
+                                Avanti
+                            </Button>{' '}
+                    </Row>
+                     <br/>
                 </form>
             </Container>
         </div>

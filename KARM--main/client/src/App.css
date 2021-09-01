@@ -87,7 +87,19 @@ html, body {
 }
 
 .pag{
-    margin-bottom: 300px;
+    margin-bottom: 310px;
+}
+
+.pagA{
+    margin-bottom: 380px;
+}
+
+.parch{
+    margin-bottom: 200px;
+}
+
+.autista{
+    margin-bottom: 30px;
 }
 
 .img-profilo{
@@ -96,6 +108,11 @@ html, body {
     align-content: center;
     margin-top: 2px;
     margin-bottom: 2px;
+}
+
+.list-group-item-info {
+    color: #0d1011;
+    background-color: #e4e4e4;
 }
 
 @media only screen and (max-width: 599px) {
@@ -121,9 +138,20 @@ html, body {
     }
     
     .pag{
-        margin-bottom: 30px;
+        margin-bottom: 200px;
     }
-    
+
+    .pagA{
+        margin-bottom: 175px;
+    }
+
+    .autista{
+        margin-bottom: 10px;
+    }
+
+    .parch{
+        margin-bottom: 50px;
+    }
 }
 
 @media only screen and (min-width: 600px) {
@@ -150,6 +178,18 @@ html, body {
 
     .pag{
         margin-bottom: 200px;
+    }
+
+    .pagA{
+        margin-bottom: 300px;
+    }
+
+    .autista{
+        margin-bottom: 20px;
+    }
+
+    .parch{
+        margin-bottom: 130px;
     }
 }
 
@@ -178,8 +218,57 @@ html, body {
     .pag{
         margin-bottom: 300px;
     }
-    
-    
+
+    .pagA{
+        margin-bottom: 380px;
+    }
+
+    .autista{
+        margin-bottom: 30px;
+    }
+
+    .parch{
+        margin-bottom: 250px;
+    }
+}
+
+@media only screen and (min-width: 1520px) {
+    /* For monitor: */
+    .container{
+        width: 100%;
+        height: auto;
+    }
+
+    .accesso{
+        margin-top: 300px;
+        margin-bottom: 300px;
+    }
+
+    .profilo{
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+
+    .password{
+        margin-top: 60px;
+        margin-bottom: 60px;
+    }
+
+    .pag{
+        margin-bottom: 600px;
+    }
+
+    .pagA{
+        margin-bottom: 760px;
+    }
+
+    .autista{
+        margin-bottom: 60px;
+    }
+
+    .parch{
+        margin-bottom: 500px;
+    }
 }
 
 @media only screen and (max-width: 400px) {

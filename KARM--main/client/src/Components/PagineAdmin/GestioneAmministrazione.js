@@ -3,31 +3,35 @@ import {Container,Row,Col, Button} from "react-bootstrap";
 
 function GestioneAmministrazione () {
     return(
-        <div>
-            <Container>
+        <div class="container">
+            <Container >
                 <Row>
                     <Col>
                         <br/>
                         <h3> GESTIONE AMMINISTRAZIONE</h3>
                     </Col>
                 </Row>
-                <Row >
-                    <Col md="3">
-                        <Button className="button" variant="secondary" href="/VisualizzaClienti"> Visualizza Clienti</Button> 
-                    </Col>
-                    <Col md="3">
-                        <Button className="button" variant="secondary" href="/VisualizzaDipendenti"> Visualizza Dipendenti </Button>
-                    </Col>
-                    <Col md="3">
-                        <Button className="button" variant="secondary" href="/VisualizzaParcheggi"> Visualizza Parcheggi </Button>
-                    </Col>
-                    <Col md="3">
-                        <Button className="button" variant="secondary" href="/VisualizzaVeicoli"> Visualizza Veicoli </Button>
-                    </Col>
-                    <Col md="3">
-                        <Button className="button" variant="secondary" href="/ModificaTariffe"> Modifica Tariffe </Button>
-                    </Col>
+                <br/>
+                <Row class="row text-center">
+                    <Button className="button" variant="secondary" size="lg" href="/VisualizzaClienti"> Visualizza Clienti</Button> 
                 </Row>
+                <br/>
+                <Row class="row text-center">
+                    <Button className="button" variant="secondary" size="lg" href="/VisualizzaDipendenti"> Visualizza Dipendenti </Button>
+                </Row>
+                <br/>
+                <Row class="row text-center">
+                    <Button className="button" variant="secondary" size="lg" href="/VisualizzaParcheggi"> Visualizza Parcheggi </Button>
+                </Row>
+                <br/>
+                <Row class="row text-center">
+                    <Button className="button" variant="secondary" size="lg" href="/VisualizzaVeicoli"> Visualizza Veicoli </Button>
+                </Row>
+                <br/>
+                <Row class="row text-center">
+                    <Button className="button" variant="secondary" size="lg" href="/ModificaTariffe"> Modifica Tariffe </Button>
+                </Row>
+                <br/><br/>
             </Container>
         </div>
     )

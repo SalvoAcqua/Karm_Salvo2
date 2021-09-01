@@ -22,6 +22,7 @@ function SceltaVeicolo(){
         } else {
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
             dispatch(newInformation(nuovaPrenotazione.prenotazione));
+            window.location.href="/SceltaParcheggi"
         }
     }
 
@@ -33,108 +34,131 @@ function SceltaVeicolo(){
         case "Autovettura":
         return(
             <div>
-                <Container>
+                <Container class="container profilo">
+                    <br/>
+                    <h3>Scegli l'auto che preferisci</h3>
+                    <br/>
+
                     <Row>
-                {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
-                    <Col>
-                    <Card style={{ width: '20rem' }} bg="light" border="info">
-                    <Card.Img variant="top" src={Autovettura} alt="immagine" />
-                    <Card.Body>
-                        <Card.Title>Descrizione:</Card.Title>
-                        <Card.Text>
-                            {veicolo.descrizione}
-                        </Card.Text>
-                        <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
-                            <ListGroupItem variant="info">Modello: {veicolo.modello} - Marca: {veicolo.marca}</ListGroupItem>
-                            <ListGroupItem variant="info">Cilindrata: {veicolo.cilindrata} - Nposti: {veicolo.nPosti} - Nporte: {veicolo.nPorte}</ListGroupItem>
-                            <ListGroupItem variant="info">Prezzo Festivo: {veicolo.prezzoFestivo}€ - Prezzo Feriale : {veicolo.prezzoFeriale}€</ListGroupItem>
-                        </ListGroup>
-                        <Button variant="primary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
-                    </Card.Body>
-                    </Card>
-                </Col>
-                ))}
+                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                            <Col>
+                            <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
+                            <Card.Img variant="top" src={Autovettura} alt="immagine" />
+                            <Card.Body>
+                                <Card.Title>Descrizione:</Card.Title>
+                                <Card.Text>
+                                    {veicolo.descrizione}
+                                </Card.Text>
+                                <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
+                                    <ListGroupItem variant="light">Modello: {veicolo.modello} <br/> Marca: {veicolo.marca}</ListGroupItem>
+                                    <ListGroupItem variant="light">Cilindrata: {veicolo.cilindrata} <br/> N Posti: {veicolo.nPosti} <br/> N Porte: {veicolo.nPorte}</ListGroupItem>
+                                    <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                </ListGroup>
+                                <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
+                            </Card.Body>
+                            </Card>
+                        </Col>
+                        ))}
                 </Row>
+                <br/>
                 </Container>
             </div>
         )
         case "Moto":
             return(
                 <div>
-                    <Container>
+                    <Container class="container profilo">
+
+                        <br/>
+                        <h3>Scegli la moto che preferisci</h3>
+                        <br/>
+
                         <Row>
-                    {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
-                        <Col>
-                        <Card style={{ width: '18rem' }} bg="light" border="info">
-                        <Card.Img variant="top" src={Moto} alt="immagine" />
-                        <Card.Body>
-                            <Card.Title>Descrizione:</Card.Title>
-                            <Card.Text>
-                                {veicolo.descrizione}
-                            </Card.Text>
-                            <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
-                                <ListGroupItem variant="info">Modello: {veicolo.modello} - Marca: {veicolo.marca}</ListGroupItem>
-                                <ListGroupItem variant="info">Cilindrata: {veicolo.cilindrata}</ListGroupItem>
-                                <ListGroupItem variant="info">Prezzo Festivo: {veicolo.prezzoFestivo}€ - Prezzo Feriale : {veicolo.prezzoFeriale}€</ListGroupItem>
-                            </ListGroup>
-                            <Button variant="primary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
-                        </Card.Body>
-                        </Card>
-                    </Col>
-                    ))}
+                            {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                                <Col>
+                                <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
+                                <Card.Img variant="top" src={Moto} alt="immagine" />
+                                <Card.Body>
+                                    <Card.Title>Descrizione:</Card.Title>
+                                    <Card.Text>
+                                        {veicolo.descrizione}
+                                    </Card.Text>
+                                    <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
+                                        <ListGroupItem variant="light">Modello: {veicolo.modello} <br/> Marca: {veicolo.marca}</ListGroupItem>
+                                        <ListGroupItem variant="light">Cilindrata: {veicolo.cilindrata}</ListGroupItem>
+                                        <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                    </ListGroup>
+                                    <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
+                                </Card.Body>
+                                </Card>
+                            </Col>
+                            ))}
                     </Row>
+                    <br/>
                     </Container>
                 </div>
             )
         case "Bicicletta":
             return (
                 <div>
-                <Container>
+                <Container class="container profilo">
+                    <br/>
+                    <h3>Scegli la bicicletta che preferisci</h3>
+                    <br/>
+
                     <Row>
-                {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
-                    <Col>
-                    <Card style={{ width: '18rem' }} bg="light" border="info">
-                    <Card.Img variant="top" src={Bicicletta} alt="immagine" />
-                    <Card.Body>
-                        <Card.Title>Descrizione:</Card.Title>
-                        <Card.Text>
-                            {veicolo.descrizione}
-                        </Card.Text>
-                        <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
-                            <ListGroupItem variant="info">Prezzo Festivo: {veicolo.prezzoFestivo}€ - Prezzo Feriale : {veicolo.prezzoFeriale}€</ListGroupItem>
-                        </ListGroup>
-                        <Button variant="primary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
-                    </Card.Body>
-                    </Card>
-                </Col>
-                ))}
+                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                            <Col>
+                            <Card  style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
+                            <Card.Img variant="top" src={Bicicletta} alt="immagine" />
+                            <Card.Body>
+                                <Card.Title>Descrizione:</Card.Title>
+                                <Card.Text>
+                                    {veicolo.descrizione}
+                                </Card.Text>
+                                <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
+                                    <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                </ListGroup>
+                                <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
+                            </Card.Body>
+                            </Card>
+                        </Col>
+                        ))}
                 </Row>
+                <br/>
                 </Container>
             </div>
             )
         default:
+            //MONOPATTINO
             return (
                 <div>
-                <Container>
+                <Container class="container profilo">
+
+                    <br/>
+                    <h3>Scegli il monopattino che preferisci</h3>
+                    <br/>
+
                     <Row>
-                {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
-                    <Col>
-                    <Card style={{ width: '18rem' }} bg="light" border="info">
-                    <Card.Img variant="top" src={Monopattino} alt="immagine" />
-                    <Card.Body>
-                        <Card.Title>Descrizione:</Card.Title>
-                        <Card.Text>
-                            {veicolo.descrizione}
-                        </Card.Text>
-                        <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
-                            <ListGroupItem variant="info">Prezzo Festivo: {veicolo.prezzoFestivo}€ - Prezzo Feriale : {veicolo.prezzoFeriale}€</ListGroupItem>
-                        </ListGroup>
-                        <Button variant="primary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
-                    </Card.Body>
-                    </Card>
-                </Col>
-                ))}
-                </Row>
+                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                        <Col>
+                            <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary" >
+                            <Card.Img variant="top" src={Monopattino} alt="immagine" />
+                            <Card.Body>
+                                <Card.Title>Descrizione:</Card.Title>
+                                <Card.Text>
+                                    {veicolo.descrizione}
+                                </Card.Text>
+                                <ListGroup className="list-group-flush " style={{marginBottom:"10px", background:"white"}}>
+                                    <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                </ListGroup>
+                                <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
+                            </Card.Body>
+                            </Card>
+                        </Col>
+                        ))}
+                    </Row>
+                    <br/>
                 </Container>
             </div>
             )

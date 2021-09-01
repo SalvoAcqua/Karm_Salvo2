@@ -7,18 +7,62 @@ import {convertiData, getOra} from '../gestioneDateTime.js';
 export const verifyDelivery = async (req,res) =>{
     let todayTime = new Date();
     let todayDate = new Date(convertiData(todayTime));
-    let flag = false;
-    await prenotazione.find({idVeicolo: req.body.cod, statoPrenotazione: "completa"}).then(async (Prenotazioni)=>{
-        for(let Prenotazione of Prenotazioni){
-            let dataPartenza = new Date(Prenotazione.dataPartenza)
-            if (dataPartenza.getTime()==todayDate.getTime() && oraPartenza<getOra(todayTime) && !flag){
-                flag=true;
-                let idBooking = Prenotazione._id;
-                await prenotazione.findOneAndUpdate({_id: idBooking},{statoPrenotazione: "in_corsa"});
-                await veicolo.findOneAndUpdate({_id: req.body.cod},{statoVeicolo: "Occupato"});
-                return res.json(Prenotazione);
+    await prenotazione.findOne({_id: req.body.cod, statoPrenotzione: "completa"}).then(async (Prenotazione)=>{
+        if (Prenotazione){    
+            let dataPartenza = new Date(Prenotazione.dataPartenza);
+            let dataArrivo = new Date(Prenotazione.dataArrivo);
+            let idVeicolo = Prenotazione.idVeicolo;
+            
+            if (dataPartenza.getTime()==dataArrivo.getTime()) {
+                if (dataPartenza.getTime()==todayDate.getTime() && getOra(oraPartenza)<=getOra(oraAttuale) && getOra(oraArrivo)>getOra(oraAttuale)) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "in_corsa"});
+                    await veicolo.findOneAndUpdate({_id: idVeicolo},{statoVeicolo: "Occupato"});
+                    return res.status(200).json(Prenotazione);
+                } else {
+                    if (dataPartenza.getTime()<todayDate.getTime()){
+                        await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "terminata"});
+                        return res.status(400).json({ consegna: "Questa prenotazione è scaduta"});
+                    } else if(dataPartenza.getTime()>todayDate.getTime()) {
+                        return res.status(400).json({ consegna: "Non e' possibile ritirare in anticipo il veicolo. Riprova più tardi"});
+                    } else if(getOra(oraArrivo)<=getOra(oraAttuale)) {
+                        await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "terminata"});
+                        return res.status(400).json({ consegna: "Questa prenotazione è scaduta"});
+                    } else if (getOra(oraPartenza)>getOra(oraAttuale)) {
+                        return res.status(400).json({ consegna: "Non e' possibile ritirare in anticipo il veicolo. Riprova più tardi"});
+                    }
+                }
+            } else {
+                if (dataPartenza.getTime()<todayDate.getTime() && dataArrivo.getTime()>todayDate.getTime()) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "in_corsa"});
+                    await veicolo.findOneAndUpdate({_id: idVeicolo},{statoVeicolo: "Occupato"});
+                    return res.status(200).json(Prenotazione);
+                } else if(dataPartenza.getTime()==todayDate.getTime() && getOra(oraPartenza)<=getOra(oraAttuale)) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "in_corsa"});
+                    await veicolo.findOneAndUpdate({_id: idVeicolo},{statoVeicolo: "Occupato"});
+                    return res.status(200).json(Prenotazione);
+                } else if(dataArrivo.getTime()==todayDate.getTime() && getOra(oraArrivo)>getOra(oraAttuale)) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "in_corsa"});
+                    await veicolo.findOneAndUpdate({_id: idVeicolo},{statoVeicolo: "Occupato"});
+                    return res.status(200).json(Prenotazione);
+                } else if (dataPartenza.getTime()>todayDate.getTime()) {
+                    return res.status(400).json({ consegna: "Non e' possibile ritirare in anticipo il veicolo. Riprova più tardi"});
+                } else if (dataArrivo.getTime()<todayDate.getTime()) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "terminata"});
+                    return res.status(400).json({ consegna: "Questa prenotazione è scaduta"});
+                } else if (dataPartenza.getTime()==todayDate.getTime() && getOra(oraPartenza)>getOra(oraAttuale)) {
+                    return res.status(400).json({ consegna: "Non e' possibile ritirare in anticipo il veicolo. Riprova più tardi"});
+                } else if (dataArrivo.getTime()==todayDate.getTime() && getOra(oraArrivo)<getOra(oraAttuale)) {
+                    await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "terminata"});
+                    return res.status(400).json({ consegna: "Questa prenotazione è scaduta"});
+                }
             }
+        } else {
+            return res.status(400).json({ consegna: "Nessuna prenotazione valida individuata"});
         }
-        return res.status(400).json({ consegna: "Nessuna prenotazione e' associata a questo veicolo in questo momento"});
     }).catch((err)=> {return res.status(500).json(err.message)})
+};
+
+export const completaRilascio = async (req,res) => {
+    //AggiornaStatoVeicolo
+    //AggiornaStatoPrenotazione
 };

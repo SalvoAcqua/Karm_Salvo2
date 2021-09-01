@@ -33,7 +33,7 @@ function ModificaTariffeForm (){
                     <Modal.Title>Inserisci i dati della carta</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Container>
+                    <Container >
                         <Row>
                             <form onSubmit={onSubmit}>
                                 <label htmlFor="text">Prezzo Festivo</label><br/>
@@ -51,7 +51,9 @@ function ModificaTariffeForm (){
                     </Container> 
                  </Modal.Body>
              </Modal>
-            <Container style={{marginTop:"20px"}}>
+            <Container className="container" style={{marginTop:"20px"}}>
+                <h3>Tariffe</h3>
+                <br/>
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
@@ -87,7 +89,7 @@ function ModificaTariffeForm (){
                                         <td>{veicolo.prFestivo}</td>
                                         <td>{veicolo.prFeriale}</td>
                                         <td>
-                                            <Button onClick={()=>setModifica({...modifica,show:true, id:veicolo._id})}>
+                                            <Button variant="secondary" onClick={()=>setModifica({...modifica,show:true, id:veicolo._id})}>
                                                 <BrushSharpIcon/>
                                             </Button>
                                         </td>
@@ -97,6 +99,7 @@ function ModificaTariffeForm (){
                         </Table>
                     </Col>
                 </Row>
+                <br/>
             </Container>
         </div>
     )

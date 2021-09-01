@@ -138,14 +138,17 @@ function SchermataVisualizzaParcheggi () {
                     </Container> 
                  </Modal.Body>
              </Modal> 
-            <Container style={{marginTop:"20px"}}>
+
+             <br/>
+                <h3>Parcheggi</h3>
+
+            <Container className="container pag" style={{marginTop:"20px"}}>
                 <Row style={{marginTop:"20px"}}>
-                    <Col style={{display:"flex", justifyContent:"end"}}>
-                        <Button onClick={()=>setShow(true)}>
-                            Inserisci un nuovo parcheggio
-                        </Button>
-                    </Col>
+                    <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
+                        Inserisci un nuovo parcheggio
+                    </Button>
                 </Row>
+                <br/>
                 <Row>
                     <Col> 
                         <Table striped bordered hover size="sm" responsive>
@@ -179,14 +182,16 @@ function SchermataVisualizzaParcheggi () {
                         </Table>
                     </Col>
                 </Row>
+                <br/>
+                <Row style={{marginTop:"20px"}}>
+                    <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
+                        Inserisci un nuovo parcheggio
+                    </Button>
+                </Row>
+                <br/>
             </Container>
         </div>
     )
 }
 
 export default SchermataVisualizzaParcheggi
-
-
-
-
-

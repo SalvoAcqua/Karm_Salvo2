@@ -13,8 +13,9 @@ function SchermataVisualizzaClienti () {
      useEffect(()=>{
         dispatch(getListaClienti());
     },[])
+
     return(
-        <div>
+        <div class="container pag" >
             <Container style={{marginTop:"20px"}}>
                 <Row>
                     <Col> 

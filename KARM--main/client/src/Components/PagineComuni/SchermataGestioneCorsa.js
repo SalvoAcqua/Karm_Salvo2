@@ -8,32 +8,30 @@ function SchermataGestioneCorsa () {
     
     if (user.ruolo=="Autista" || user.ruolo=="Cliente"){
         return(
-            <div>
-                <Container>
+            <div class="container pag">
+                <Container >
                     <Row>
                         <Col>
                             <br/>
                             <h3> GESTIONE CORSA</h3>
                         </Col>
                     </Row>
+                    <br/>
                     <Row >
-                        <Col md="3">
-                            <Button className="button" variant="secondary" href="/Consegna"> Consegna </Button> 
-                        </Col>
-                        <Col md="3">
-                            <Button className="button" variant="secondary" href="/Rilascio"> Rilascio </Button>
-                        </Col>
-                        <Col md="3">
-                            <Button className="button" variant="secondary" href="/ComunicaGuasto"> Comunica Guasto </Button>
-                        </Col>
+                            <Button className="button" variant="secondary" size="lg" href="/Consegna"> Consegna </Button> 
+
+                            <Button className="button" variant="secondary" size="lg" href="/Rilascio"> Rilascio </Button>
+
+                            <Button className="button" variant="secondary" size="lg" href="/ComunicaGuasto"> Comunica Guasto </Button>
                     </Row>
+                    <br/>
                 </Container>
             </div>
         )
     } else {
         return(
             <div>
-                <Container>
+                <Container class="container pag">
                     <Row>
                         <Col>
                             <br/>
@@ -41,12 +39,9 @@ function SchermataGestioneCorsa () {
                         </Col>
                     </Row>
                     <Row >
-                        <Col md="3">
                             <Button className="button" variant="secondary" href="/Consegna"> Consegna </Button> 
-                        </Col>
-                        <Col md="3">
+
                             <Button className="button" variant="secondary" href="/Rilascio"> Rilascio </Button>
-                        </Col>
                     </Row>
                 </Container>
             </div>

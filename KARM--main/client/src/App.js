@@ -24,6 +24,8 @@ import SchermataPrenotazioniCliente from './Components/PagineCliente/SchermataPr
 import NuovaPrenotazioneForm from './Components/PagineCliente/NuovaPrenotazioneForm';
 import SceltaVeicolo from './Components/PagineCliente/SceltaVeicolo';
 import SceltaParcheggi from './Components/PagineCliente/SceltaParcheggi';
+import SchermataRiepilogo from './Components/PagineCliente/SchermataRiepilogo';
+import SuDiNoi from './Components/PagineComuni/SuDiNoi';
 
 
 //PagineAdmin
@@ -54,9 +56,10 @@ const App = () => {
                     <Route exact path="/Registrazione" component={RegistratiForm} />
                     <ProtectedRoute exact path="/HomePage" component={HomePage} />
                     <ProtectedRoute exact path="/SchermataMioProfilo" component={SchermataMioProfilo} />
-                    <ProtectedRoute exact path="/SchermataGestioneCorsa" component={SchermataGestioneCorsa} />
+                    <ProtectedRoute exact path="/GestioneCorsa" component={SchermataGestioneCorsa} />
                     <ProtectedRoute exact path="/Consegna" component={ConsegnaForm} />
                     <ProtectedRoute exact path="/Rilascio" component={RilascioForm} />
+                    <ProtectedRoute exact path="/SuDiNoi" component={SuDiNoi} />
                     <ProtectedRoute exact path="/ModificaPassword" component={CambiaPassForm} />
                     <ProtectedRouteCliente exact path="/AggiornaPatenteCliente" component={AggiornaPatForm}/>
                     <ProtectedRouteCliente exact path="/MetodiDiPagamento" component={SchermataMetodiPag} />
@@ -64,6 +67,7 @@ const App = () => {
                     <ProtectedRouteCliente exact path="/AggiornaEmail" component={CambiaEmailForm} />
                     <ProtectedRouteCliente exact path="/SceltaVeicolo" component={SceltaVeicolo} />
                     <ProtectedRouteCliente exact path="/SceltaParcheggi" component={SceltaParcheggi} />
+                    <ProtectedRouteCliente exact path="/SchermataRiepilogo" component={SchermataRiepilogo} />
                     <ProtectedRouteCliente exact path="/SchermataPrenotazioniCliente" component={SchermataPrenotazioniCliente}/>
                     <ProtectedRouteAdmin exact path="/GestioneAmministrazione" component={GestioneAmministrazione}/>
                     <ProtectedRouteAdmin exact path="/VisualizzaClienti" component={SchermataVisualizzaClienti}/>

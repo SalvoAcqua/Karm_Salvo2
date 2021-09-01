@@ -57,14 +57,14 @@ function SchermataVisualizzaVeicoli (){
 
     return (
         <div>
-            <Container style={{marginTop:"20px"}}>
+            <Container className="container" style={{marginTop:"20px", textAlign:"center"}}>
                 <Modal show={showErrEliminazione || showErrRiattivazione || showErrBlocca} onHide={()=>{setShowErrEliminazione(false); setShowErrRiattivazione(false); setShowErrBlocca(false)}} centered backdrop="static">
                     <Modal.Header closeButton>
                             <Modal.Title style={{color:"red"}}>Errore</Modal.Title>
                     </Modal.Header>
                     <ModalBody>
                         <h1 style={{color:"red"}}>Non puoi {showErrEliminazione ? "rimuovere" : (showErrRiattivazione ? "riattivare" : "bloccare")}  questo veicolo!</h1>
-                        <p style={{color:"red"}}>Assicurati che lo stato del veicolo {showErrEliminazione||showErrRiattivazione ? "sia Non Attivo" : "non sia Occupato"}</p>
+                        <p style={{color:"red"}}>Assicurati che lo stato del veicolo {showErrEliminazione||showErrRiattivazione ? "sia Non Attivo, in caso blocca il veicolo" : "sia Libero"}</p>
                     </ModalBody>
                 </Modal>
 
@@ -114,9 +114,12 @@ function SchermataVisualizzaVeicoli (){
                     <ModalBody>
                         <form onSubmit={onSubmit}>
                             <Row>
-                                <div style={{backgroundColor:"lightblue", marginBottom:"10px", border:"solid"}}>
-                                    <label>Verranno mostrati soltanto i parcheggi disponibili in base alla capienza</label>
+                                <div style={{backgroundColor:"#dcdcdc", marginBottom:"10px", border:"solid"}}>
+                                    <label class="h6">Verranno mostrati soltanto i parcheggi disponibili in base alla capienza</label>
                                 </div>
+                            </Row>
+                            <br/>
+                            <Row>
                                 <select type="text" id="parcheggio" name="parcheggio" onChange={(e)=>setParcheggio(e.target.value)} title="Seleziona il parcheggio in cui si trova il veicolo"> <br/>
                                     <option value="" selected disabled>Parcheggio</option>
                                     {listaParcheggiDisp.length==0 ? <option value="-1" disabled>Nessun parcheggio disponibile</option> :
@@ -131,7 +134,7 @@ function SchermataVisualizzaVeicoli (){
                                 <br/><br/>
                             </Row>
                             <Row>
-                                <Button type="submit">
+                                <Button variant="secondary" type="submit">
                                     Avanti
                                 </Button>
                             </Row>
@@ -141,16 +144,17 @@ function SchermataVisualizzaVeicoli (){
 
                 <Row  style={{marginTop:"20px"}}>
                     <Col>
-                        <div style={{backgroundColor:"lightblue", marginBottom:"10px", border:"solid"}}>
+                        <div style={{backgroundColor:"#dcdcdc", marginBottom:"10px", border:"solid"}}>
                             <label>In caso di veicoli fuori stallo, verrà mostrata la via nei Parcheggi Associati</label>
                         </div>
                     </Col>
-                    <Col style={{display:"flex", justifyContent:"end"}}>
-                        <Button href="/InserisciVeicolo">
-                            Inserisci veicolo
-                        </Button>
-                    </Col>
                 </Row>
+                <Row>
+                    <Button variant="secondary" size="lg" href="/InserisciVeicolo">
+                        Inserisci veicolo
+                    </Button>
+                </Row>
+                <br/>
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
@@ -191,22 +195,22 @@ function SchermataVisualizzaVeicoli (){
                                         <td>{veicolo.prFestivo}</td>
                                         <td>{veicolo.prFeriale}</td>
                                         <td>
-                                            <Button onClick={()=>veicolo.stato!="Occupato" ? setConfermaBlocca({...confermaBlocca, show:true, veicolo:veicolo}) : setShowErrBlocca(true)}>
+                                            <Button variant="secondary" onClick={()=>veicolo.stato=="Libero" ? setConfermaBlocca({...confermaBlocca, show:true, veicolo:veicolo}) : setShowErrBlocca(true)}>
                                                 <NotInterestedIcon/>
                                             </Button>
                                         </td>
                                         <td>
-                                            <Button onClick={()=>veicolo.stato=="Non Attivo" ? clickRiattivazione(veicolo) : setShowErrRiattivazione(true)}>
+                                            <Button variant="secondary" onClick={()=>veicolo.stato=="Non Attivo" ? clickRiattivazione(veicolo) : setShowErrRiattivazione(true)}>
                                                 <SettingsBackupRestoreIcon/>
                                             </Button>
                                         </td>
                                         <td>
-                                            <Button onClick={()=>clickModificaParcheggio(veicolo)}>
+                                            <Button variant="secondary" onClick={()=>clickModificaParcheggio(veicolo)}>
                                                 <TimeToLeaveIcon/>
                                             </Button>
                                         </td>
                                         <td>
-                                            <Button onClick={()=> veicolo.stato=="Non Attivo" ? setConfermaEliminazione({...confermaEliminazione, show:true, veicolo:veicolo}) : setShowErrEliminazione(true)}>
+                                            <Button variant="secondary" onClick={()=> veicolo.stato=="Non Attivo" ? setConfermaEliminazione({...confermaEliminazione, show:true, veicolo:veicolo}) : setShowErrEliminazione(true)}>
                                                 <DeleteIcon/>
                                             </Button>
                                         </td>
@@ -216,6 +220,12 @@ function SchermataVisualizzaVeicoli (){
                         </Table>
                     </Col>
                 </Row>
+                <Row>
+                    <Button variant="secondary" size="lg" href="/InserisciVeicolo">
+                        Inserisci veicolo
+                    </Button>
+                </Row>
+                <br/>
             </Container>
         </div>
     )

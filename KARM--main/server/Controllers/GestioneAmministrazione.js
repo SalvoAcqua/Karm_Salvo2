@@ -211,7 +211,7 @@ export const removeVehicle = async (req,res) =>{
 
 //Blocca Veicolo
 export const blockVehicle = async (req,res) =>{
-    await prenotazione.find({statoPrenotazione: {$ne: "terminata"}, idVeicolo: req.body.veicolo._id}).then(async (prenotazioni)=>{
+    await prenotazione.find({idVeicolo: req.body.veicolo._id, $or: [{ statoPrenotazione: "completa" }, { statoPrenotazione: "incompleta" }]}).then(async (prenotazioni)=>{
         if (prenotazioni.length!=0){
             for (let Prenotazione of prenotazioni) {
                 let DataPartenza = new Date(Prenotazione.dataPartenza);
@@ -358,7 +358,7 @@ export const modificaTariffa = async (req,res) =>{
 //Rimuovi Dipendente
 export const removeEmployee = async (req,res) =>{
     if (req.body.dipendente.ruolo=="Autista") {
-        await prenotazione.findOne({statoPrenotazione:"completa", idAutista: req.body.dipendente._id}).then(async (booking)=>{
+        await prenotazione.findOne({statoPrenotazione:{ $ne: "terminata"}, idAutista: req.body.dipendente._id}).then(async (booking)=>{
             if(booking){
                 return res.status(400).json({rimozioneAutista:true});
             }else{

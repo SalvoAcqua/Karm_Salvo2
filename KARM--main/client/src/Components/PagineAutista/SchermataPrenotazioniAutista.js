@@ -19,15 +19,15 @@ function SchermataPrenotazioniAutista (){
 
     return (
         <div>
-            <Container style={{marginTop:"20px"}}>
+            <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
                             <thead>
                                 <tr>
+                                <th>Codice Prenotazione</th>
                                 <th>Nome Cliente</th>    
                                 <th>Cognome Cliente</th>
-                                <th>Codice Veicolo</th>
                                 <th>Tipo Veicolo</th>
                                 <th>Targa Veicolo</th>
                                 <th>Data Partenza</th>
@@ -48,9 +48,9 @@ function SchermataPrenotazioniAutista (){
                                         <td> Non ci sono prenotazioni associate al tuo profilo</td>
                                     </tr> : listaPrenotazioni.map((prenotazione) => (
                                     <tr>
+                                        <td>{prenotazione._id}</td>
                                         <td>{prenotazione.nomeCliente}</td>
                                         <td>{prenotazione.cognomeCliente}</td>
-                                        <td>{prenotazione.idVeicolo}</td>
                                         <td>{prenotazione.tipoVeicolo}</td>
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
                                         <td>{prenotazione.dataPartenza}</td>
@@ -63,7 +63,7 @@ function SchermataPrenotazioniAutista (){
                                         <td>{prenotazione.indirizzoArrivo}</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>
-                                            <Button style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
                                                 <DeleteIcon/>
                                             </Button>
                                         </td>
