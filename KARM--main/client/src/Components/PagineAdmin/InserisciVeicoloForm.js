@@ -27,44 +27,44 @@ function InserisciVeicoloForm (){
     const onSubmit = (event) => {
         event.preventDefault();
         let Veicolo = {};
-    switch(veicolo.tipo){
-        case "Autovettura":
-             Veicolo = {
-                tipoVeicolo:veicolo.tipo,
-                modello:veicolo.modello,
-                marca:veicolo.marca,
-                cilindrata:veicolo.cilindrata,
-                nPosti:veicolo.posti,
-                nPorte:veicolo.porte,
-                targa:veicolo.targa,
-                parcheggioAssociato:veicolo.parcAssociato,
-                descrizione:veicolo.descrizione,
-                prezzoFestivo:veicolo.prFestivo,
-                prezzoFeriale:veicolo.prFeriale
-            }
-            break;
-        case "Moto":
-              Veicolo = {
-                tipoVeicolo:veicolo.tipo,
-                modello:veicolo.modello,
-                marca:veicolo.marca,
-                cilindrata:veicolo.cilindrata,
-                targa:veicolo.targa,
-                parcheggioAssociato:veicolo.parcAssociato,
-                descrizione:veicolo.descrizione,
-                prezzoFestivo:veicolo.prFestivo,
-                prezzoFeriale:veicolo.prFeriale
-            }
-            break;
-        default:
-              Veicolo = {
-                tipoVeicolo:veicolo.tipo,
-                parcheggioAssociato:veicolo.parcAssociato,
-                descrizione:veicolo.descrizione,
-                prezzoFestivo:veicolo.prFestivo,
-                prezzoFeriale:veicolo.prFeriale
-            }
-            break;
+        switch(veicolo.tipo){
+            case "Autovettura":
+                Veicolo = {
+                    tipoVeicolo:veicolo.tipo,
+                    modello:veicolo.modello,
+                    marca:veicolo.marca,
+                    cilindrata:veicolo.cilindrata,
+                    nPosti:veicolo.posti,
+                    nPorte:veicolo.porte,
+                    targa:veicolo.targa,
+                    parcheggioAssociato:veicolo.parcAssociato,
+                    descrizione:veicolo.descrizione,
+                    prezzoFestivo:veicolo.prFestivo,
+                    prezzoFeriale:veicolo.prFeriale
+                }
+                break;
+            case "Moto":
+                Veicolo = {
+                    tipoVeicolo:veicolo.tipo,
+                    modello:veicolo.modello,
+                    marca:veicolo.marca,
+                    cilindrata:veicolo.cilindrata,
+                    targa:veicolo.targa,
+                    parcheggioAssociato:veicolo.parcAssociato,
+                    descrizione:veicolo.descrizione,
+                    prezzoFestivo:veicolo.prFestivo,
+                    prezzoFeriale:veicolo.prFeriale
+                }
+                break;
+            default:
+                Veicolo = {
+                    tipoVeicolo:veicolo.tipo,
+                    parcheggioAssociato:veicolo.parcAssociato,
+                    descrizione:veicolo.descrizione,
+                    prezzoFestivo:veicolo.prFestivo,
+                    prezzoFeriale:veicolo.prFeriale
+                }
+                break;
         }
         dispatch(addVeicolo(Veicolo));
     }

@@ -2,10 +2,18 @@ import * as api from '../Api/corsa';
 
 export const verifyDelivery = (userData) => async (dispatch) =>{
     await api.verifyDelivery(userData).then((res)=>{
-        dispatch({type:'SET_RUN', payload:res.data});
-        window.location.href("/SchermataGestioneCorsa");
+        window.location.href="/GestioneCorsa";
     }).catch((err)=>{
         dispatch({type:'GET_ERROR', payload:err.response.data});
+    });
+};
+
+export const verifyRelease = (userData) => async (dispatch) =>{
+    await api.verifyRelease(userData).then((res)=>{
+        dispatch({type:'SET_RUN', payload:res.data.corsa}); //Inserisco i dati della corsa in Reducers/Corsa/corsa
+        dispatch({type:'GET_ERROR', payload:res.data}); //Rendo visibile il modal in RilascioForm
+    }).catch((err)=>{
+        dispatch({type:'GET_ERROR', payload:err.response.data}); //Rendo visibile l'alert in RilascioForm
     });
 };
 
@@ -14,12 +22,12 @@ export const pagamentoAggiuntivo = (userData) => async (dispatch) =>{
 };
 
 export const assegnaLuogo = (userData) => async (dispatch) =>{
-
+    await api.assegnaLuogo(userData).catch((err)=>{console.log(err.message)});
 };
 
 export const completaRilascio = (userData) => async (dispatch) =>{
     await api.completaRilascio(userData).then((res)=>{
     //distruggi Entity
-    window.location.href("/HomePage");
+    window.location.href="/HomePage";
     }).catch((err)=>{console.log(err.message)});
 };

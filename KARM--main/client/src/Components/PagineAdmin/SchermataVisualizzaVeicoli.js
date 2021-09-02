@@ -89,7 +89,7 @@ function SchermataVisualizzaVeicoli (){
 
                 <Modal show={confermaEliminazione.show} onHide={()=>setConfermaEliminazione({...confermaEliminazione, show:false})} centered backdrop="static">
                     <Modal.Header >
-                             <Modal.Title>Sei sicuro di voler eliminare questo veicolo?</Modal.Title>
+                             <Modal.Title>Vuoi eliminare questo veicolo?</Modal.Title>
                     </Modal.Header>
                     <ModalBody>
                             <Row>

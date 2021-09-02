@@ -1,5 +1,5 @@
 const initialState = {
-    corsa:{},
+    corsa:{}
 };
 
 export default (state=initialState, action) => {

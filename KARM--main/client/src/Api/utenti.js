@@ -20,11 +20,6 @@ export const registerLicense = (dati) =>{
     return axios.post('/Routers/GestioneAccount/AggiornaPatente',dati);
 }
 
-//Lista Metodi di Pagamento
-export const takeMethods = (dati) => {
-    return axios.post('/Routers/GestioneAccount/ListMetodiPagamento',dati);
-}
-
 //Elimina Metodo Pagamento
 export const removeMethods = (dati) => {
     return axios.post('/Routers/GestioneAccount/RemoveMetodoPagamento',dati)

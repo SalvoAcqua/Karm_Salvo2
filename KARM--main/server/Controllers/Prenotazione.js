@@ -5,8 +5,9 @@ import prenotazione from '../Models/prenotazioni.js';
 
 export const addPrenotazione = async (req,res) => {
     let Prenotazione = {};
-    if(req.body.autista=='false'){
+    if(req.body.autista==false){
         Prenotazione={
+            statoPrenotazione:req.body.statoPrenotazione,
             idCliente:req.body.cliente,
             idVeicolo:req.body.veicolo,
             dataPartenza:req.body.dataPa,
@@ -17,6 +18,8 @@ export const addPrenotazione = async (req,res) => {
             idParcheggioRilascio:req.body.parcheggioRilascio,
             viaPartenza:'',
             viaDestinazione:'',
+            numeroCartaPagamento:req.body.numeroCarta,
+            prezzo:req.body.prezzo
         }
     }else{
         Prenotazione={
@@ -30,6 +33,8 @@ export const addPrenotazione = async (req,res) => {
             idParcheggioRilascio:req.body.parcheggioRilascio,  //Messo per fare vedere all'autista dove lasciare il veicolo
             viaPartenza:req.body.indirizzoPa,
             viaDestinazione:req.body.indirizzoArr,
+            numeroCartaPagamento:req.body.numeroCarta,
+            prezzo:req.body.prezzo
         }
     }
     const newPrenotazione = new prenotazione(Prenotazione);
@@ -152,6 +157,7 @@ export const listaPrenotazioniAdmin = async (req,res) => {
                 let nomeParcheggioArrivo="//";
                 let indirizzoPartenza=booking.viaPartenza=="" ? "//" : booking.viaPartenza;
                 let indirizzoArrivo=booking.viaDestinazione=="" ? "//" : booking.viaDestinazione;
+                let prezzo = booking.prezzo;
                 
                 await utente.findOne({_id: idCliente}).then((cliente)=>{
                     nomeCliente=cliente.nome;
@@ -198,7 +204,8 @@ export const listaPrenotazioniAdmin = async (req,res) => {
                     nomeParcheggioArrivo: nomeParcheggioArrivo,
                     indirizzoPartenza: indirizzoPartenza,
                     indirizzoArrivo: indirizzoArrivo,
-                    statoPrenotazione: booking.statoPrenotazione
+                    statoPrenotazione: booking.statoPrenotazione,
+                    prezzo:prezzo
                 };
                 Prenotazioni.push(Prenotazione);
             }
@@ -290,6 +297,7 @@ export const listaPrenotazioniCliente = async (req,res) => {
                 let nomeParcheggioArrivo="//";
                 let indirizzoPartenza=booking.viaPartenza=="" ? "//" : booking.viaPartenza;
                 let indirizzoArrivo=booking.viaDestinazione=="" ? "//" : booking.viaDestinazione;
+                let prezzo = booking.prezzo;
                 
                 //idAutista puo' essere undefined se non si e' richiesto l'autista o "" se nessun autista ha ancora accettato
                 if(idAutista!=undefined && idAutista!=""){
@@ -329,7 +337,8 @@ export const listaPrenotazioniCliente = async (req,res) => {
                     nomeParcheggioArrivo: nomeParcheggioArrivo,
                     indirizzoPartenza: indirizzoPartenza,
                     indirizzoArrivo: indirizzoArrivo,
-                    statoPrenotazione: booking.statoPrenotazione
+                    statoPrenotazione: booking.statoPrenotazione,
+                    prezzo:prezzo
                 };
                 Prenotazioni.push(Prenotazione);
             }

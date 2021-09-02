@@ -15,8 +15,10 @@ const prenotazioneSchema = mongoose.Schema({
     statoPrenotazione:{
         type:String,
         enum:["incompleta","completa","in_corsa","terminata"],
-        default:"incompleta"
-    }
+        default:"incompleta",
+    },
+    numeroCartaPagamento:Number,
+    prezzo: Number
     
 });
 

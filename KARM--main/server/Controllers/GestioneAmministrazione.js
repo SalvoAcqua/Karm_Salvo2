@@ -88,24 +88,72 @@ export const getParcheggi = async (req,res) => {
 export const getParcheggiDisp = async (req,res) => {
     switch(req.body.tipo){
         case "Autovettura":
-            await parcheggio.find({ $expr: { $gt: [ "$capienzaAuto" , "$autoPresenti" ] } }).then((parcheggi)=>{
-                return res.json(parcheggi)
-            }).catch((err)=> {return res.status(500).json(err.message)})
+            let nAutovetture = "";
+            let capAutovetture = 0;
+            await veicolo.find({tipoVeicolo: "Autovettura"}).then((Autovetture)=>{nAutovetture=Autovetture.length});
+            await parcheggio.find().then((Parcheggi)=>{
+                for (let Parcheggio of Parcheggi){
+                    capAutovetture+=Parcheggio.capienzaAuto;
+                }
+            });
+            if (nAutovetture<capAutovetture){
+                await parcheggio.find({ $expr: { $gt: [ "$capienzaAuto" , "$autoPresenti" ] } }).then((parcheggi)=>{
+                    return res.status(200).json(parcheggi)
+                }).catch((err)=> {return res.status(500).json(err.message)})
+            } else {
+                return res.status(200).json([])
+            }
             break;
         case "Moto":
-            await parcheggio.find({ $expr: { $gt: [ "$capienzaMoto" , "$motoPresenti" ] } }).then((parcheggi)=>{
-                return res.json(parcheggi)
-            }).catch((err)=> {return res.status(500).json(err.message)})
+            let nMoto = "";
+            let capMoto = 0;
+            await veicolo.find({tipoVeicolo: "Moto"}).then((Moto)=>{nMoto=Moto.length});
+            await parcheggio.find().then((Parcheggi)=>{
+                for (let Parcheggio of Parcheggi){
+                    capMoto+=Parcheggio.capienzaMoto;
+                }
+            });
+            if (nMoto<capMoto){
+                await parcheggio.find({ $expr: { $gt: [ "$capienzaMoto" , "$motoPresenti" ] } }).then((parcheggi)=>{
+                    return res.status(200).json(parcheggi)
+                }).catch((err)=> {return res.status(500).json(err.message)})
+            } else {
+                return res.status(200).json([])
+            }
             break;
         case "Bicicletta":
-            await parcheggio.find({ $expr: { $gt: [ "$capienzaBici" , "$biciPresenti" ] } }).then((parcheggi)=>{
-                return res.json(parcheggi)
-            }).catch((err)=> {return res.status(500).json(err.message)})
+            let nBici = "";
+            let capBici = 0;
+            await veicolo.find({tipoVeicolo: "Bicicletta"}).then((Bici)=>{nBici=Bici.length});
+            await parcheggio.find().then((Parcheggi)=>{
+                for (let Parcheggio of Parcheggi){
+                    capBici+=Parcheggio.capienzaBici;
+                }
+            });
+            if (nBici<capBici){
+                await parcheggio.find({ $expr: { $gt: [ "$capienzaBici" , "$biciPresenti" ] } }).then((parcheggi)=>{
+                    return res.status(200).json(parcheggi)
+                }).catch((err)=> {return res.status(500).json(err.message)})
+            } else {
+                return res.status(200).json([])
+            }
             break;
         default:
-            await parcheggio.find({ $expr: { $gt: [ "$capienzaMonopattini" , "$monopattiniPresenti" ] } }).then((parcheggi)=>{
-                return res.json(parcheggi)
-            }).catch((err)=> {return res.status(500).json(err.message)})
+            let nMonopattini = "";
+            let capMonopattini = 0;
+            await veicolo.find({tipoVeicolo: "Monopattino"}).then((Monopattini)=>{nMonopattini=Monopattini.length});
+            await parcheggio.find().then((Parcheggi)=>{
+                for (let Parcheggio of Parcheggi){
+                    capMonopattini+=Parcheggio.capienzaMonopattini;
+                }
+            });
+            if (nMonopattini<capMonopattini){
+                await parcheggio.find({ $expr: { $gt: [ "$capienzaMonopattini" , "$monopattiniPresenti" ] } }).then((parcheggi)=>{
+                    return res.status(200).json(parcheggi)
+                }).catch((err)=> {return res.status(500).json(err.message)})
+            } else {
+                return res.status(200).json([])
+            }
             break;
     }
 };

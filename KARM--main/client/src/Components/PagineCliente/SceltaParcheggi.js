@@ -21,7 +21,8 @@ const center = {
 }
 
 function SceltaParcheggi (){
-    const [dati,setDati] = useState({parcheggioConsegna:'', parcheggioRilascio:'', datiConsegna:{}, datiRilascio:{}});
+    const [datiConsegna,setDatiConsegna] = useState({parcheggioConsegna:''});
+    const [datiRilascio,setDatiRilascio]=useState({parcheggioRilascio:''})
     const [errori,setErrori] = useState({parcheggioConsegna:true, parcheggioRilascio:true});
     const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
     const nuovaPrenotazione = useSelector((state)=>state.Prenotazioni);
@@ -38,50 +39,45 @@ function SceltaParcheggi (){
             let DatiConsegna = {};
             let DatiRilascio = {};
             nuovaPrenotazione.prenotazione.cliente = user._id;
-            nuovaPrenotazione.prenotazione.parcheggioConsegna = dati.parcheggioConsegna;
-            nuovaPrenotazione.prenotazione.parcheggioRilascio = dati.parcheggioRilascio;
+            nuovaPrenotazione.prenotazione.parcheggioConsegna = datiConsegna.parcheggioConsegna;
+            nuovaPrenotazione.prenotazione.parcheggioRilascio = datiRilascio.parcheggioRilascio;
             for(let element of listaParcheggi){
-                
-                if(element._id==dati.parcheggioConsegna){
+                if(element._id==datiConsegna.parcheggioConsegna){
                      DatiConsegna = {
                         nome: element.nome,
                         indirizzo: element.indirizzo,
                         nCivico: element.nCivico
                     }
-                    setDati({...dati,datiConsegna:DatiConsegna})
                 }
-                if(element._id==dati.parcheggioRilascio){
+                if(element._id==datiRilascio.parcheggioRilascio){
                      DatiRilascio = {
                         nome: element.nome,
                         indirizzo: element.indirizzo,
                         nCivico: element.nCivico
                     }
-                    setDati({...dati,datiRilascio:DatiRilascio})
                 }
-                
-            
             }
-            nuovaPrenotazione.prenotazione.datiParcheggioConsegna = dati.datiConsegna;
-            nuovaPrenotazione.prenotazione.datiParcheggioRilascio = dati.datiRilascio;
+            nuovaPrenotazione.prenotazione.datiParcheggioConsegna = DatiConsegna;
+            nuovaPrenotazione.prenotazione.datiParcheggioRilascio = DatiRilascio;
             dispatch(newInformation(nuovaPrenotazione.prenotazione));
             window.location.href="/SchermataRiepilogo"
         }
     }
     useEffect(()=>{
-        if(dati.parcheggioConsegna!=""){
+        if(datiConsegna.parcheggioConsegna!=""){
             setErrori({...errori,parcheggioConsegna:false});
         } else{
             setErrori({...errori,parcheggioConsegna:true});
         }
-    },[dati.parcheggioConsegna])
+    },[datiConsegna.parcheggioConsegna])
 
     useEffect(()=>{
-        if(dati.parcheggioRilascio!=""){
+        if(datiRilascio.parcheggioRilascio!=""){
             setErrori({...errori,parcheggioRilascio:false});
         } else{
             setErrori({...errori,parcheggioRilascio:true});
         }
-    },[dati.parcheggioRilascio])
+    },[datiRilascio.parcheggioRilascio])
 
 
 
@@ -108,7 +104,7 @@ function SceltaParcheggi (){
                     </Col>   
                     <Col>
                         <label>Parcheggio di Partenza</label><br/>
-                        <select type="text" id="parcheggioPartenza" name="parcheggioPartenza" onChange={(e)=>setDati({...dati,parcheggioConsegna:e.target.value})}title="Seleziona il parcheggio in cui si trova il veicolo">
+                        <select type="text" id="parcheggioPartenza" name="parcheggioPartenza" onChange={(e)=>setDatiConsegna({...datiConsegna,parcheggioConsegna:e.target.value})}title="Seleziona il parcheggio in cui si trova il veicolo">
                             <option value="" selected disabled>Parcheggio</option>
                             {listaParcheggi.length==0 ? "" : listaParcheggi.map((parcheggio)=>(
                                 <option value={parcheggio._id}> {parcheggio.nome}-{parcheggio.indirizzo},{parcheggio.nCivico} </option>
@@ -117,7 +113,7 @@ function SceltaParcheggi (){
                         <span className={classnames({'green-convalid':!errori.parcheggioConsegna, 'red-convalid':errori.parcheggioConsegna})}> {errori.parcheggioConsegna ? "Voce obbligatoria per il completamento della prenotazione" : "OK"} </span>
                         <br/><br/>
                         <label>Parcheggio di Arrivo</label><br/>
-                        <select type="text" id="parcheggioArrivo" name="parcheggioArrivo" onChange={(e)=>setDati({...dati,parcheggioRilascio:e.target.value})} title="Seleziona il parcheggio in cui si trova il veicolo"> <br/>
+                        <select type="text" id="parcheggioArrivo" name="parcheggioArrivo" onChange={(e)=>setDatiRilascio({...datiRilascio,parcheggioRilascio:e.target.value})} title="Seleziona il parcheggio in cui si trova il veicolo"> <br/>
                             <option value="" selected disabled>Parcheggio</option>
                             {listaParcheggi.length==0 ? "" : listaParcheggi.map((parcheggio)=>(
                                 <option value={parcheggio._id}> {parcheggio.nome}-{parcheggio.indirizzo},{parcheggio.nCivico} </option>

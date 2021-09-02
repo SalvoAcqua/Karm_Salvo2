@@ -37,16 +37,11 @@ export const getPrenotazioniCliente = (userData) => async (dispatch) => {
 
 //Add prenotazione
 export const addPrenotazione = (userData) => async (dispatch) => {
-        
-            await api.addPrenotazione(userData).then((res)=>{
+        await api.addPrenotazione(userData).then((res)=>{
+                window.location.href="/SchermataPrenotazioniCliente"
                 dispatch({type:'SET_BOOKING', payload:""});
-                if(userData.autista==true){
-                        window.location.href="/HomePage"
-                }else {
-                        console.log(res.data)
-                }
-        })
-         
+                
+        })       
 }
 
 //Nuova Prenotazione

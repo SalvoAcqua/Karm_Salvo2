@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const veicoloSchema = mongoose.Schema({
     tipoVeicolo: {
         type: String,
-        enum: ["Autovettura", "Moto", "Bicicletta", "Monopattino"]
+        enum: ["Autovettura", "Moto", "Bici", "Monopattino"]
     },
     modello: String,
     marca: String,

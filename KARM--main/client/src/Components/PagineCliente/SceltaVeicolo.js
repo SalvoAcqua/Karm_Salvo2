@@ -14,13 +14,24 @@ function SceltaVeicolo(){
     const utente = useSelector((state)=>state.utenti.utente)
     const dispatch = useDispatch();
 
-    const prenota = (idVeicolo) =>{
+    const prenota = (idVeicolo) =>  {
+         let feriale = 0;
+         let festivo = 0;
+        nuovaPrenotazione.listaVeicoli.map((veicolo)=>{
+            if(veicolo._id==idVeicolo){
+                feriale=veicolo.prezzoFeriale;
+                festivo=veicolo.prezzoFestivo;
+            } 
+        });
         if(nuovaPrenotazione.prenotazione.autista==true){
             nuovaPrenotazione.prenotazione.cliente=utente._id;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
             dispatch(addPrenotazione(nuovaPrenotazione.prenotazione));
         } else {
+            nuovaPrenotazione.prenotazione.prezzoFeriale=feriale;
+            nuovaPrenotazione.prenotazione.prezzoFestivo=festivo;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
+            console.log(feriale)
             dispatch(newInformation(nuovaPrenotazione.prenotazione));
             window.location.href="/SceltaParcheggi"
         }

@@ -2,65 +2,95 @@ import React from "react";
 import {Container,Row,Col,Button,Alert,Modal,ModalBody} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {pagamentoAggiuntivo, assegnaLuogo, completaRilascio} from '../../Actions/corsa';
+import {verifyRelease, pagamentoAggiuntivo, assegnaLuogo, completaRilascio} from '../../Actions/corsa';
 import {getListaParcheggi} from '../../Actions/admin';
 import {getTariffe} from '../../Actions/prenotazioni';
+import {convertiData, getOra, emptyDate} from '../gestioneDateTime';
 import classnames from "classnames";
 
 function RilascioForm (){
-    const [visibility,setVisibility] = useState({alert:false, modalCalcola:false, modalRiepilogo:false});
+    const [showContainer, setShowContainer] = useState("none");
     const [rilascio,setRilascio] = useState({codPrenotazione:'',integrita:'',luogoInd:'',luogoParch:''});
-    const [importo,setImporto] = useState('');
+    const [importoDanni,setImportoDanni] = useState(0);
+    const [importoLuogo,setImportoLuogo] = useState(0);
+    const [importoTempo,setImportoTempo] = useState(0);
     const [errCodice,setErrCodice] = useState(true);
     const [errIntegrita,setErrIntegrita] = useState(true);
-    const [errInd,setErrInd] = useState(true);
-    const [errParch,setErrParch] = useState(true);
-    const prenotazioneInCorso = useSelector((state)=>state.PrenotazioneInCorso.corsa);
+    const [errLuogo,setErrLuogo] = useState(true);
     const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
     const tariffe = useSelector ((state)=>state.Prenotazioni.tariffe);
+    const corsa = useSelector((state)=>state.Corsa.corsa);
+    const Err = useSelector((state)=>state.errori.error);
     const dispatch = useDispatch();
     
     const onSubmit = (event) => {
         event.preventDefault();
-        if (!errCodice && !errIntegrita && !errInd && !errParch) {
-            if(prenotazioneInCorso._id==rilascio.codPrenotazione) {
-                setVisibility({...visibility, modalCalcola: true});
-            } else {
-                setVisibility({...visibility, alert: true});
-            }
+        if (!errCodice && !errIntegrita && !errLuogo) {
+            const Dati={cod: rilascio.codPrenotazione};
+            dispatch(verifyRelease(Dati));
         }
     }
 
     const clickPagamento = () => {
-        setVisibility({...visibility,modalCalcola:false});
-        dispatch(getTariffe(prenotazioneInCorso));
-        let sovrapprezzo="";
+        dispatch(getTariffe(corsa));
+        
         switch (rilascio.integrita) {
             case "0":
-                setImporto('0');
+                setImportoDanni(0);
                 break;
             case "1":
-                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
-                setImporto(sovrapprezzo);
+                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)/4);
                 break;
             case "2":
-                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
-                setImporto(sovrapprezzo);
+                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)/2);
                 break;
             default:
-                sovrapprezzo = tariffe.prFestivo +  tariffe.prFeriale;
-                setImporto(sovrapprezzo);
+                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)*5);
                 break;
         }
-        const Dati = {importo: importo, prenotazione: prenotazioneInCorso};
-        dispatch(pagamentoAggiuntivo(Dati)); //ritira i soldi dalla carta di credito
-        setVisibility({...visibility,modalRiepilogo:true});
+
+        if (rilascio.luogoInd!=""){
+            if(rilascio.luogoInd!=corsa.viaDestinazione){
+                setImportoLuogo((tariffe.prFestivo +  tariffe.prFeriale)/4);
+            }
+        } else {
+            if(rilascio.luogoParch!=corsa.idParcheggioRilascio){
+                setImportoLuogo((tariffe.prFestivo +  tariffe.prFeriale)/4);
+            }
+        }
+
+        let todayTime=new Date();
+        let todayDate=new Date(convertiData(todayTime));
+        let dataArrivo=new Date(corsa.dataArrivo);
+        let sovrapprezzoTempo=0;
+        
+        if (dataArrivo.getTime()<todayDate.getTime()){
+            let data = dataArrivo;
+            do {
+                if(data.getDay()==0 || data.getDay()==6){
+                    sovrapprezzoTempo += Number(tariffe.prFestivo);
+                } else {
+                    sovrapprezzoTempo += Number(tariffe.prFeriale);
+                }
+                data.setDate(data.getDate()+1)
+            } while(data<=todayDate);
+        } else {
+            if (corsa.oraArrivo>getOra(todayTime)){
+                sovrapprezzoTempo=(todayDate.getDay()==0 || todayDate.getDay()==6) ? tariffe.prFestivo : tariffe.prFeriale;
+            }
+        }
+        setImportoTempo(sovrapprezzoTempo);
+
+        setShowContainer("block");
     }
 
     const clickConferma = () => {
-        let Dati = {idVeicolo: prenotazioneInCorso.idVeicolo, parch: rilascio.luogoParch, ind: rilascio.luogoInd};
-        dispatch(assegnaLuogo(Dati));
-        dispatch(completaRilascio(prenotazioneInCorso));
+        let totale=importoDanni+importoLuogo+importoTempo;
+        let Dati={totale: totale, corsa: corsa};
+        dispatch(pagamentoAggiuntivo(Dati)); //ritira i soldi dalla carta di credito
+        let dati = {idVeicolo: corsa.idVeicolo, parch: rilascio.luogoParch, ind: rilascio.luogoInd};
+        dispatch(assegnaLuogo(dati));
+        dispatch(completaRilascio(corsa));
     }
 
     useEffect(()=>{    
@@ -89,13 +119,11 @@ function RilascioForm (){
 
     useEffect(()=>{
         if((rilascio.luogoParch=="" && rilascio.luogoInd=="")||(rilascio.luogoParch!="" && rilascio.luogoInd!="")){
-            setErrInd(true);
-            setErrParch(true);
+            setErrLuogo(true);
             document.getElementById("luogoParch").style.borderColor="red";
             document.getElementById("luogoInd").style.borderColor="red";
         }else {
-            setErrInd(false);
-            setErrParch(false);
+            setErrLuogo(false);
             document.getElementById("luogoParch").style.borderColor="green";
             document.getElementById("luogoInd").style.borderColor="green";
         }
@@ -105,23 +133,27 @@ function RilascioForm (){
     return (
         <div>
            <Container>
-                <Modal show={visibility.modalCalcola} centered backdrop="static">
+                <Modal show={Err.corsa!=undefined} centered backdrop="static">
                     <ModalBody>
                         <Button onClick={()=>clickPagamento()}>Calcola pagamento aggiuntivo</Button>
+                        <Container style={{display:showContainer}} classtyle={{marginTop:"20px"}}>
+                            <br/><br/>
+                            <h3> Sovrapprezzo calcolato: </h3>
+                            <Row>
+                                <br/><br/>
+                                <p>Verranno prelevati dalla tua carta di credito (inserita in fase di prenotazione): </p><br/>
+                                <p> {importoDanni} € a causa dei danni provocati al veicolo</p><br/>
+                                <p> {importoTempo} € a causa del ritardo riscontrato</p><br/>
+                                <p> {importoLuogo} € a causa del luogo del rilascio</p><br/><br/>
+                                <p> Per un importo totale pari a  {importoDanni+importoTempo+importoLuogo}€</p><br/>
+                            </Row>
+                            <Row>
+                                <Button onClick={()=>clickConferma()}>Conferma</Button>
+                            </Row>
+                        </Container>
                     </ModalBody>
                 </Modal>
-                <Modal show={visibility.modalRiepilogo} centered backdrop="static">
-                    <Modal.Header> Pagamento avvenuto con successo </Modal.Header>
-                    <ModalBody>
-                        <Row>
-                            <p>Sono stati prelevati {importo}€ dalla carta di credito {prenotazioneInCorso._id} a causa dei danni provocati al veicolo</p>
-                        </Row>
-                        <Row>
-                            <Button onClick={()=>clickConferma()}>Conferma</Button>
-                        </Row>
-                    </ModalBody>
-                </Modal>
-                <Alert show={visibility.alert} variant="danger">
+                <Alert show={Err.rilascio!=undefined} variant="danger">
                     <Alert.Heading>Errore!</Alert.Heading>
                     <p>
                         Il codice inserito non risulta essere il codice di una prenotazione in corso
@@ -154,12 +186,12 @@ function RilascioForm (){
                                     <option value={parcheggio._id}>{parcheggio.nome}-{parcheggio.indirizzo},{parcheggio.nCivico}</option>
                                 )}
                     </select><br/>
-                    <span className={classnames({'green-convalid':!errParch, 'red-convalid':errParch})}> {errParch ? "Seleziona il parcheggio di rilascio solo se non hai inserito alcun indirizzo" : "OK"} </span>
+                    <span className={classnames({'green-convalid':!errLuogo, 'red-convalid':errLuogo})}> {errLuogo ? "Seleziona il parcheggio di rilascio solo se non hai inserito alcun indirizzo" : "OK"} </span>
                     <br/><br/>
 
                     <label htmlFor="luogoInd"> Indirizzo di rilascio: </label> <br/>
                     <input type="text" id="luogoInd" name="luogoInd" onChange={(e)=>setRilascio({...rilascio,luogoInd: e.target.value})} title="Inserisci l'indirizzo del luogo in cui hai rilasciato il veicolo"/> <br/>
-                    <span className={classnames({'green-convalid':!errInd, 'red-convalid':errInd})}> {errInd ? "Inserisci l'indirizzo di rilascio solo se hai selezionato 'Nessun Parcheggio'" : "OK"} </span>
+                    <span className={classnames({'green-convalid':!errLuogo, 'red-convalid':errLuogo})}> {errLuogo ? "Inserisci l'indirizzo di rilascio solo se hai selezionato 'Nessun Parcheggio'" : "OK"} </span>
                     <br/><br/>
 
                     <Button type="submit" variant="success" >Avanti</Button>

@@ -112,7 +112,13 @@ export const accessoUtente = async (req,res) => {
                         }
                         return res.status(200).json(Utente);
                     }
-                    else{
+                    else if(user.ruolo=="Cliente"){
+                        
+                        await metodiPagamento.find({emailCliente: user.email}).then((metodi)=>{
+                            return res.status(200).json({user,metodi});
+                        })
+                        
+                    } else {
                         return res.status(200).json(user);
                     }
                 }

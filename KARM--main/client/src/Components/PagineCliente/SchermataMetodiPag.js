@@ -39,13 +39,14 @@ function SchermataMetodiPag (){
                 cvv: dati.cvv
             }
             dispatch(addMetodoDiPagamento(newMethod))
+            window.location.reload();
         }
     }
 
-    useEffect(()=>{
+    /* useEffect(()=>{
         const datiEmail = {email: emailUtente}
         dispatch(getMetodiDiPagamento(datiEmail));
-    },[]);
+    },[]); */
 
     useEffect(()=>{
         if(patternNumber.test(dati.numeroCarta) && (dati.numeroCarta.length==13 || dati.numeroCarta.length==16 )){ 

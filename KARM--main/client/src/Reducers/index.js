@@ -4,8 +4,7 @@ import errori from './errori';
 import AccountCliente from './AccountCliente';
 import AccountAdmin from './AccountAdmin';
 import Prenotazioni from './Prenotazioni';
-import PrenotazioneInCorso from './PrenotazioneInCorso';
-
+import Corsa from './Corsa';
 
 
 export default combineReducers({
@@ -14,6 +13,6 @@ export default combineReducers({
     AccountCliente,
     AccountAdmin,
     Prenotazioni,
-    PrenotazioneInCorso
+    Corsa
 })
 

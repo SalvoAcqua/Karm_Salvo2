@@ -39,6 +39,7 @@ function SchermataPrenotazioniAdmin (){
                                 <th>Nome Parcheggio Arrivo</th>
                                 <th>Indirizzo Partenza</th>
                                 <th>Indirizzo Arrivo</th>
+                                <th>Prezzo</th>
                                 <th>Stato Prenotazione</th>
                                 <th style={{color:"blue"}}>Modifica Prenotazione</th>
                                 <th style={{color:"red"}}>Annulla Prenotazione</th>
@@ -65,6 +66,7 @@ function SchermataPrenotazioniAdmin (){
                                         <td>{prenotazione.nomeParcheggioArrivo}</td>
                                         <td>{prenotazione.indirizzoPartenza}</td>
                                         <td>{prenotazione.indirizzoArrivo}</td>
+                                        <td>{prenotazione.prezzo}€</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>
                                             <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
