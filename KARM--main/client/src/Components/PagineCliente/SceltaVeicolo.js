@@ -17,10 +17,12 @@ function SceltaVeicolo(){
     const prenota = (idVeicolo) =>  {
          let feriale = 0;
          let festivo = 0;
+         let viaFuoriStallo = "";
         nuovaPrenotazione.listaVeicoli.map((veicolo)=>{
             if(veicolo._id==idVeicolo){
                 feriale=veicolo.prezzoFeriale;
                 festivo=veicolo.prezzoFestivo;
+                viaFuoriStallo=veicolo.viaFuoriStallo;
             } 
         });
         if(nuovaPrenotazione.prenotazione.autista==true){
@@ -31,7 +33,7 @@ function SceltaVeicolo(){
             nuovaPrenotazione.prenotazione.prezzoFeriale=feriale;
             nuovaPrenotazione.prenotazione.prezzoFestivo=festivo;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
-            console.log(feriale)
+            nuovaPrenotazione.prenotazione.viaFuoriStallo=viaFuoriStallo;
             dispatch(newInformation(nuovaPrenotazione.prenotazione));
             window.location.href="/SceltaParcheggi"
         }
@@ -64,6 +66,7 @@ function SceltaVeicolo(){
                                     <ListGroupItem variant="light">Modello: {veicolo.modello} <br/> Marca: {veicolo.marca}</ListGroupItem>
                                     <ListGroupItem variant="light">Cilindrata: {veicolo.cilindrata} <br/> N Posti: {veicolo.nPosti} <br/> N Porte: {veicolo.nPorte}</ListGroupItem>
                                     <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                    <ListGroupItem variant="warning">Fuori Stallo: {veicolo.viaFuoriStallo=="" ? "No" : veicolo.viaFuoriStallo}</ListGroupItem>
                                 </ListGroup>
                                 <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
                             </Card.Body>
@@ -98,7 +101,7 @@ function SceltaVeicolo(){
                                         <ListGroupItem variant="light">Modello: {veicolo.modello} <br/> Marca: {veicolo.marca}</ListGroupItem>
                                         <ListGroupItem variant="light">Cilindrata: {veicolo.cilindrata}</ListGroupItem>
                                         <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
-                                    </ListGroup>
+                                        <ListGroupItem variant="warning">Fuori Stallo: {veicolo.viaFuoriStallo=="" ? "No" : veicolo.viaFuoriStallo}</ListGroupItem>                                    </ListGroup>
                                     <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
                                 </Card.Body>
                                 </Card>
@@ -129,7 +132,7 @@ function SceltaVeicolo(){
                                 </Card.Text>
                                 <ListGroup className="list-group-flush" style={{marginBottom:"10px"}}>
                                     <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
-                                </ListGroup>
+                                    <ListGroupItem variant="warning">Fuori Stallo: {veicolo.viaFuoriStallo=="" ? "No" : veicolo.viaFuoriStallo}</ListGroupItem>                                </ListGroup>
                                 <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
                             </Card.Body>
                             </Card>
@@ -162,6 +165,7 @@ function SceltaVeicolo(){
                                 </Card.Text>
                                 <ListGroup className="list-group-flush " style={{marginBottom:"10px", background:"white"}}>
                                     <ListGroupItem variant="light">Prezzo Festivo: {veicolo.prezzoFestivo}€ <br/> Prezzo Feriale: {veicolo.prezzoFeriale}€</ListGroupItem>
+                                    <ListGroupItem variant="warning">Fuori Stallo: {veicolo.viaFuoriStallo=="" ? "No" : veicolo.viaFuoriStallo}</ListGroupItem>
                                 </ListGroup>
                                 <Button variant="secondary" onClick={()=>prenota(veicolo._id)}>Seleziona</Button>
                             </Card.Body>

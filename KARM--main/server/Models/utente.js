@@ -23,7 +23,8 @@ const utenteSchema = mongoose.Schema({
     dataRilascioPatente: Date,
     dataScadenzaPatente: Date,
     enteRilascio: String,
-    idParcheggio: String,   
+    idParcheggio: String, 
+    OTP:String
 });
 
 const utente = mongoose.model('utente', utenteSchema);

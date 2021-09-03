@@ -51,7 +51,7 @@ export const newInformation = (userData) => (dispatch) => {
 
 //Get Tariffe
 export const getTariffe = (userData) => async (dispatch) => {
-        await api.getTariffe(userData).then((res)=>{
-                dispatch({type:"SET_RATE", payload: res.data});
+        return await api.getTariffe(userData).then((res)=>{
+                return res.data;
         }).catch((err)=>{console.log(err.message)})
 }

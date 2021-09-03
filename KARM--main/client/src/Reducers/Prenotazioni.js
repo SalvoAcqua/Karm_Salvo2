@@ -2,7 +2,6 @@ const initialState = {
     prenotazione:{},
     listaVeicoli:[],
     listaPrenotazioni:[],
-    tariffe:{}
 };
 
 export default (state=initialState, action) => {
@@ -13,8 +12,6 @@ export default (state=initialState, action) => {
             return {...state, listaVeicoli: action.payload};
         case 'SET_BOOKINGS':
             return {...state, listaPrenotazioni: action.payload};
-        case 'SET_RATE':
-                return {...state, tariffe: action.payload};
         default:
             return state;
     }

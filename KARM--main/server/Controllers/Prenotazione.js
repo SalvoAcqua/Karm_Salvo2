@@ -16,7 +16,7 @@ export const addPrenotazione = async (req,res) => {
             oraArrivo:req.body.oraArr,
             idParcheggioConsegna:req.body.parcheggioConsegna,
             idParcheggioRilascio:req.body.parcheggioRilascio,
-            viaPartenza:'',
+            viaPartenza:req.body.viaFuoriStallo,
             viaDestinazione:'',
             numeroCartaPagamento:req.body.numeroCarta,
             prezzo:req.body.prezzo

@@ -139,7 +139,6 @@ function RegistratiForm() {
         } catch(err) {
             document.getElementById("CF").style.borderColor="red";
             setErrCF(true);
-            console.log(err.message)
             };  
     },[dati.nome,dati.cognome,dati.sesso,dati.dataNascita,dati.provinciaNascita,dati.luogoNascita,dati.CF]);
         return(

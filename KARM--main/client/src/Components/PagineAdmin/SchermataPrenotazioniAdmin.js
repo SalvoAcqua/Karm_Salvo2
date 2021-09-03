@@ -58,9 +58,9 @@ function SchermataPrenotazioniAdmin (){
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
                                         <td>{prenotazione.nomeAutista}</td>
                                         <td>{prenotazione.cognomeAutista}</td>
-                                        <td>{prenotazione.dataPartenza}</td>
+                                        <td>{prenotazione.dataPartenza.slice(0,10)}</td>
                                         <td>{prenotazione.oraPartenza}</td>
-                                        <td>{prenotazione.dataArrivo}</td>
+                                        <td>{prenotazione.dataArrivo.slice(0,10)}</td>
                                         <td>{prenotazione.oraArrivo}</td>
                                         <td>{prenotazione.nomeParcheggioPartenza}</td>
                                         <td>{prenotazione.nomeParcheggioArrivo}</td>

@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {newInformation} from '../../Actions/prenotazioni';
 import classnames from "classnames";
 import {convertiData, getOra, emptyDate} from '../gestioneDateTime';
-
 function NuovaPrenotazioneForm (){
     const [prenotazione,setPrenotazione] = useState({tipoVeicolo:'',indirizzoPa:'',dataPa:'',oraPa:'', indirizzoArr:'',dataArr:'',oraArr:'',disp:'',autista:''});
     

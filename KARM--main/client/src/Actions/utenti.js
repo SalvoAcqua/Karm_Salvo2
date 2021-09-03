@@ -44,7 +44,7 @@ export const logoutUser = () => async (dispatch) => {
 export const modificaPass = (userData) => async (dispatch) => {
     await api.modificaPassword(userData).then((res)=>{
         dispatch({type:'SET_USER', payload: res.data});
-        window.location.href="/SchermataMioProfilo"
+        window.location.href="/"
     }).catch((err)=>{console.log(err.message)})
 }
 
@@ -78,4 +78,22 @@ export const setPark = (userData) => async (dispatch) => {
         dispatch({type:'SET_USER', payload: res.data});
         window.location.href="/SchermataMioProfilo"
     }).catch((err)=>{console.log(err.message)})
+}
+
+//Recupera password
+export const passwordRecovery = (userData) => async (dispatch) => {
+
+    return await api.passwordRecovery(userData).then((res)=>{
+       return res.data
+    }).catch((err)=>{
+        dispatch({type:'GET_ERROR',payload: err.response.data})
+    })
+}
+
+export const checkOTP = (userData) => async (dispatch) => {
+    return await api.checkOTP(userData).then((res)=>{
+        return res.data
+    }).catch((err)=>{
+        dispatch({type:'GET_ERROR',payload: err.response.data})
+    })
 }

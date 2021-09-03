@@ -171,7 +171,7 @@ function HomePage () {
                                 alt="areaParcheggio"
                             />
                             <Carousel.Caption>
-                                <h4>Benvenuto Admin</h4>
+                                <h4>Benvenuto Addetto</h4>
                             </Carousel.Caption>
                         </Carousel.Item>
 

@@ -18,7 +18,6 @@ function RilascioForm (){
     const [errIntegrita,setErrIntegrita] = useState(true);
     const [errLuogo,setErrLuogo] = useState(true);
     const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
-    const tariffe = useSelector ((state)=>state.Prenotazioni.tariffe);
     const corsa = useSelector((state)=>state.Corsa.corsa);
     const Err = useSelector((state)=>state.errori.error);
     const dispatch = useDispatch();
@@ -32,56 +31,56 @@ function RilascioForm (){
     }
 
     const clickPagamento = () => {
-        dispatch(getTariffe(corsa));
-        
-        switch (rilascio.integrita) {
-            case "0":
-                setImportoDanni(0);
-                break;
-            case "1":
-                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)/4);
-                break;
-            case "2":
-                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)/2);
-                break;
-            default:
-                setImportoDanni((tariffe.prFestivo +  tariffe.prFeriale)*5);
-                break;
-        }
-
-        if (rilascio.luogoInd!=""){
-            if(rilascio.luogoInd!=corsa.viaDestinazione){
-                setImportoLuogo((tariffe.prFestivo +  tariffe.prFeriale)/4);
+        dispatch(getTariffe(corsa)).then((res)=>{
+            switch (rilascio.integrita) {
+                case "0":
+                    setImportoDanni(0);
+                    break;
+                case "1":
+                    setImportoDanni((res.prFestivo +  res.prFeriale)/4);
+                    break;
+                case "2":
+                    setImportoDanni((res.prFestivo +  res.prFeriale)/2);
+                    break;
+                default:
+                    setImportoDanni((res.prFestivo +  res.prFeriale)*5);
+                    break;
             }
-        } else {
-            if(rilascio.luogoParch!=corsa.idParcheggioRilascio){
-                setImportoLuogo((tariffe.prFestivo +  tariffe.prFeriale)/4);
-            }
-        }
-
-        let todayTime=new Date();
-        let todayDate=new Date(convertiData(todayTime));
-        let dataArrivo=new Date(corsa.dataArrivo);
-        let sovrapprezzoTempo=0;
-        
-        if (dataArrivo.getTime()<todayDate.getTime()){
-            let data = dataArrivo;
-            do {
-                if(data.getDay()==0 || data.getDay()==6){
-                    sovrapprezzoTempo += Number(tariffe.prFestivo);
-                } else {
-                    sovrapprezzoTempo += Number(tariffe.prFeriale);
+    
+            if (rilascio.luogoInd!=""){
+                if(rilascio.luogoInd!=corsa.viaDestinazione){
+                    setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
                 }
-                data.setDate(data.getDate()+1)
-            } while(data<=todayDate);
-        } else {
-            if (corsa.oraArrivo>getOra(todayTime)){
-                sovrapprezzoTempo=(todayDate.getDay()==0 || todayDate.getDay()==6) ? tariffe.prFestivo : tariffe.prFeriale;
+            } else {
+                if(rilascio.luogoParch!=corsa.idParcheggioRilascio){
+                    setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
+                }
             }
-        }
-        setImportoTempo(sovrapprezzoTempo);
-
-        setShowContainer("block");
+    
+            let todayTime=new Date();
+            let todayDate=new Date(convertiData(todayTime));
+            let dataArrivo=new Date(corsa.dataArrivo);
+            let sovrapprezzoTempo=0;
+            
+            if (dataArrivo.getTime()<todayDate.getTime()){
+                let data = dataArrivo;
+                do {
+                    if(data.getDay()==0 || data.getDay()==6){
+                        sovrapprezzoTempo += Number(res.prFestivo);
+                    } else {
+                        sovrapprezzoTempo += Number(res.prFeriale);
+                    }
+                    data.setDate(data.getDate()+1)
+                } while(data<=todayDate);
+            } else if (dataArrivo.getTime()==todayDate.getTime()) {
+                if (corsa.oraArrivo>getOra(todayTime)){
+                    sovrapprezzoTempo=(todayDate.getDay()==0 || todayDate.getDay()==6) ? res.prFestivo : res.prFeriale;
+                }
+            }
+            setImportoTempo(sovrapprezzoTempo);
+    
+            setShowContainer("block");
+        })
     }
 
     const clickConferma = () => {

@@ -34,3 +34,13 @@ export const addMethods = (dati) => {
 export const setPark = (dati) =>{
     return axios.post('/Routers/GestioneAccount/AggiornaParcheggio',dati);
 };
+
+//Recupera Password
+export const passwordRecovery = (dati) =>{
+    return axios.post('/Routers/GestioneAccount/RecuperaPassword',dati);
+};
+
+//Controllo OTP
+export const checkOTP = (dati) =>{
+    return axios.post('/Routers/GestioneAccount/ControlloOTP',dati);
+};

@@ -2,6 +2,17 @@ import utente from '../Models/utente.js';
 import parcheggi from '../Models/parcheggi.js'
 import metodiPagamento from '../Models/metodiPagamento.js';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+//Genera OTP
+function generateRandomOTP() {
+    var sRnd = '';
+    var sChrs = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    for (var i = 0; i < 7; i++) {
+      var randomPoz = Math.floor(Math.random() * sChrs.length);
+      sRnd += sChrs.substring(randomPoz, randomPoz + 1);
+    }
+    return sRnd;
+  }
 
 
 //Aggiungi Utente
@@ -71,6 +82,7 @@ export const registraUtente = async (req, res) => {
     })
 }
 
+//Accesso Utente
 export const accessoUtente = async (req,res) => {
     const {email,password} = await req.body
     await utente.findOne({email}).then((user)=>{
@@ -127,13 +139,15 @@ export const accessoUtente = async (req,res) => {
     }).catch((err)=>{ return res.status(500).json(err.message);});
 } 
 
+//Cambia Password
 export const nuovaPassword = async (req,res) =>{
     const nuovaPassword = await bcrypt.hash(req.body.nuovaPassword,10);
-    await utente.findOneAndUpdate({email : req.body.email}, {password: nuovaPassword},{new:true}).then((user)=>{
+    await utente.findOneAndUpdate({email : req.body.email}, {password: nuovaPassword, $unset:{OTP:""}},{new:true}).then((user)=>{
         return res.json(user);
     }).catch((err)=> {return res.status(500).json(err.message)})
 }
 
+//Aggiungi metodo di pagamento
 export const addMetodoPagamento = async (req,res) =>{
     const newMethod = new metodiPagamento ({
         emailCliente: req.body.email,
@@ -147,19 +161,21 @@ export const addMetodoPagamento = async (req,res) =>{
 };
 
 
-
+//prendi metodi di pagamento
 export const getMetodiPagamento = async (req,res) => {
     await metodiPagamento.find({emailCliente : req.body.email}).then((pag)=>{
         return res.json(pag)
     }).catch((err)=> {return res.status(500).json(err.message)})
 }
 
+//rimuovi metodi di pagamento
 export const removeMetodoPagamento = async (req,res) =>{
    await metodiPagamento.findOneAndRemove({_id: req.body.id}).then((pag)=>{
        res.json({succes: true,pag})
    }).catch((err)=>{return res.status(500).json(err.message)})
 };
 
+//aggiorna patente
 export const aggiornaPatente = async (req,res) => {
     await utente.findOneAndUpdate({
         email : req.body.email}, 
@@ -217,4 +233,52 @@ export const aggiornaParcheggio = async (req,res) => {
         }
         return res.status(200).json(Utente);
     }).catch((err) => {return res.status(500).json(err.message)})
+}
+
+export const recuperaPassword = async (req,res) => {
+    await utente.findOne({email:req.body.email}).then((User)=>{
+        if(User){
+            let otp=generateRandomOTP();
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                user: 'team.karm2021@gmail.com',
+                pass: 'Karm@2021' // naturally, replace both with your real credentials or an application-specific password
+            },tls: {rejectUnauthorized: false}
+            });
+      
+        const mailOptions = {
+            from: 'team.karm2021@gmail.com',
+            to: User.email,
+            subject: 'TeamKarm: Recupero Password',
+            text: `${User.nome}, utilizza il seguente codice OTP per poter cambiare la tua password! : ${otp}`
+        };
+      
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (!error) {
+            await utente.findOneAndUpdate({email:User.email},{OTP:otp},{new:true}).then((user)=>{
+                return res.status(200).json(true);
+            }).catch((err)=>{ return res.status(500).json(err)})
+            } else {
+                console.log(error);
+                //res.status(500).json({email:"Non siamo riusciti a contattare questa email"});
+            }
+        });
+        } else{
+            res.status(400).json({email:"L'email inserita non ha un account registrato"});
+        }
+    })
+    
+}
+
+export const controlloOTP = async (req,res) => {
+    await utente.findOne({email:req.body.email, OTP:req.body.OTP}).then((user)=>{
+        if(user){
+            return res.status(200).json(true);
+        } else{
+            return res.status(400).json({otp:"Codice OTP non valido"});
+        }
+    }).catch((err)=>{
+        return res.statu(500).json(err);
+    })
 }

@@ -23,7 +23,7 @@ function SchermataIniziale (){
   },[])
   
   return (
-    <div className="dist-div-footer corpo">
+    <div className="container">
       <Modal show={show} onHide={()=>setShow(false)} centered backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>Inserisci i tuoi dati</Modal.Title>
@@ -55,7 +55,7 @@ function SchermataIniziale (){
             <Row>
               <Col style={{display:"flex", justifyContent:"flex-end"}}>
                 <p>
-                  <Link to="/Registrazione"> Hai dimenticato la password? </Link>
+                  <Link to="/RecuperaPassword"> Hai dimenticato la password? </Link>
                 </p>
               </Col>
             </Row>

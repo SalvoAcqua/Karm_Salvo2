@@ -166,7 +166,7 @@ export const addVeicolo = async (req,res) => {
     let moto='';
     let bici='';
     let monopattini='';
-    await parcheggio.findOne({_id:req.body.parcheggioAssociato}).then((parking)=>{
+    await parcheggio.findOne({_id:req.body.parcheggioAssociato}).then(async (parking)=>{
         parche=parking.nome;
         auto=parking.autoPresenti;
         moto=parking.motoPresenti;
@@ -346,24 +346,32 @@ export const changePark = async (req,res) => {
     await parcheggio.findOne({_id:req.body.nuovoParcheggio}).then((parking)=>{
         parche=parking.nome;
     })
-    await veicolo.findOneAndUpdate({_id: req.body.veicolo._id},{parcheggioAssociato: parche}).then((veicolo)=>{
+    await veicolo.findOneAndUpdate({_id: req.body.veicolo._id},{parcheggioAssociato: parche, viaFuoriStallo:""}).then((veicolo)=>{
         res.json(veicolo);
     }).catch((err)=>{return res.status(500).json(err.message)})
     switch(req.body.veicolo.tipo){
         case "Autovettura":
-            await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {autoPresenti: -1}})
+            if (req.body.veicolo.parcAssociato!=""){
+                await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {autoPresenti: -1}})
+            }
             await parcheggio.findOneAndUpdate({_id: req.body.nuovoParcheggio},{ $inc: {autoPresenti: 1}})
             break;
         case "Moto":
-            await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {motoPresenti: -1}})
+            if (req.body.veicolo.parcAssociato!=""){
+                await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {motoPresenti: -1}})
+            }
             await parcheggio.findOneAndUpdate({_id: req.body.nuovoParcheggio},{ $inc: {motoPresenti: 1}})
             break;
         case "Bicicletta":
-            await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {biciPresenti: -1}})
+            if (req.body.veicolo.parcAssociato!=""){
+                await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {biciPresenti: -1}})
+            }
             await parcheggio.findOneAndUpdate({_id: req.body.nuovoParcheggio},{ $inc: {biciPresenti: 1}})
             break;
         default:
-            await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {monopattiniPresenti: -1}})
+            if (req.body.veicolo.parcAssociato!=""){
+                await parcheggio.findOneAndUpdate({nome: req.body.veicolo.parcAssociato},{ $inc: {monopattiniPresenti: -1}})
+            }
             await parcheggio.findOneAndUpdate({_id: req.body.nuovoParcheggio},{ $inc: {monopattiniPresenti: 1}})
             break;
     }

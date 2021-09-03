@@ -192,8 +192,8 @@ function SchermataRiepilogo() {
                         <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
                         <ListGroupItem>Date e ora Partenza : {nuovaPrenotazione.prenotazione.dataPa.slice(0,10)}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
                         <ListGroupItem>Data e ora Arrivo : {nuovaPrenotazione.prenotazione.dataArr.slice(0,10)}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
-                        <ListGroupItem>Parcheggio Consegna : {nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico}<br/></ListGroupItem>
-                        <ListGroupItem>Parcheggio Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
+                        <ListGroupItem>Consegna : {nuovaPrenotazione.prenotazione.viaFuoriStallo=!'' ?  nuovaPrenotazione.prenotazione.viaFuoriStallo : (nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome - nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo,nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico)}<br/></ListGroupItem>
+                        <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
                         <ListGroupItem>Presenza Autista: No <br/></ListGroupItem>
                         <ListGroupItem variant="primary">Prezzo da pagare: {prezzoDaPagare()}€</ListGroupItem>  
                     </ListGroup>

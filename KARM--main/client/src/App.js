@@ -26,6 +26,7 @@ import SceltaVeicolo from './Components/PagineCliente/SceltaVeicolo';
 import SceltaParcheggi from './Components/PagineCliente/SceltaParcheggi';
 import SchermataRiepilogo from './Components/PagineCliente/SchermataRiepilogo';
 import SuDiNoi from './Components/PagineComuni/SuDiNoi';
+import RecuperaPasswordForm from './Components/PagineComuni/RecuperaPasswordForm';
 
 
 //PagineAdmin
@@ -54,6 +55,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={SchermataIniziale} />
                     <Route exact path="/Registrazione" component={RegistratiForm} />
+                    <Route exact path="/RecuperaPassword" component={RecuperaPasswordForm} />
                     <ProtectedRoute exact path="/HomePage" component={HomePage} />
                     <ProtectedRoute exact path="/SchermataMioProfilo" component={SchermataMioProfilo} />
                     <ProtectedRoute exact path="/GestioneCorsa" component={SchermataGestioneCorsa} />

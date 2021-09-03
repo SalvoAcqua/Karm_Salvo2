@@ -27,7 +27,6 @@ export const assegnaLuogo = (userData) => async (dispatch) =>{
 
 export const completaRilascio = (userData) => async (dispatch) =>{
     await api.completaRilascio(userData).then((res)=>{
-    //distruggi Entity
-    window.location.href="/HomePage";
+        window.location.href="/HomePage";
     }).catch((err)=>{console.log(err.message)});
 };

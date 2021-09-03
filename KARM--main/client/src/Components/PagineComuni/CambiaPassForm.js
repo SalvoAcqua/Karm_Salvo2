@@ -20,16 +20,10 @@ function CambiaPassForm (){
 
     const onSubmit = (event) => {
         event.preventDefault();
-        let controlla = false;
-        if(errVecchiaPass==true || errNuovaPass==true || errConfPass==true){
-            controlla = true;
-        }
-
-        if(controlla==false){
+        if(errVecchiaPass==false && errNuovaPass==false && errConfPass==false){
             const nuovaPassword = {nuovaPassword: dati.nuovaPassword , email: emailUtente};
             dispatch(modificaPass(nuovaPassword))
         }
-
     }
 
     useEffect(()=>{
