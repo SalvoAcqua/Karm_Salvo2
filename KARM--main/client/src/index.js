@@ -16,7 +16,7 @@ const persistConfig = {
     key: "karm",
     storage,
     whitelist: ["utenti","AccountCliente","AccountAdmin","Prenotazioni","Corsa"],
-    blacklist: ["errori"]
+    blacklist: ["errori","Notifiche"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

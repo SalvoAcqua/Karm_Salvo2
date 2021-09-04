@@ -6,6 +6,7 @@ import {getPrenotazioniAutista} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
 import classnames from "classnames";
 import DeleteIcon from '@material-ui/icons/Delete';
+import {convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAutista (){
     const user = useSelector ((state)=>state.utenti.utente);
@@ -39,6 +40,7 @@ function SchermataPrenotazioniAutista (){
                                 <th>Indirizzo Partenza</th>
                                 <th>Indirizzo Arrivo</th>
                                 <th>Stato Prenotazione</th>
+                                <th>Prezzo</th>
                                 <th style={{color:"red"}}>Annulla Prenotazione</th>
                                 </tr>
                             </thead>
@@ -53,15 +55,16 @@ function SchermataPrenotazioniAutista (){
                                         <td>{prenotazione.cognomeCliente}</td>
                                         <td>{prenotazione.tipoVeicolo}</td>
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
-                                        <td>{prenotazione.dataPartenza.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataPartenza))}</td>
                                         <td>{prenotazione.oraPartenza}</td>
-                                        <td>{prenotazione.dataArrivo.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataArrivo))}</td>
                                         <td>{prenotazione.oraArrivo}</td>
                                         <td>{prenotazione.nomeParcheggioPartenza}</td>
                                         <td>{prenotazione.nomeParcheggioArrivo}</td>
                                         <td>{prenotazione.indirizzoPartenza}</td>
                                         <td>{prenotazione.indirizzoArrivo}</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
+                                        <td>{prenotazione.prezzo}€</td>
                                         <td>
                                             <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
                                                 <DeleteIcon/>

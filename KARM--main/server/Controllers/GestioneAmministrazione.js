@@ -257,79 +257,98 @@ export const removeVehicle = async (req,res) =>{
     }).catch((err)=>{return res.status(500).json(err.message)})
 };
 
+//Cerca sostituto
+export const cercaSostituto = async (Prenotazione, Vehicle) => {
+    let DataPartenza = new Date(Prenotazione.dataPartenza);
+    let DataArrivo = new Date(Prenotazione.dataArrivo);
+    let ris = {};
+    let flag=false;
+    switch (Vehicle.tipoVeicolo) {
+        case "Autovettura":
+            return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, modello: Vehicle.modello, cilindrata:Vehicle.cilindrata, nPosti: Vehicle.nPosti, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
+                for (let Veicolo of Veicoli) {
+                    let idPossibileSostituto=Veicolo._id;
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                        if(!corsa && !flag){
+                            flag=true;
+                            ris = {sostituibile: true, sostituto: Veicolo};
+                        }
+                    }).catch((err)=>{return res.status(500).json(err.message)})
+                }
+                if (!flag) {
+                    ris = {sostituibile: false, sostituto: ""};
+                }
+                return ris;
+            }).catch((err)=>{return res.status(500).json(err.message)})
+            break;
+        case "Moto":
+            return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, modello: Vehicle.modello, cilindrata:Vehicle.cilindrata, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
+                for (let Veicolo of Veicoli) {
+                    let idPossibileSostituto=Veicolo._id;
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                        if(!corsa && !flag){
+                            flag=true;
+                            ris = {sostituibile: true, sostituto: Veicolo};
+                        }
+                    }).catch((err)=>{return res.status(500).json(err.message)})
+                }
+                if (!flag) {
+                    ris = {sostituibile: false, sostituto: ""};
+                }
+                return ris;
+            }).catch((err)=>{return res.status(500).json(err.message)})
+            break;
+        case "Bicicletta":
+            return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
+                for (let Veicolo of Veicoli) {
+                    let idPossibileSostituto=Veicolo._id;
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                        if(!corsa && !flag){
+                            flag=true;
+                            ris = {sostituibile: true, sostituto: Veicolo};
+                        }
+                    }).catch((err)=>{return res.status(500).json(err.message)})
+                }
+                if (!flag) {
+                    ris = {sostituibile: false, sostituto: ""};
+                }
+                return ris;
+            }).catch((err)=>{return res.status(500).json(err.message)})
+            break;
+        default:
+            return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
+                for (let Veicolo of Veicoli) {
+                    let idPossibileSostituto=Veicolo._id;
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                        if(!corsa && !flag){
+                            flag=true;
+                            ris = {sostituibile: true, sostituto: Veicolo};
+                        }
+                    }).catch((err)=>{return res.status(500).json(err.message)})
+                }
+                if (!flag) {
+                    ris = {sostituibile: false, sostituto: ""};
+                }
+                return ris;
+            }).catch((err)=>{return res.status(500).json(err.message)})
+            break;
+    }
+}
+
+
 //Blocca Veicolo
 export const blockVehicle = async (req,res) =>{
     await prenotazione.find({idVeicolo: req.body.veicolo._id, $or: [{ statoPrenotazione: "completa" }, { statoPrenotazione: "incompleta" }]}).then(async (prenotazioni)=>{
         if (prenotazioni.length!=0){
             for (let Prenotazione of prenotazioni) {
-                let DataPartenza = new Date(Prenotazione.dataPartenza);
-                let DataArrivo = new Date(Prenotazione.dataArrivo);
-                let nessunVeicoloSostituto=true;
-                switch (req.body.veicolo.tipo) {
-                    case "Autovettura":
-                        await veicolo.find({_id: {$ne: req.body.veicolo._id}, tipoVeicolo: req.body.veicolo.tipo, modello: req.body.veicolo.modello, cilindrata:req.body.veicolo.cilindrata, nPosti: req.body.veicolo.posti, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
-                            for (let Veicolo of Veicoli) {
-                                let idPossibileSostituto=Veicolo._id;
-                                await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: req.body.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: req.body.oraPartenza}}]}).then(async (corsa)=>{
-                                    if(!corsa){
-                                        nessunVeicoloSostituto=false;
-                                        await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: idPossibileSostituto}).catch((err)=>{return res.status(500).json(err.message)})
-                                    }
-                                }).catch((err)=>{return res.status(500).json(err.message)})
-                            }
-                            if (nessunVeicoloSostituto){
-                                //rimborso + email
-                            }
-                        }).catch((err)=>{return res.status(500).json(err.message)})
-                        break;
-                    case "Moto":
-                        await veicolo.find({_id: {$ne: req.body.veicolo._id}, tipoVeicolo: req.body.veicolo.tipo, modello: req.body.veicolo.modello, cilindrata:req.body.veicolo.cilindrata, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
-                            for (let Veicolo of Veicoli) {
-                                let idPossibileSostituto=Veicolo._id;
-                                await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: req.body.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: req.body.oraPartenza}}]}).then(async (corsa)=>{
-                                    if(!corsa){
-                                        nessunVeicoloSostituto=false;
-                                        await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: idPossibileSostituto}).catch((err)=>{return res.status(500).json(err.message)})
-                                    }
-                                }).catch((err)=>{return res.status(500).json(err.message)})
-                            }
-                            if (nessunVeicoloSostituto){
-                                //rimborso + email
-                            }
-                        }).catch((err)=>{return res.status(500).json(err.message)})
-                        break;
-                    case "Bicicletta":
-                        await veicolo.find({_id: {$ne: req.body.veicolo._id}, tipoVeicolo: req.body.veicolo.tipo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
-                            for (let Veicolo of Veicoli) {
-                                let idPossibileSostituto=Veicolo._id;
-                                await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: req.body.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: req.body.oraPartenza}}]}).then(async (corsa)=>{
-                                    if(!corsa){
-                                        nessunVeicoloSostituto=false;
-                                        await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: idPossibileSostituto}).catch((err)=>{return res.status(500).json(err.message)})
-                                    }
-                                }).catch((err)=>{return res.status(500).json(err.message)})
-                            }
-                            if (nessunVeicoloSostituto){
-                                //rimborso + email
-                            }
-                        }).catch((err)=>{return res.status(500).json(err.message)})
-                        break;
-                    default:
-                        await veicolo.find({_id: {$ne: req.body.veicolo._id}, tipoVeicolo: req.body.veicolo.tipo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
-                            for (let Veicolo of Veicoli) {
-                                let idPossibileSostituto=Veicolo._id;
-                                await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: req.body.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: req.body.oraPartenza}}]}).then(async (corsa)=>{
-                                    if(!corsa){
-                                        nessunVeicoloSostituto=false;
-                                        await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: idPossibileSostituto}).catch((err)=>{return res.status(500).json(err.message)})
-                                    }
-                                }).catch((err)=>{return res.status(500).json(err.message)})
-                            }
-                            if (nessunVeicoloSostituto){
-                                //rimborso + email
-                            }
-                        }).catch((err)=>{return res.status(500).json(err.message)})
-                        break;
+                let ris={};
+                await cercaSostituto(Prenotazione, req.body.veicolo).then((risposta)=>{
+                    ris=risposta;
+                });
+                if (ris.sostituibile){
+                    await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: ris.sostituto._id}).catch((err)=>{return res.status(500).json(err.message)});
+                } else {
+                    //effettua rimborso
                 }
             }
         }

@@ -7,6 +7,7 @@ import Table from 'react-bootstrap/Table';
 import classnames from "classnames";
 import BrushSharpIcon from '@material-ui/icons/BrushSharp';
 import DeleteIcon from '@material-ui/icons/Delete';
+import {convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAdmin (){
     const listaPrenotazioni = useSelector((state)=>state.Prenotazioni.listaPrenotazioni);
@@ -58,9 +59,9 @@ function SchermataPrenotazioniAdmin (){
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
                                         <td>{prenotazione.nomeAutista}</td>
                                         <td>{prenotazione.cognomeAutista}</td>
-                                        <td>{prenotazione.dataPartenza.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataPartenza))}</td>
                                         <td>{prenotazione.oraPartenza}</td>
-                                        <td>{prenotazione.dataArrivo.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataArrivo))}</td>
                                         <td>{prenotazione.oraArrivo}</td>
                                         <td>{prenotazione.nomeParcheggioPartenza}</td>
                                         <td>{prenotazione.nomeParcheggioArrivo}</td>

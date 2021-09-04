@@ -6,7 +6,7 @@ import {addMetodoDiPagamento } from "../../Actions/utenti";
 import {addPrenotazione} from "../../Actions/prenotazioni"
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import classnames from "classnames";
-import {convertiData} from '../gestioneDateTime';
+import {convertiData, convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataRiepilogo() {
     const nuovaPrenotazione = useSelector((state)=>state.Prenotazioni);
@@ -190,8 +190,8 @@ function SchermataRiepilogo() {
                     </Card.Body>
                     <ListGroup className="list-group-flush">
                         <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
-                        <ListGroupItem>Date e ora Partenza : {nuovaPrenotazione.prenotazione.dataPa.slice(0,10)}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
-                        <ListGroupItem>Data e ora Arrivo : {nuovaPrenotazione.prenotazione.dataArr.slice(0,10)}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
+                        <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
+                        <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
                         <ListGroupItem>Consegna : {nuovaPrenotazione.prenotazione.viaFuoriStallo=!'' ?  nuovaPrenotazione.prenotazione.viaFuoriStallo : (nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome - nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo,nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico)}<br/></ListGroupItem>
                         <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
                         <ListGroupItem>Presenza Autista: No <br/></ListGroupItem>

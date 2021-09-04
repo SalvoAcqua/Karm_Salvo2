@@ -74,7 +74,7 @@ function SchermataVisualizzaVeicoli (){
                     </Modal.Header>
                     <ModalBody>
                             <Row>
-                                <p>{confermaBlocca.veicolo.tipo} di {confermaBlocca.veicolo.parcAssociato}</p>
+                                <p>{confermaBlocca.veicolo.tipo} di {confermaBlocca.veicolo.viaFuoriStallo=="" ? confermaBlocca.veicolo.parcAssociato : confermaBlocca.veicolo.viaFuoriStallo}</p>
                             </Row>
                             <Row>
                                 <Col>
@@ -93,7 +93,7 @@ function SchermataVisualizzaVeicoli (){
                     </Modal.Header>
                     <ModalBody>
                             <Row>
-                                <p>{confermaEliminazione.veicolo.tipo} di {confermaEliminazione.veicolo.parcAssociato}</p>
+                                <p>{confermaEliminazione.veicolo.tipo} di {confermaEliminazione.veicolo.viaFuoriStallo=="" ? confermaEliminazione.veicolo.parcAssociato : confermaEliminazione.veicolo.viaFuoriStallo}</p>
                             </Row>
                             <Row>
                                 <Col>

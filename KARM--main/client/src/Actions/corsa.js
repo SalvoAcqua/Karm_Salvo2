@@ -30,3 +30,12 @@ export const completaRilascio = (userData) => async (dispatch) =>{
         window.location.href="/HomePage";
     }).catch((err)=>{console.log(err.message)});
 };
+
+export const richiediNuovoVeicolo = (userData) => async (dispatch) =>{
+    await api.richiediNuovoVeicolo(userData).then((res)=>{
+        dispatch({type: 'SET_NEW_VEHICLE', payload:res.data.sostituto});
+        dispatch({type:'GET_ERROR', payload:res.data});
+    }).catch((err)=>{
+        dispatch({type:'GET_ERROR', payload:err.response.data});
+    });
+};

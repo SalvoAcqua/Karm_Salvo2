@@ -22,7 +22,7 @@ function SchermataGestioneCorsa () {
 
                             <Button className="button" variant="secondary" size="lg" href="/Rilascio"> Rilascio </Button>
 
-                            <Button className="button" variant="secondary" size="lg" href="/ComunicaGuasto"> Comunica Guasto </Button>
+                            <Button className="button" variant="secondary" size="lg" href={user.ruolo=="Autista" ? "/SchermataComunicaGuastoAutista" : "/SchermataComunicaGuastoCliente"}> Comunica Guasto </Button>
                     </Row>
                     <br/>
                 </Container>

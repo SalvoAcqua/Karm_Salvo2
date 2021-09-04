@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getPrenotazioniAddetto} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
 import classnames from "classnames";
+import {convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAddetto (){
     const user = useSelector ((state)=>state.utenti.utente);
@@ -55,9 +56,9 @@ function SchermataPrenotazioniAddetto (){
                                         <td>{prenotazione.targa!=undefined ? prenotazione.targa : "//"}</td>
                                         <td>{prenotazione.nomeAutista}</td>
                                         <td>{prenotazione.cognomeAutista}</td>
-                                        <td>{prenotazione.dataPartenza.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataPartenza))}</td>
                                         <td>{prenotazione.oraPartenza}</td>
-                                        <td>{prenotazione.dataArrivo.slice(0,10)}</td>
+                                        <td>{convertiDataEuropa(new Date(prenotazione.dataArrivo))}</td>
                                         <td>{prenotazione.oraArrivo}</td>
                                         <td>{prenotazione.nomeParcheggioPartenza}</td>
                                         <td>{prenotazione.nomeParcheggioArrivo}</td>

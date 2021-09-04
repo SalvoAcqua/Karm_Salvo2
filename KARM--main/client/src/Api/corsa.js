@@ -19,3 +19,8 @@ export const assegnaLuogo = (dati) => {
 export const completaRilascio = (dati) => {
     return axios.post('/Routers/GestioneCorsa/completaRilascio', dati);
 }
+
+//Richiedi Nuovo Veicolo
+export const richiediNuovoVeicolo = (dati) => {
+    return axios.post('/Routers/GestioneCorsa/richiediNuovoVeicolo', dati);
+}

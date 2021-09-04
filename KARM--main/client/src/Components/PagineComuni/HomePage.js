@@ -190,7 +190,7 @@ function HomePage () {
                     <Container style={{marginBottom:"30px"}}>
                         <Row className="justifyCenter row text-center autista">
                             <Col class="col text-center">
-                                <Button  className="button" variant="secondary" size="lg">
+                                <Button  className="button" variant="secondary" size="lg" href='/GestioneCorsa'>
                                     GESTIONE CORSA
                                 </Button>
                             </Col>
@@ -232,7 +232,7 @@ function HomePage () {
                     <Container>
                         <Row className="justifyCenter row text-center">
                             <Col class="col text-center">
-                                <Button  className="button" variant="secondary" size="lg">
+                                <Button  className="button" variant="secondary" size="lg" href='/GestioneCorsa'>
                                     GESTIONE CORSA
                                 </Button>
                             </Col>

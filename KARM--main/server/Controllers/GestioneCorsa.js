@@ -1,6 +1,7 @@
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
 import prenotazione from '../Models/prenotazioni.js';
+import {cercaSostituto} from './GestioneAmministrazione.js';
 import {convertiData, getOra} from '../gestioneDateTime.js';
 
 export const verifyDelivery = async (req,res) =>{
@@ -198,3 +199,31 @@ export const completaRilascio = async (req,res) => {
     }).catch((err)=> {return res.status(500).json(err.message)});
     
 };
+
+export const richiediNuovoVeicolo = async (req,res) => {
+    let Prenotazione={};
+    let Veicolo={};
+    await prenotazione.findOne({_id: req.body.cod}).then((booking)=>{
+        Prenotazione=booking;
+    }).catch((err)=> {return res.status(500).json(err.message)});
+    await veicolo.findOne({_id: Prenotazione.idVeicolo}).then((vehicle)=>{
+        Veicolo=vehicle;
+    }).catch((err)=> {return res.status(500).json(err.message)});
+    let ris={};
+    await cercaSostituto(Prenotazione,Veicolo).then((risposta)=>{
+        ris=risposta;
+    });
+    if (ris.sostituibile){
+        await prenotazione.findOneAndUpdate({_id: req.body.cod},{idVeicolo: ris.sostituto._id});
+        await veicolo.findOneAndUpdate({_id: ris.sostituto._id},{statoVeicolo: "Occupato"});
+        disattivaVeicolo(Veicolo);
+        return res.status(200).json({sostituto: ris.sostituto});
+    } else {
+        //rimborsa+termina+disattivaVeicolo();
+        return res.status(400).json({guasto: "Nessun veicolo individuato"});
+    }
+};
+
+const disattivaVeicolo = async (Veicolo) => {
+    await veicolo.findOneAndUpdate({_id: Veicolo._id},{statoVeicolo: "Non Attivo"});
+}

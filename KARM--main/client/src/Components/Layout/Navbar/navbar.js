@@ -1,22 +1,32 @@
 import React from "react";
 import logo from "../../../Images/logo.png"
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux'
 import {logoutUser} from '../../../Actions/utenti'
 import { Navbar,Nav, NavDropdown, Modal, ModalBody,Container,Row,Col,Button} from "react-bootstrap";
 import PersonIcon from "@material-ui/icons/Person";
 import DescriptionIcon from '@material-ui/icons/Description';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import {prendiNonLette} from '../../../Actions/notifiche'
 
 function NAVBAR() {
     const [show,setShow]=useState(false);
+    const [numeroNotifiche,setNumero]=useState(0)
     const authenticated = useSelector((state)=>state.utenti.isAuthenticated);
-    const utente = useSelector((state)=>state.utenti.utente)
+    const utente = useSelector((state)=>state.utenti.utente);
     const dispatch = useDispatch();
 
     const logout = () =>{
         dispatch(logoutUser());
     }
+    useEffect(()=>{
+        if(authenticated){
+            dispatch(prendiNonLette({_id: utente._id})).then((res)=>{
+                setNumero(res)
+            })
+        }
+    },[])
+    
     if(authenticated){
         switch (utente.ruolo) {
             case "Cliente":
@@ -52,7 +62,8 @@ function NAVBAR() {
                                 </Nav>
         
                                 <Nav>
-                                    <Button variant="secondary" href="/Notifiche">
+                                    <p style={{color:"red"}}>{numeroNotifiche==0 ? "": numeroNotifiche}</p>
+                                    <Button variant="secondary" href="/NotificheCliente">
                                         <NotificationsIcon/>
                                     </Button>
                                     
@@ -204,7 +215,8 @@ function NAVBAR() {
                                 </Nav>
         
                                 <Nav>
-                                    <Button variant="secondary" href="/Notifiche">
+                                    <p style={{color:"red"}}>{numeroNotifiche==0 ? "": numeroNotifiche}</p>
+                                    <Button variant="secondary" href="/NotificheAutista">
                                         <NotificationsIcon/>
                                     </Button>
                                     

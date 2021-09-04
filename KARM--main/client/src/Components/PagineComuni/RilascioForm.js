@@ -20,6 +20,7 @@ function RilascioForm (){
     const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
     const corsa = useSelector((state)=>state.Corsa.corsa);
     const Err = useSelector((state)=>state.errori.error);
+    const user = useSelector((state)=>state.utenti.utente);
     const dispatch = useDispatch();
     
     const onSubmit = (event) => {
@@ -47,13 +48,17 @@ function RilascioForm (){
                     break;
             }
     
-            if (rilascio.luogoInd!=""){
-                if(rilascio.luogoInd!=corsa.viaDestinazione){
-                    setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
-                }
-            } else {
-                if(rilascio.luogoParch!=corsa.idParcheggioRilascio){
-                    setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
+            if (user.ruolo=="Autista"){
+                setImportoLuogo(0);
+            }else{
+                if (rilascio.luogoInd!=""){
+                    if(rilascio.luogoInd!=corsa.viaDestinazione){
+                        setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
+                    }
+                } else {
+                    if(rilascio.luogoParch!=corsa.idParcheggioRilascio){
+                        setImportoLuogo((res.prFestivo +  res.prFeriale)/4);
+                    }
                 }
             }
     
@@ -94,6 +99,9 @@ function RilascioForm (){
 
     useEffect(()=>{    
         dispatch(getListaParcheggi());
+        if (user.ruolo=="Autista") {
+            document.getElementById("luogoInd").disabled=true;
+        }
     },[]);
     
     useEffect(()=>{
@@ -140,7 +148,7 @@ function RilascioForm (){
                             <h3> Sovrapprezzo calcolato: </h3>
                             <Row>
                                 <br/><br/>
-                                <p>Verranno prelevati dalla tua carta di credito (inserita in fase di prenotazione): </p><br/>
+                                <p> {(corsa.idAutista!=undefined && corsa.idAutista!="") ? "" : "Verranno prelevati dalla tua carta di credito (inserita in fase di prenotazione)"} </p><br/>
                                 <p> {importoDanni} € a causa dei danni provocati al veicolo</p><br/>
                                 <p> {importoTempo} € a causa del ritardo riscontrato</p><br/>
                                 <p> {importoLuogo} € a causa del luogo del rilascio</p><br/><br/>

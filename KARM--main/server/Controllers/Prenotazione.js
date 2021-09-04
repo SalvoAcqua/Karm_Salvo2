@@ -2,6 +2,7 @@ import utente from '../Models/utente.js';
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
 import prenotazione from '../Models/prenotazioni.js';
+import { notificaAccettaCorsa } from './Notifiche.js';
 
 export const addPrenotazione = async (req,res) => {
     let Prenotazione = {};
@@ -30,16 +31,19 @@ export const addPrenotazione = async (req,res) => {
             oraPartenza:req.body.oraPa,
             dataArrivo:req.body.dataArr,
             oraArrivo:req.body.oraArr,
-            idParcheggioRilascio:req.body.parcheggioRilascio,  //Messo per fare vedere all'autista dove lasciare il veicolo
             viaPartenza:req.body.indirizzoPa,
             viaDestinazione:req.body.indirizzoArr,
-            numeroCartaPagamento:req.body.numeroCarta,
             prezzo:req.body.prezzo
         }
     }
     const newPrenotazione = new prenotazione(Prenotazione);
-    await newPrenotazione.save().then((prenotazione)=>{return res.status(200).json(prenotazione)})
-    .catch((err)=>{return res.status(500).json(err.message)})
+    await newPrenotazione.save().then(async (prenotazione)=>{
+        if(req.body.autista==true){
+            notificaAccettaCorsa(prenotazione)
+        }
+        return res.status(200).json(prenotazione)
+    }).catch((err)=>{return res.status(500).json(err.message)})
+    
 }
 
 //Lista Veicoli

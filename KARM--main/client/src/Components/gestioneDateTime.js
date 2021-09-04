@@ -13,6 +13,21 @@
     return date;
 }
 
+//funzione che formatta la data in un formato europeo
+export function convertiDataEuropa(date){
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; //January is 0!
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    }
+    date = dd+'-'+mm+'-'+yyyy;
+    return date;
+}
+
 //funzione che restituisce l'orario a partire da una certa data
 export function getOra(date){
     var ore = date.getHours();

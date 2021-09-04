@@ -6,8 +6,9 @@ import cors from 'cors';
 import {databaseURI} from "./DB/database.js";
 import GestioneAccount from './Routers/GestioneAccount.js';
 import GestioneAmministrazione from './Routers/GestioneAmministrazione.js';
-import Prenotazione from './Routers/Prenotazione.js'
-import GestioneCorsa from './Routers/GestioneCorsa.js'
+import Prenotazione from './Routers/Prenotazione.js';
+import GestioneCorsa from './Routers/GestioneCorsa.js';
+import Notifiche from './Routers/Notifiche.js';
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use('/Routers/GestioneAccount', GestioneAccount);
 app.use('/Routers/GestioneAmministrazione', GestioneAmministrazione);
 app.use('/Routers/Prenotazione',Prenotazione);
 app.use('/Routers/GestioneCorsa',GestioneCorsa);
+app.use('/Routers/Notifiche',Notifiche);
 
 
 
