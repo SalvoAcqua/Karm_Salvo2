@@ -38,12 +38,13 @@ function SchermataMetodiPag (){
                 dataScadenza: dati.dataScadenza,
                 cvv: dati.cvv
             }
-            dispatch(addMetodoDiPagamento(newMethod))
-            window.location.reload();
+            dispatch(addMetodoDiPagamento(newMethod)).then(()=>{
+                window.location.reload();
+            })
         }
     }
 
-    /* useEffect(()=>{
+   /* useEffect(()=>{
         const datiEmail = {email: emailUtente}
         dispatch(getMetodiDiPagamento(datiEmail));
     },[]); */
@@ -80,7 +81,9 @@ function SchermataMetodiPag (){
 
     const deleteMethod = (idCarta) => {
         const datiCarta = {id: idCarta}
-        dispatch(removeMetodoDiPagamento(datiCarta));
+        dispatch(removeMetodoDiPagamento(datiCarta)).then(()=>{
+            window.location.reload();
+        });
     }
 
 

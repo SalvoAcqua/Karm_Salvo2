@@ -1,24 +1,68 @@
 import React from "react"
-import {Container,Row,Col, Button} from "react-bootstrap";
+import {Container,Row,Col,Button,Modal,ModalBody} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import {getPrenotazioniAdmin} from "../../Actions/prenotazioni";
+import {getPrenotazioniAdmin,deleteBooking,terminaPrenotazione} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
-import classnames from "classnames";
 import BrushSharpIcon from '@material-ui/icons/BrushSharp';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {convertiDataEuropa} from '../gestioneDateTime';
+import {convertiDataEuropa,convertiData,getOra} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAdmin (){
+    const [annullamento,setAnnullamento] = useState({prenotazione: {}, show: false});
+    //const [modifica,setModifica] = useState({prenotazione: {}, show: false});
     const listaPrenotazioni = useSelector((state)=>state.Prenotazioni.listaPrenotazioni);
     const dispatch = useDispatch();
+    
+    const DeleteBooking = (Prenotazione) => {
+        let oraAttuale = new Date();
+        let todayDate = new Date(convertiData(oraAttuale));
+        let dataPartenza = new Date(Prenotazione.dataPartenza);
+        if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
+            //Puoi fare rimborso
+            //email
+            //notifiche da rimuovere
+            //notifica da mandare
+            const dati = {id: Prenotazione._id};
+            dispatch(deleteBooking(dati));
+        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+            //notifica da mandare
+            const dati = {id: Prenotazione._id};
+            dispatch(terminaPrenotazione(dati));
+        } else {
+            //email
+            //notifiche da rimuovere
+            //notifica da mandare
+            const dati = {id: Prenotazione._id};
+            dispatch(deleteBooking(dati));
+        }
+    };
     
     useEffect(()=>{
         dispatch(getPrenotazioniAdmin());
     },[])
 
     return (
-        <div>
+        <div>            
+            <Modal show={annullamento.show} onHide={()=>setAnnullamento({...annullamento, show:false})} centered backdrop="static">
+                <Modal.Header >
+                            <Modal.Title>Sei sicuro di voler annullare questa prenotazione?</Modal.Title>
+                </Modal.Header>
+                <ModalBody>
+                        <Row>
+                            <p>Codice Prenotazione: {annullamento.prenotazione._id}</p>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button variant="success" onClick={()=>DeleteBooking(annullamento.prenotazione)}>Conferma</Button>
+                            </Col>
+                            <Col>
+                                <Button variant="danger" onClick={()=>setAnnullamento({...annullamento, show:false})}>Annulla</Button>
+                            </Col>
+                        </Row>
+                </ModalBody>
+            </Modal>
+
             <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
                 <Row>
                     <Col>
@@ -36,10 +80,8 @@ function SchermataPrenotazioniAdmin (){
                                 <th>Ora Partenza</th>
                                 <th>Data Arrivo</th>
                                 <th>Ora Arrivo</th>
-                                <th>Nome Parcheggio Partenza</th>
-                                <th>Nome Parcheggio Arrivo</th>
-                                <th>Indirizzo Partenza</th>
-                                <th>Indirizzo Arrivo</th>
+                                <th>Luogo Partenza</th>
+                                <th>Luogo Arrivo</th>
                                 <th>Prezzo</th>
                                 <th>Stato Prenotazione</th>
                                 <th style={{color:"blue"}}>Modifica Prenotazione</th>
@@ -63,19 +105,17 @@ function SchermataPrenotazioniAdmin (){
                                         <td>{prenotazione.oraPartenza}</td>
                                         <td>{convertiDataEuropa(new Date(prenotazione.dataArrivo))}</td>
                                         <td>{prenotazione.oraArrivo}</td>
-                                        <td>{prenotazione.nomeParcheggioPartenza}</td>
-                                        <td>{prenotazione.nomeParcheggioArrivo}</td>
-                                        <td>{prenotazione.indirizzoPartenza}</td>
-                                        <td>{prenotazione.indirizzoArrivo}</td>
+                                        <td>{prenotazione.nomeParcheggioPartenza=="//" ? prenotazione.indirizzoPartenza : prenotazione.nomeParcheggioPartenza}</td>
+                                        <td>{prenotazione.nomeParcheggioArrivo=="//" ? prenotazione.indirizzoArrivo : prenotazione.nomeParcheggioArrivo}</td>
                                         <td>{prenotazione.prezzo}€</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>
-                                            <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility: (prenotazione.statoPrenotazione!="terminata" && prenotazione.statoPrenotazione!="in_corsa") ? "visible" : "hidden"}} onClick={()=>{}}>
                                                 <BrushSharpIcon/>
                                             </Button>
                                         </td>
                                         <td>
-                                            <Button variant="secondary" style={{visibility:prenotazione.statoPrenotazione!="terminata" ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility: (prenotazione.statoPrenotazione!="terminata" && prenotazione.statoPrenotazione!="in_corsa") ? "visible" : "hidden"}} onClick={()=>{setAnnullamento({...annullamento, show: true, prenotazione: prenotazione})}}>
                                                 <DeleteIcon/>
                                             </Button>
                                         </td>

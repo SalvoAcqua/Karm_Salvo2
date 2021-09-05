@@ -18,7 +18,8 @@ const prenotazioneSchema = mongoose.Schema({
         default:"incompleta",
     },
     numeroCartaPagamento:Number,
-    prezzo: Number
+    prezzo: Number,
+    mancia: Number
     
 });
 

@@ -157,7 +157,7 @@ export const addMetodoPagamento = async (req,res) =>{
         CVV: req.body.cvv,
     });
 
-    await newMethod.save().then((user) => res.json(user)) .catch((err) => console.log(err));   
+    await newMethod.save().then((metodo) => {return res.status(200).json(metodo)}) .catch((err) => console.log(err));   
 };
 
 
@@ -171,7 +171,7 @@ export const getMetodiPagamento = async (req,res) => {
 //rimuovi metodi di pagamento
 export const removeMetodoPagamento = async (req,res) =>{
    await metodiPagamento.findOneAndRemove({_id: req.body.id}).then((pag)=>{
-       res.json({succes: true,pag})
+       return res.status(200).json(pag)
    }).catch((err)=>{return res.status(500).json(err.message)})
 };
 

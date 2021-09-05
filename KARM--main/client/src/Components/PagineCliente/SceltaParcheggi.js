@@ -80,9 +80,10 @@ function SceltaParcheggi (){
                 nuovaPrenotazione.prenotazione.datiParcheggioRilascio = DatiRilascio;
             }
             console.log(nuovaPrenotazione.prenotazione)
-            dispatch(newInformation(nuovaPrenotazione.prenotazione));
-            console.log(nuovaPrenotazione.prenotazione)
-            window.location.href="/SchermataRiepilogo"
+            dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
+                window.location.href="/SchermataRiepilogo"
+            });
+            
         } else{
             console.log(errori)
         }
@@ -106,26 +107,26 @@ function SceltaParcheggi (){
 
 
     //Mappa
-    const libraries = ["places"]
+    /*const libraries = ["places"]
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey:GoogleKey.REACT_GOOGLE_MAP_API_KEY,
         libraries
     })
     if(loadError) return "Errore caricamento Mappa" 
     if(!isLoaded) return "caricamento mappa"
+    <Col>
+    <GoogleMap mapContainerStyle={mapContainerStyle} zoom={13} center={center}>
+    </GoogleMap>
+</Col>  */ 
 
    
 
 
 
     return (
-        <div>
+        <div class="container pagA" >
             <Container style={{margin:"20px"}}>
                 <Row>
-                    <Col>
-                        <GoogleMap mapContainerStyle={mapContainerStyle} zoom={13} center={center}>
-                        </GoogleMap>
-                    </Col>   
                     <Col>
                     <Alert style={{display:showFuoriStallo}} variant="primary" id="FuoriStallo">
                         Hai scelto un veicolo fuori stallo! La consegna avverrà in {nuovaPrenotazione.prenotazione.viaFuoriStallo}

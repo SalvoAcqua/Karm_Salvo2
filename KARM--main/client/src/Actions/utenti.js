@@ -61,7 +61,7 @@ export const registerLicense = (userData) => async (dispatch) => {
 //Rimuovi Metodo di Pagamento
 export const removeMetodoDiPagamento = (userData) => async (dispatch) => {
     await api.removeMethods(userData).then((res)=>{
-        window.location.reload();
+        dispatch({type:'REMOVE_METODOPAGAMENTO',payload:res.data})
     }).catch((err)=>{console.log(err.message)})
 }
 

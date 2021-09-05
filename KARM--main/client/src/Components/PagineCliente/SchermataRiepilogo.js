@@ -3,15 +3,17 @@ import {Container,Row,Col, Button, Card, ListGroupItem, ListGroup, Modal, ModalB
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {addMetodoDiPagamento } from "../../Actions/utenti";
-import {addPrenotazione} from "../../Actions/prenotazioni"
+import {addPrenotazione, pagaAutista} from "../../Actions/prenotazioni"
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import classnames from "classnames";
 import {convertiData, convertiDataEuropa} from '../gestioneDateTime';
 
+
 function SchermataRiepilogo() {
     const nuovaPrenotazione = useSelector((state)=>state.Prenotazioni);
     const [numeroCarta,setNumeroCarta] = useState('')
-    const [dati,setDati] = useState({numeroCarta:'',intestatario:'',dataScadenza:'', cvv:''})
+    const [displayMancia,setDisplayMancia] = useState('none')
+    const [dati,setDati] = useState({numeroCarta:'',intestatario:'',dataScadenza:'', cvv:'',mancia:''})
     const [errNumeroCarta,setErrNumeroCarta] = useState(true);
     const [errIntestatario,setErrIntestatario] = useState(true);
     const [errCvv,setErrCvv] = useState(true);
@@ -24,6 +26,60 @@ function SchermataRiepilogo() {
     const patternAlfa = /[0-9]/;
 
     var today=convertiData(new Date());
+
+    useEffect(()=>{
+        if(nuovaPrenotazione.prenotazione.autista==true){
+            setDisplayMancia('block')  
+        }
+    },[])
+
+    const mostra = () =>{
+        if(nuovaPrenotazione.prenotazione.autista==false){
+            return(
+                <Row>             
+                    <Card className="card" style={{width: '100%', backgroundColor: "rgb(214, 214, 214)" }}>
+                        <Card.Body>
+                            <Card.Title>Riepilogo Prenotazione</Card.Title>
+                        </Card.Body>
+                        <ListGroup className="list-group-flush">
+                            <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
+                            <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
+                            <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
+                            <ListGroupItem>Consegna : {(nuovaPrenotazione.prenotazione.viaFuoriStallo=!'') ? nuovaPrenotazione.prenotazione.viaFuoriStallo : (nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome - nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo,nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico)}<br/></ListGroupItem>
+                            <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
+                            <ListGroupItem>Presenza Autista: No <br/></ListGroupItem>
+                            <ListGroupItem variant="primary">Prezzo da pagare: {nuovaPrenotazione.prenotazione.prezzo}€</ListGroupItem>  
+                        </ListGroup>
+                        <br/>
+                    </Card>
+                </Row>
+            )
+        } else{
+            return(
+                <Row>             
+                    <Card className="card" style={{width: '100%', backgroundColor: "rgb(214, 214, 214)" }}>
+                        <Card.Body>
+                            <Card.Title>Riepilogo Prenotazione</Card.Title>
+                        </Card.Body>
+                        <ListGroup className="list-group-flush">
+                            <ListGroupItem>Tipo Veicolo: Autovettura</ListGroupItem>
+                            <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
+                            <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
+                            <ListGroupItem>Via Partenza : {nuovaPrenotazione.prenotazione.indirizzoPa}<br/></ListGroupItem>
+                            <ListGroupItem>Via Destinazione : {nuovaPrenotazione.prenotazione.indirizzoArr} <br/></ListGroupItem>
+                            <ListGroupItem>Presenza Autista: SI <br/></ListGroupItem>
+                            <ListGroupItem variant="primary">Prezzo da pagare: {nuovaPrenotazione.prenotazione.prezzo}€</ListGroupItem>  
+                        </ListGroup>
+                        <br/>
+                    </Card>
+                </Row>
+            )
+
+        }
+    }
+
+
+
 
     const onSubmit = (event) =>{
         event.preventDefault();
@@ -40,8 +96,10 @@ function SchermataRiepilogo() {
                 cvv: dati.cvv
                 
             }
-            dispatch(addMetodoDiPagamento(newMethod))
-            window.location.reload();
+            dispatch(addMetodoDiPagamento(newMethod)).then(()=>{
+                window.location.reload();
+            })
+            
         }
     }
 
@@ -54,30 +112,17 @@ function SchermataRiepilogo() {
     }
 
 
-    var Prezzo = 0
-    const prezzoDaPagare = () => {
-        let data = new Date(nuovaPrenotazione.prenotazione.dataPa);
-        do {
-            if(data.getDay()==0 || data.getDay()==6){
-                Prezzo += Number(nuovaPrenotazione.prenotazione.prezzoFestivo);
-            } else {
-                Prezzo += Number(nuovaPrenotazione.prenotazione.prezzoFeriale);
-            }
-            data.setDate(data.getDate()+1)
-        } while(data<=new Date(nuovaPrenotazione.prenotazione.dataArr));
-        return Prezzo;
-    }
-    useEffect(()=>{
-        console.log(nuovaPrenotazione.prenotazione)
-    },[])
-
     const pagaOra = () =>{
         if(numeroCarta!=''){
+            if(nuovaPrenotazione.prenotazione.autista==false){
             nuovaPrenotazione.prenotazione.numeroCarta = numeroCarta;
             nuovaPrenotazione.prenotazione.statoPrenotazione = "completa";
             nuovaPrenotazione.prenotazione.viaDestinazione = "";
-            nuovaPrenotazione.prenotazione.prezzo = Prezzo;
             dispatch(addPrenotazione(nuovaPrenotazione.prenotazione));
+            } else {
+                nuovaPrenotazione.prenotazione.numeroCarta = numeroCarta;
+                dispatch(pagaAutista({numeroCarta:nuovaPrenotazione.prenotazione.numeroCarta, mancia:dati.mancia, idPrenotazione: nuovaPrenotazione.prenotazione._id}))
+            }
         }
     }
 
@@ -126,10 +171,15 @@ function SchermataRiepilogo() {
                                 ))} 
                             </select> <br/>
                             <span className={classnames({'red-convalid':numeroCarta=='', 'green-convalid':numeroCarta!=''})}>{numeroCarta=='' ? "Seleziona un metodo di pagamento" : "OK"} </span>
+                            <div style={{display:displayMancia}}>
+                                <label htmlFor="number">Mancia </label> <br/>
+                                        <input name="mancia" id="mancia" type="text" min="0" defaultValue="0" onChange={(e)=>setDati({...dati,mancia:e.target.value})} />
+                                        <br />
+                            </div>
                         </fieldset><br/>
                         <Row>
                             <Col> 
-                            <Button onClick={()=>cambiaModal()}>Inserisci nuovo metodo</Button>
+                            <Button variant="secondary" onClick={()=>cambiaModal()}>Inserisci nuovo metodo</Button>
                             </Col>
                             <Col>
                              <Button variant="success" onClick={()=>pagaOra()}>Paga ora</Button>
@@ -180,29 +230,19 @@ function SchermataRiepilogo() {
                 </Modal>
 
 
-
-
-
-                <Row>
-                <Card className="card" style={{width: '60%', backgroundColor: "rgb(214, 214, 214)" }}>
-                    <Card.Body>
-                        <Card.Title>Riepilogo Prenotazione</Card.Title>
-                    </Card.Body>
-                    <ListGroup className="list-group-flush">
-                        <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
-                        <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
-                        <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
-                        <ListGroupItem>Consegna : {nuovaPrenotazione.prenotazione.viaFuoriStallo=!'' ?  nuovaPrenotazione.prenotazione.viaFuoriStallo : (nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome - nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo,nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico)}<br/></ListGroupItem>
-                        <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
-                        <ListGroupItem>Presenza Autista: No <br/></ListGroupItem>
-                        <ListGroupItem variant="primary">Prezzo da pagare: {prezzoDaPagare()}€</ListGroupItem>  
-                    </ListGroup>
-                    <br/>
-                </Card>
-                </Row>
+                <br/>
                 <Row>
                     <Button size="lg" variant="success" onClick={()=>setShowPagamento(true)}>Procedi al Pagamento</Button>
                 </Row>
+                <br/>
+                {mostra()}
+                
+                <br/>
+                <Row>
+                    <Button size="lg" variant="success" onClick={()=>setShowPagamento(true)}>Procedi al Pagamento</Button>
+                </Row>
+                <br/>
+
                 
             </Container>
         </div>

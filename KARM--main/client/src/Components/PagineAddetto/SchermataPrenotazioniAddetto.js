@@ -1,6 +1,6 @@
 import React from "react"
 import {Container,Row,Col} from "react-bootstrap";
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getPrenotazioniAddetto} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
@@ -36,10 +36,8 @@ function SchermataPrenotazioniAddetto (){
                                 <th>Ora Partenza</th>
                                 <th>Data Arrivo</th>
                                 <th>Ora Arrivo</th>
-                                <th>Nome Parcheggio Partenza</th>
-                                <th>Nome Parcheggio Arrivo</th>
-                                <th>Indirizzo Partenza</th>
-                                <th>Indirizzo Arrivo</th>
+                                <th>Luogo Partenza</th>
+                                <th>Luogo Arrivo</th>
                                 <th>Stato Prenotazione</th>
                                 </tr>
                             </thead>
@@ -60,10 +58,8 @@ function SchermataPrenotazioniAddetto (){
                                         <td>{prenotazione.oraPartenza}</td>
                                         <td>{convertiDataEuropa(new Date(prenotazione.dataArrivo))}</td>
                                         <td>{prenotazione.oraArrivo}</td>
-                                        <td>{prenotazione.nomeParcheggioPartenza}</td>
-                                        <td>{prenotazione.nomeParcheggioArrivo}</td>
-                                        <td>{prenotazione.indirizzoPartenza}</td>
-                                        <td>{prenotazione.indirizzoArrivo}</td>
+                                        <td>{prenotazione.nomeParcheggioPartenza=="//" ? prenotazione.indirizzoPartenza : prenotazione.nomeParcheggioPartenza}</td>
+                                        <td>{prenotazione.nomeParcheggioArrivo=="//" ? prenotazione.indirizzoArrivo : prenotazione.nomeParcheggioArrivo}</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                     </tr>
                                 ))}

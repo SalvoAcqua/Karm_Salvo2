@@ -11,7 +11,7 @@ export default (state=initialState, action) => {
         case 'LISTA_METODIPAGAMENTO':
             return {...state, listaMetodi: action.payload}
         case 'REMOVE_METODOPAGAMENTO':
-            const index = state.listaMetodi.indexOf(action.payload.pag._id);
+            const index = state.listaMetodi.indexOf(action.payload._id);
             state.listaMetodi.splice(index,1);
             return{...state}
         default:

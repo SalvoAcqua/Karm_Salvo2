@@ -53,38 +53,90 @@ export const prendiNonLette = async (req,res) => {
 export const prendiNotifiche = async (req,res) => {
     let NOTIFICHE=[];
     let notificaAccettaCorsa={}
+    let notificaCompletaCorsa={}
     await notifiche.find({idUtente:req.body._id}).then(async(Notifiche)=>{  
         for(let notifica of Notifiche){
             await notifiche.findOneAndUpdate({_id:notifica._id},{letta:"true"})
-            if(notifica.tipo=="accettaCorsa"){
-                await prenotazione.findOne({_id:notifica.idPrenotazione}).then(async(Prenotazione)=>{
-                    if(Prenotazione){
-                        await utente.findOne({_id:Prenotazione.idCliente}).then((Utente)=>{
-                            notificaAccettaCorsa={
-                                letta:notifica.letta,
+            switch(notifica.tipo){
+                case "accettaCorsa": 
+                    await prenotazione.findOne({_id:notifica.idPrenotazione}).then(async(Prenotazione)=>{
+                        if(Prenotazione){
+                            await utente.findOne({_id:Prenotazione.idCliente}).then((Utente)=>{
+                                notificaAccettaCorsa={
+                                    idPrenotazione:notifica.idPrenotazione,
+                                    letta:notifica.letta,
+                                    tipo:notifica.tipo,
+                                    nome:Utente.nome,
+                                    cognome:Utente.cognome,
+                                    dataPartenza:Prenotazione.dataPartenza,
+                                    dataArrivo:Prenotazione.dataArrivo,
+                                    oraPartenza:Prenotazione.oraPartenza,
+                                    oraArrivo:Prenotazione.oraArrivo,
+                                    viaPartenza:Prenotazione.viaPartenza,
+                                    viaDestinazione:Prenotazione.viaDestinazione,
+                                }
+                                NOTIFICHE.push(notificaAccettaCorsa);
+                            })
+                        }
+                    }).catch((err)=>{console.log(err)})
+                    break;
+                case "completaCorsa":
+                    await prenotazione.findOne({_id:notifica.idPrenotazione}).then(async(Prenotazione)=>{
+                        await utente.findOne({_id:Prenotazione.idAutista}).then((Utente)=>{
+                            notificaCompletaCorsa={
+                                idPrenotazione:notifica.idPrenotazione,
                                 tipo:notifica.tipo,
-                                nome:Utente.nome,
-                                cognome:Utente.cognome,
-                                dataPartenza:Prenotazione.dataPartenza,
-                                dataArrivo:Prenotazione.dataArrivo,
-                                oraPartenza:Prenotazione.oraPartenza,
-                                oraArrivo:Prenotazione.oraArrivo,
-                                viaPartenza:Prenotazione.viaPartenza,
-                                viaDestinazione:Prenotazione.viaDestinazione,
+                                messaggio:`L'autista ${Utente.nome} ${Utente.cognome} ha accettato la tua corsa`
                             }
-                            NOTIFICHE.push(notificaAccettaCorsa);
+                            
                         })
-                    }
-                }).catch((err)=>{console.log(err)})
-                
-            } else{
-                NOTIFICHE.push(notifica);
-            }
-        }   
+                    })
+                    NOTIFICHE.push(notificaCompletaCorsa);
+                    break;
+                default:
+                    NOTIFICHE.push(notifica);
+            }   
+        }
         return res.status(200).json(NOTIFICHE)
     }).catch((err)=>{return res.status(500).json(err.message)})
 }
 
+
+export const notificaCorsaAccettata = async (idPrenotazione) =>{
+    await notifiche.find({idPrenotazione:idPrenotazione}).then(async (Notifiche)=>{
+        for( let Notifica of Notifiche) {
+            await notifiche.findOneAndRemove({_id:Notifica._id})
+        }
+    })
+    await prenotazione.findOne({_id:idPrenotazione}).then((Prenotazione)=>{
+        let NOTIFICA = {
+            letta:false,
+            tipo:"completaCorsa",
+            idUtente:Prenotazione.idCliente,
+            idPrenotazione:idPrenotazione
+        }
+        let newNotifica = new notifiche(NOTIFICA)
+        newNotifica.save();
+    })
+
+}
+
+//Rimuovi completa operazione
+export const removeCompletaOperazione = async (id) =>{
+    await notifiche.findOneAndRemove({tipo:"completaCorsa",idPrenotazione:id})
+}
+
+//Rifiuta Corsa
+export const notificaRifiutaCorsa = async (idPrenotazione,idAutista) =>{
+    await notifiche.findOneAndRemove({tipo:"accettaCorsa",idPrenotazione:idPrenotazione,idUtente:idAutista})
+    await notifiche.find({tipo:"accettaCorsa",idPrenotazione:idPrenotazione}).then(async(Notifiche)=>{
+        if(Notifiche.length==0){
+            await prenotazione.findOne({_id:idPrenotazione}).then((Prenotazione)=>{
+                notificaNessunAutista(Prenotazione.idCliente,idPrenotazione)
+            })
+        }
+    })
+}
 
 
 

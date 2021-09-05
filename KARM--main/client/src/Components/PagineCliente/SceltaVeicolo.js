@@ -14,6 +14,20 @@ function SceltaVeicolo(){
     const utente = useSelector((state)=>state.utenti.utente)
     const dispatch = useDispatch();
 
+    var Prezzo = 0
+    const prezzoDaPagare = (feriale,festivo) => {
+        let data = new Date(nuovaPrenotazione.prenotazione.dataPa);
+        do {
+            if(data.getDay()==0 || data.getDay()==6){
+                Prezzo += Number(festivo);
+            } else {
+                Prezzo += Number(feriale);
+            }
+            data.setDate(data.getDate()+1)
+        } while(data<=new Date(nuovaPrenotazione.prenotazione.dataArr));
+        return Prezzo;
+    }
+
     const prenota = (idVeicolo) =>  {
          let feriale = 0;
          let festivo = 0;
@@ -25,6 +39,7 @@ function SceltaVeicolo(){
                 viaFuoriStallo=veicolo.viaFuoriStallo;
             } 
         });
+        nuovaPrenotazione.prenotazione.prezzo=prezzoDaPagare(feriale,festivo);
         if(nuovaPrenotazione.prenotazione.autista==true){
             nuovaPrenotazione.prenotazione.cliente=utente._id;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
@@ -34,8 +49,10 @@ function SceltaVeicolo(){
             nuovaPrenotazione.prenotazione.prezzoFestivo=festivo;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
             nuovaPrenotazione.prenotazione.viaFuoriStallo=viaFuoriStallo;
-            dispatch(newInformation(nuovaPrenotazione.prenotazione));
-            window.location.href="/SceltaParcheggi"
+            dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
+                window.location.href="/SceltaParcheggi"
+            })
+            
         }
     }
 

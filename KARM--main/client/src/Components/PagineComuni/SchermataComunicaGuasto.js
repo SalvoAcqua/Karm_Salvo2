@@ -32,8 +32,8 @@ function SchermataComunicaGuasto (){
 
 
     return (
-        <div>
-           <Container>
+        <div class="container pag">
+           <Container >
                 <Modal show={Err.sostituto!=undefined} centered backdrop="static">
                     <ModalBody>
                         <Row>
@@ -92,6 +92,7 @@ function SchermataComunicaGuasto (){
                     </p>
                 </Alert>
                 <form onSubmit={onSubmit}>
+                    <br/>
                         <Row>
                             <Button variant="secondary" size="lg" type="submit">
                                 Avanti

@@ -2,7 +2,7 @@ import utente from '../Models/utente.js';
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
 import prenotazione from '../Models/prenotazioni.js';
-import { notificaAccettaCorsa } from './Notifiche.js';
+import { notificaAccettaCorsa, notificaCorsaAccettata, removeCompletaOperazione, notificaRifiutaCorsa} from './Notifiche.js';
 
 export const addPrenotazione = async (req,res) => {
     let Prenotazione = {};
@@ -357,4 +357,68 @@ export const getTariffe = async (req,res) => {
         let tariffe = {prFestivo: veicolo.prezzoFestivo, prFeriale: veicolo.prezzoFeriale};
         return res.status(200).json(tariffe); 
     }).catch((err)=>{return res.status(500).json(err.message)});
+}
+
+//Accetta corsa
+export const accettaCorsa = async (req,res) => {
+    await prenotazione.findOneAndUpdate({_id:req.body.idPrenotazione, idAutista:""},{idAutista:req.body.idAutista},{new:true}).then((Prenotazione)=>{
+        if(!Prenotazione){
+            return res.status(400).json({accettata:"Ci dispiace, ma la corsa è già stata accettata"})
+        } else{
+            notificaCorsaAccettata(Prenotazione._id)
+        }
+        return res.status(200).json({success:true});
+    })
+}
+
+//Annulla Prenotazione
+export const deleteBooking = async (req,res) => {
+    await prenotazione.findOneAndRemove({_id: req.body.id}).then((Prenotazione)=>{
+        return res.status(200).json(Prenotazione);
+    }).catch((err)=>{
+        return res.status(500).json(err.message);
+    });
+}
+
+//Termina Prenotazione
+export const terminaPrenotazione = async (req,res) => {
+    await prenotazione.findOneAndUpdate({_id: req.body.id},{statoPrenotazione: "terminata"}).then((Prenotazione)=>{
+        return res.status(200).json(Prenotazione);
+    }).catch((err)=>{
+        return res.status(500).json(err.message);
+    });
+}
+
+//Dati Prenotazione
+export const datiPrenotazione = async (req,res) => {
+    let PRENOTAZIONE={}
+    await prenotazione.findOne({_id:req.body.idPrenotazione}).then((Prenotazione)=>{
+        PRENOTAZIONE = {
+            _id:Prenotazione._id,
+            dataArr : Prenotazione.dataArrivo,
+            dataPa : Prenotazione.dataPartenza,
+            oraArr : Prenotazione.oraArrivo,
+            oraPa : Prenotazione.oraPartenza,
+            prezzo : Prenotazione.prezzo,
+            indirizzoArr : Prenotazione.viaDestinazione,
+            indirizzoPa : Prenotazione.viaPartenza,
+            autista:true
+        }
+        return res.status(200).json(PRENOTAZIONE);
+    }).catch((err)=>{res.status(500).json(err.message)})
+}
+
+//Paga Autista
+export const pagaAutista = async (req,res) =>{
+    console.log(req.body)
+    await prenotazione.findByIdAndUpdate({_id:req.body.idPrenotazione},{statoPrenotazione:"completa",numeroCarta:req.body.numeroCarta,mancia:req.body.mancia}).then((Prenotazione)=>{
+        removeCompletaOperazione(req.body.idPrenotazione);
+        return res.status(200).json({success: true})
+    })
+}
+
+//Rifiuta Corsa
+export const rifiutaCorsa = async (req,res) => {
+    notificaRifiutaCorsa(req.body.idPrenotazione,req.body.idAutista)
+    return res.status(200).json({success:true})
 }

@@ -34,3 +34,33 @@ export const addPrenotazione = (dati) => {
 export const getTariffe = (dati) => {
     return axios.post("/Routers/Prenotazione/GetTariffe", dati);
 }
+
+//Annulla Prenotazione
+export const deleteBooking = (dati) => {
+    return axios.post("/Routers/Prenotazione/DeleteBooking", dati);
+}
+
+//Termina Prenotazione
+export const terminaPrenotazione = (dati) => {
+    return axios.post("/Routers/Prenotazione/TerminaPrenotazione", dati);
+}
+
+//Accetta Corsa
+export const accettaCorsa = (dati) => {
+    return axios.post("/Routers/Prenotazione/AccettaCorsa",dati)
+}
+
+//Completa Operazione
+export const completaOperazione = (dati) => {
+    return axios.post("/Routers/Prenotazione/DatiPrenotazione",dati);
+}
+
+//Paga Autista
+export const pagaAutista = (dati) => {
+    return axios.post("/Routers/Prenotazione/PagaAutista",dati);
+}
+
+//Rifiuta Corsa
+export const rifiutaCorsa = (dati) => {
+    return axios.post("/Routers/Prenotazione/RifiutaCorsa",dati);
+}

@@ -95,6 +95,10 @@ html, body {
     margin-bottom: 380px;
 }
 
+.notifiche{
+    margin-bottom: 450px;
+}
+
 .parch{
     margin-bottom: 200px;
 }
@@ -146,6 +150,10 @@ html, body {
         margin-bottom: 175px;
     }
 
+    .notifiche{
+        margin-bottom: 270px;
+    }
+    
     .autista{
         margin-bottom: 10px;
     }
@@ -185,6 +193,10 @@ html, body {
         margin-bottom: 300px;
     }
 
+    .notifiche{
+        margin-bottom: 300px;
+    }
+    
     .autista{
         margin-bottom: 20px;
     }
@@ -224,6 +236,10 @@ html, body {
         margin-bottom: 380px;
     }
 
+    .notifiche{
+        margin-bottom: 465px;
+    }
+    
     .autista{
         margin-bottom: 30px;
     }
@@ -262,6 +278,10 @@ html, body {
     .pagA{
         margin-bottom: 760px;
     }
+
+    .notifiche{
+        margin-bottom: 700px;
+    }    
 
     .autista{
         margin-bottom: 60px;
