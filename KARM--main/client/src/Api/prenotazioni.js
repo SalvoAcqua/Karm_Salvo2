@@ -45,6 +45,11 @@ export const terminaPrenotazione = (dati) => {
     return axios.post("/Routers/Prenotazione/TerminaPrenotazione", dati);
 }
 
+//Modifica Prenotazione_Veicolo
+export const modifyVehicle = (dati) => {
+    return axios.post("/Routers/Prenotazione/ModifyVehicle", dati);
+}
+
 //Accetta Corsa
 export const accettaCorsa = (dati) => {
     return axios.post("/Routers/Prenotazione/AccettaCorsa",dati)

@@ -18,6 +18,7 @@ import ConsegnaForm from './Components/PagineComuni/ConsegnaForm';
 import RilascioForm from './Components/PagineComuni/RilascioForm';
 import AggiornaPatForm from './Components/PagineComuni/AggiornaPatForm';
 import CambiaPassForm from './Components/PagineComuni/CambiaPassForm';
+import ModPrenotazioneVeicolo from './Components/PagineComuni/ModPrenotazioneVeicolo';
 import SchermataComunicaGuasto from './Components/PagineComuni/SchermataComunicaGuasto';
 import CambiaEmailForm from './Components/PagineCliente/CambiaEmailForm';
 import SchermataMetodiPag from './Components/PagineCliente/SchermataMetodiPag';
@@ -75,6 +76,7 @@ const App = () => {
                     <ProtectedRouteCliente exact path="/SchermataPrenotazioniCliente" component={SchermataPrenotazioniCliente}/>
                     <ProtectedRouteCliente exact path="/SchermataComunicaGuastoCliente" component={SchermataComunicaGuasto}/>
                     <ProtectedRouteCliente exact path="/NotificheCliente" component={Notifiche}/>
+                    <ProtectedRouteCliente exact path="/ModificaPrenotazioneVeicoloCliente" component={ModPrenotazioneVeicolo}/>
                     <ProtectedRouteAdmin exact path="/GestioneAmministrazione" component={GestioneAmministrazione}/>
                     <ProtectedRouteAdmin exact path="/VisualizzaClienti" component={SchermataVisualizzaClienti}/>
                     <ProtectedRouteAdmin exact path="/VisualizzaDipendenti" component={SchermataVisualizzaDipendenti}/>
@@ -84,12 +86,13 @@ const App = () => {
                     <ProtectedRouteAdmin exact path="/ModificaTariffe" component={ModificaTariffeForm}/>
                     <ProtectedRouteAdmin exact path="/InserisciDipendente" component={InserisciDipendenteForm}/>
                     <ProtectedRouteAdmin exact path="/SchermataPrenotazioniAdmin" component={SchermataPrenotazioniAdmin}/>
+                    <ProtectedRouteAdmin exact path="/ModificaPrenotazioneVeicoloAdmin" component={ModPrenotazioneVeicolo}/>
                     <ProtectedRouteAddetto exact path="/ModificaParcheggioAddetto" component={SchermataParcheggioAssociato}/>
                     <ProtectedRouteAddetto exact path="/SchermataPrenotazioniAddetto" component={SchermataPrenotazioniAddetto}/>
                     <ProtectedRouteAutista exact path="/AggiornaPatenteAutista" component={AggiornaPatForm}/>
                     <ProtectedRouteAutista exact path="/SchermataPrenotazioniAutista" component={SchermataPrenotazioniAutista}/>
                     <ProtectedRouteAutista exact path="/NotificheAutista" component={Notifiche}/>
-                    <ProtectedRouteCliente exact path="/SchermataComunicaGuastoAutista" component={SchermataComunicaGuasto}/>
+                    <ProtectedRouteAutista exact path="/SchermataComunicaGuastoAutista" component={SchermataComunicaGuasto}/>
 
                     <Route path="*" component={()=> "404 NOT FOUND"}/>
                 </Switch>

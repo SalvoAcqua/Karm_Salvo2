@@ -79,7 +79,6 @@ function SceltaParcheggi (){
                 }
                 nuovaPrenotazione.prenotazione.datiParcheggioRilascio = DatiRilascio;
             }
-            console.log(nuovaPrenotazione.prenotazione)
             dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
                 window.location.href="/SchermataRiepilogo"
             });

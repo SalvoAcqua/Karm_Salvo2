@@ -3,7 +3,7 @@ import {Container,Row,Col, Button, Card, ListGroupItem, ListGroup, Modal, ModalB
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {addMetodoDiPagamento } from "../../Actions/utenti";
-import {addPrenotazione, pagaAutista} from "../../Actions/prenotazioni"
+import {addPrenotazione, newInformation, pagaAutista} from "../../Actions/prenotazioni"
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import classnames from "classnames";
 import {convertiData, convertiDataEuropa} from '../gestioneDateTime';
@@ -28,13 +28,15 @@ function SchermataRiepilogo() {
     var today=convertiData(new Date());
 
     useEffect(()=>{
+        console.log(nuovaPrenotazione.prenotazione)
         if(nuovaPrenotazione.prenotazione.autista==true){
             setDisplayMancia('block')  
         }
+        console.log(nuovaPrenotazione.prenotazione.viaFuoriStallo)
     },[])
 
     const mostra = () =>{
-        if(nuovaPrenotazione.prenotazione.autista==false){
+        if(nuovaPrenotazione.prenotazione.autista==""){
             return(
                 <Row>             
                     <Card className="card" style={{width: '100%', backgroundColor: "rgb(214, 214, 214)" }}>
@@ -45,7 +47,7 @@ function SchermataRiepilogo() {
                             <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
                             <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
                             <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
-                            <ListGroupItem>Consegna : {(nuovaPrenotazione.prenotazione.viaFuoriStallo=!'') ? nuovaPrenotazione.prenotazione.viaFuoriStallo : (nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome - nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo,nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico)}<br/></ListGroupItem>
+                            <ListGroupItem>Consegna : {nuovaPrenotazione.prenotazione.viaFuoriStallo!='' ? nuovaPrenotazione.prenotazione.viaFuoriStallo : `${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome}-${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo},${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico}` }<br/></ListGroupItem>
                             <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
                             <ListGroupItem>Presenza Autista: No <br/></ListGroupItem>
                             <ListGroupItem variant="primary">Prezzo da pagare: {nuovaPrenotazione.prenotazione.prezzo}€</ListGroupItem>  
@@ -154,7 +156,7 @@ function SchermataRiepilogo() {
     return(
         <div>
             <Container>
-                <Modal show={showPagamento} onHide={()=>closePagamento()} centered backdrop="static">
+           <Modal show={showPagamento} onHide={()=>closePagamento()} centered backdrop="static">
                     <ModalBody>
                         <Modal.Header closeButton>
                             <Modal.Title>
@@ -187,6 +189,7 @@ function SchermataRiepilogo() {
                         </Row>
                     </ModalBody>
                 </Modal>
+
                 <Modal show={showMetodo} onHide={()=>setShowMetodo(false)} centered backdrop="static">
                     <Modal.Header closeButton>
                         <Modal.Title>Inserisci i dati della carta</Modal.Title>
@@ -228,25 +231,26 @@ function SchermataRiepilogo() {
                         </Container> 
                     </Modal.Body>
                 </Modal>
-
-
                 <br/>
                 <Row>
                     <Button size="lg" variant="success" onClick={()=>setShowPagamento(true)}>Procedi al Pagamento</Button>
                 </Row>
                 <br/>
                 {mostra()}
-                
                 <br/>
                 <Row>
                     <Button size="lg" variant="success" onClick={()=>setShowPagamento(true)}>Procedi al Pagamento</Button>
                 </Row>
                 <br/>
-
-                
             </Container>
         </div>
     )
 }
 
 export default SchermataRiepilogo
+
+
+
+                
+
+            

@@ -389,6 +389,27 @@ export const terminaPrenotazione = async (req,res) => {
     });
 }
 
+//Modifica Prenotazione_Veicolo
+export const modifyVehicle = async (req,res) => {
+    let TipoVeicolo = "";
+    await veicolo.find({_id: req.body.prenotazione.idVeicolo}).then((Veicolo)=>{
+        TipoVeicolo = Veicolo.tipoVeicolo;
+    });
+    let Veicoli = [];
+    await veicolo.find({tipoVeicolo: TipoVeicolo, statoVeicolo: { $ne: "Non Attivo"} }).then(async (veicoli)=>{
+        let DataPartenza = new Date(req.body.prenotazione.dataPartenza);
+        let DataArrivo = new Date(req.body.prenotazione.dataArrivo);    
+        for (let vehicle of veicoli) {
+            await prenotazione.findOne({idVeicolo: vehicle._id, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: req.body.prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: req.body.prenotazione.oraPartenza}}]}).then((controlloPrenotazioni)=>{
+                if(!controlloPrenotazioni){
+                    Veicoli.push(vehicle); 
+                } 
+            }).catch((err)=>{res.status(500).json(err.message)});
+        } 
+        return res.status(200).json(Veicoli);
+    });
+}
+
 //Dati Prenotazione
 export const datiPrenotazione = async (req,res) => {
     let PRENOTAZIONE={}

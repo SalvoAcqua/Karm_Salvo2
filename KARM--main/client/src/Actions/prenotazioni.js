@@ -45,7 +45,7 @@ export const addPrenotazione = (userData) => async (dispatch) => {
 
 //Nuova Prenotazione
 export const newInformation = (userData) => async (dispatch) => {
-        dispatch({type:'SET_BOOKING', payload: userData});
+        return dispatch({type:'SET_BOOKING', payload: userData});
 }
 
 //Get Tariffe
@@ -66,6 +66,13 @@ export const deleteBooking = (userData) => async (dispatch) => {
 export const terminaPrenotazione = (userData) => async (dispatch) =>{
         return await api.terminaPrenotazione(userData).then((res)=>{
                 window.location.reload();
+        }).catch((err)=>{console.log(err.messagge)});
+}
+
+//Modifica Prenotazione_Veicolo
+export const modifyVehicle = (userData) => async (dispatch) =>{
+        return await api.modifyVehicle(userData).then((res)=>{
+                dispatch({type:"SET_VEHICLE", payload: res.data});
         }).catch((err)=>{console.log(err.messagge)});
 }
 

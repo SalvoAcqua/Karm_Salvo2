@@ -36,7 +36,7 @@ function SceltaVeicolo(){
             if(veicolo._id==idVeicolo){
                 feriale=veicolo.prezzoFeriale;
                 festivo=veicolo.prezzoFestivo;
-                viaFuoriStallo=veicolo.viaFuoriStallo;
+                viaFuoriStallo=veicolo.viaFuoriStallo=='' ? "" : veicolo.viaFuoriStallo;
             } 
         });
         nuovaPrenotazione.prenotazione.prezzo=prezzoDaPagare(feriale,festivo);
