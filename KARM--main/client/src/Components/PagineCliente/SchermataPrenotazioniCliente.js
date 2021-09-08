@@ -1,40 +1,62 @@
 import React from "react"
-import {Container,Row,Col,Button,Modal,ModalBody} from "react-bootstrap";
+import {Container,Row,Col,Button,Alert,Modal,ModalBody} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import {getPrenotazioniCliente, deleteBooking, terminaPrenotazione} from "../../Actions/prenotazioni";
+import {getPrenotazioniCliente, deleteBooking, terminaPrenotazione,modifyVehicle,newInformation} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
 import BrushSharpIcon from '@material-ui/icons/BrushSharp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {convertiData, getOra, convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataPrenotazioniCliente (){
+    const Utente = useSelector((state)=>state.utenti.utente);
+    const [errModifica,setErrModifica] = useState({show: false, mess: ""});
     const [annullamento,setAnnullamento] = useState({prenotazione: {}, show: false});
-    //const [modifica,setModifica] = useState({prenotazione: {}, show: false});
+    const [modifica,setModifica] = useState({prenotazione: {}, show: false});
     const user = useSelector ((state)=>state.utenti.utente);
     const listaPrenotazioni = useSelector((state)=>state.Prenotazioni.listaPrenotazioni);
     const dispatch = useDispatch();
+
+    const checkModifica = (Prenotazione) => {
+        let oraAttuale = new Date();
+        let todayDate = new Date(convertiData(oraAttuale));
+        let dataPartenza = new Date(Prenotazione.dataPartenza);
+        if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
+            setModifica({...modifica, show: true, prenotazione: Prenotazione}); 
+        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+            setErrModifica({...errModifica, show: true, mess: "La prenotazione è già scaduta"});
+            const dati = {id: Prenotazione._id};
+            dispatch(terminaPrenotazione(dati));
+        } else {
+            setErrModifica({...errModifica, show: true, mess: "Impossibile modificare la prenotazione a meno di 24h dalla consegna"});
+            window.location.reload();
+        }
+    };
+
+    const modificaVeicolo = async (Prenotazione) => {
+        const Dati = {prenotazione: Prenotazione};
+        await dispatch(modifyVehicle(Dati));
+        window.location.href="/ModificaPrenotazioneVeicoloCliente";
+    };
+
+    const modificaArrivo = async(Prenotazione) => {
+        await dispatch(newInformation(Prenotazione));
+        window.location.href="/ModificaPrenotazioneArrivoCliente";
+    };
     
     const DeleteBooking = (Prenotazione) => {
         let oraAttuale = new Date();
         let todayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
         if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
-            //Puoi fare rimborso
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare
-            const dati = {id: Prenotazione._id};
+            //rimborso
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
-        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
-            //notifica da mandare
+        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {            
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
         } else {
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare
-            const dati = {id: Prenotazione._id};
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
         }
     };
@@ -46,6 +68,32 @@ function SchermataPrenotazioniCliente (){
 
     return (
         <div>           
+            <Alert show={errModifica.show} variant="danger">
+                <Alert.Heading>Errore!</Alert.Heading>
+                    <p>
+                        {errModifica.mess}
+                    </p>
+            </Alert>
+
+            <Modal show={modifica.show} onHide={()=>setModifica({...modifica, show:false})} centered backdrop="static">
+                <Modal.Header closeButton>
+                            <Modal.Title>Modifica Prenotazione</Modal.Title>
+                </Modal.Header>
+                <ModalBody>
+                        <Row>
+                            <p>Codice Prenotazione: {modifica.prenotazione._id}</p>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button variant="secondary" onClick={()=>modificaVeicolo(modifica.prenotazione)}>Modifica Veicolo</Button>
+                            </Col>
+                            <Col>
+                                <Button variant="secondary" onClick={()=>modificaArrivo(modifica.prenotazione)}>Modifica Arrivo</Button>
+                            </Col>
+                        </Row>
+                </ModalBody>
+            </Modal>
+            
             <Modal show={annullamento.show} onHide={()=>setAnnullamento({...annullamento, show:false})} centered backdrop="static">
                 <Modal.Header >
                             <Modal.Title>Sei sicuro di voler annullare questa prenotazione?</Modal.Title>
@@ -66,6 +114,10 @@ function SchermataPrenotazioniCliente (){
             </Modal>
 
             <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
+            <br/>
+            <h3>Le tue prenotazioni</h3>
+            <br/>
+
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
@@ -108,7 +160,7 @@ function SchermataPrenotazioniCliente (){
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>{prenotazione.prezzo}€</td>
                                         <td>
-                                            <Button variant="secondary" style={{visibility: (prenotazione.statoPrenotazione!="terminata" && prenotazione.statoPrenotazione!="in_corsa") ? "visible" : "hidden"}} onClick={()=>{}}>
+                                            <Button variant="secondary" style={{visibility: prenotazione.statoPrenotazione=="completa" ? "visible" : "hidden"}} onClick={()=>{checkModifica(prenotazione)}}>
                                                 <BrushSharpIcon/>
                                             </Button>
                                         </td>

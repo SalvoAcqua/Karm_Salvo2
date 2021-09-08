@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {registerUser} from '../../Actions/utenti'
 import classnames from "classnames";
+import bcrypt from 'bcryptjs';
 import CodiceFiscale from "codice-fiscale-js";
 
 function RegistratiForm() {
@@ -18,14 +19,27 @@ function RegistratiForm() {
    const patternEmail = /[A-z0-9\.\+_-]+@[A-z0-9\._-]+\.[A-z]{2,6}/;
    const patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,40}$/;
 
-   const onSubmit = (event) =>{
+   const onSubmit = async (event) =>{
     event.preventDefault();
         let controlla = false;
         if(errCF==true || errConfermaPass==true){
             controlla=true;
         }
         if(controlla==false){
-        const nuovoUtente = dati;
+        const passwordCriptata = await bcrypt.hash(dati.password,10);
+        const nuovoUtente = {
+            ruolo:"Cliente",
+             nome:dati.nome,
+             cognome:dati.cognome,
+             sesso:dati.sesso, 
+             dataNascita:dati.dataNascita, 
+             luogoNascita:dati.luogoNascita, 
+             provinciaNascita:dati.provinciaNascita,
+             CF:dati.CF,
+             email:dati.email,
+             password:passwordCriptata,
+        }
+        console.log(nuovoUtente)
         dispatch(registerUser(nuovoUtente));
         }  
     }

@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {convertiData,getOra,convertiDataEuropa} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAutista (){
+    const Utente = useSelector((state)=>state.utenti.utente);
     const [annullamento,setAnnullamento] = useState({prenotazione: {}, show: false});
     //const [modifica,setModifica] = useState({prenotazione: {}, show: false});
     const user = useSelector ((state)=>state.utenti.utente);
@@ -19,20 +20,13 @@ function SchermataPrenotazioniAutista (){
         let todayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
         if (((todayDate.setDate(todayDate.getDate()+4))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+4))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
-            //Puoi fare rimborso
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare
-            const dati = {id: Prenotazione._id};
+            //rimborso
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
         } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
-            //notifica da mandare
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
         } else {
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare dicendo che non e' possibile
             window.location.reload();
         }
     };
@@ -64,6 +58,10 @@ function SchermataPrenotazioniAutista (){
             </Modal>
             
             <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
+                <br/>
+                <h3>Le tue prenotazioni</h3>
+                <br/>
+
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>

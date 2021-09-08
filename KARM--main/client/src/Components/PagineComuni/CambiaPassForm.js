@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import bcrypt from 'bcryptjs';
 import classnames from "classnames";
 import { modificaPass } from "../../Actions/utenti";
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function CambiaPassForm (){
     const [dati,setDati] = useState({vecchiaPassword:'',nuovaPassword:'',confermaPassword:''});
@@ -18,10 +19,11 @@ function CambiaPassForm (){
     const patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,40}$/;
 
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
         if(errVecchiaPass==false && errNuovaPass==false && errConfPass==false){
-            const nuovaPassword = {nuovaPassword: dati.nuovaPassword , email: emailUtente};
+            const passwordCriptata = await bcrypt.hash(dati.nuovaPassword,10);
+            const nuovaPassword = {nuovaPassword:passwordCriptata, email: emailUtente};
             dispatch(modificaPass(nuovaPassword))
         }
     }
@@ -63,6 +65,13 @@ function CambiaPassForm (){
     return (
         <div className="dist-div-footer password">
            <Container class="container">
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                        <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
+
                 <form onSubmit={onSubmit}>
                     <br/>
                     <Row>

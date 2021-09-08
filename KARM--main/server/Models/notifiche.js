@@ -4,7 +4,7 @@ const notificheSchema = mongoose.Schema({
     idUtente: String,
     tipo: {
         type: String,
-        enum:["accettaCorsa","accettaModifica","comunicaRitardo","completaCorsa","completaModifica","rifiutaModifica","cliente"]
+        enum:["accettaCorsa","accettaModifica","comunicaRitardo","completaCorsa","completaModifica","rifiutaModifica","cliente","autista"]
     },
     messaggio: String,
     letta: {
@@ -12,7 +12,8 @@ const notificheSchema = mongoose.Schema({
         enum: ["false","true"],
         default : "false"
     },
-    idPrenotazione: String
+    idPrenotazione: String,
+    dati:{}
 });
 
 const notifiche = mongoose.model('notifiche', notificheSchema);

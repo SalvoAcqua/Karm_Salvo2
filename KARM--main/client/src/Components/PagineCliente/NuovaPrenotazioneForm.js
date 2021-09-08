@@ -26,7 +26,7 @@ function NuovaPrenotazioneForm (){
     var after = new Date(tmp);
     
 
-    const onSubmit= (event) => {
+    const onSubmit= async (event) => {
         event.preventDefault();
         if (prenotazione.autista && prenotazione.dataPa.getTime()<after.getTime()){
             document.getElementById("dataPa").style.borderColor="red";
@@ -34,8 +34,8 @@ function NuovaPrenotazioneForm (){
             setErrDataPartenza({...errDataPartenza,val:true,mess:"Puoi richiedere la presenza di un autista inserendo una data di partenza distante almeno 3gg dalla data attuale"});
         }else if(!errTipoVeicolo && !errDataPartenza.val && !errDataArrivo.val && !errOraPartenza.val &&
             !errOraArrivo.val && !altriErrori.indirizzoPa && !altriErrori.indirizzoArr && !altriErrori.disp) {
-                dispatch(newInformation(prenotazione));
-                window.location.href="/SceltaVeicolo"
+                await dispatch(newInformation(prenotazione));
+                window.location.href="/SceltaVeicolo";
         }
     }
 
@@ -323,9 +323,11 @@ function NuovaPrenotazioneForm (){
                     <br/>
                     <br/>
                         <Row>
+                            
                             <Button type="submit" variant="success" size="lg">
                                 Avanti
                             </Button>{' '}
+                            
                         </Row>
                     <br/>       
                 </form>

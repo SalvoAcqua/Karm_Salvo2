@@ -28,7 +28,7 @@ function SceltaVeicolo(){
         return Prezzo;
     }
 
-    const prenota = (idVeicolo) =>  {
+    const prenota = async (idVeicolo) =>  {
          let feriale = 0;
          let festivo = 0;
          let viaFuoriStallo = "";
@@ -49,7 +49,7 @@ function SceltaVeicolo(){
             nuovaPrenotazione.prenotazione.prezzoFestivo=festivo;
             nuovaPrenotazione.prenotazione.veicolo=idVeicolo;
             nuovaPrenotazione.prenotazione.viaFuoriStallo=viaFuoriStallo;
-            dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
+            await dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
                 window.location.href="/SceltaParcheggi"
             })
             
@@ -155,7 +155,7 @@ function SceltaVeicolo(){
                             </Card>
                         </Col>
                         ))}
-                </Row>
+                    </Row>
                 <br/>
                 </Container>
             </div>

@@ -1,14 +1,16 @@
 import React from "react"
-import {Container,Row,Col,Button,Modal,ModalBody} from "react-bootstrap";
+import {Container,Row,Col,Button,Alert,Modal,ModalBody} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import {getPrenotazioniAdmin,deleteBooking,terminaPrenotazione,modifyVehicle} from "../../Actions/prenotazioni";
+import {getPrenotazioniAdmin,deleteBooking,terminaPrenotazione,modifyVehicle,newInformation} from "../../Actions/prenotazioni";
 import Table from 'react-bootstrap/Table';
 import BrushSharpIcon from '@material-ui/icons/BrushSharp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {convertiDataEuropa,convertiData,getOra} from '../gestioneDateTime';
 
 function SchermataPrenotazioniAdmin (){
+    const Utente = useSelector((state)=>state.utenti.utente);
+    const [errModifica,setErrModifica] = useState({show: false, mess: ""});
     const [annullamento,setAnnullamento] = useState({prenotazione: {}, show: false});
     const [modifica,setModifica] = useState({prenotazione: {}, show: false});
     const listaPrenotazioni = useSelector((state) => state.Prenotazioni.listaPrenotazioni);
@@ -21,23 +23,24 @@ function SchermataPrenotazioniAdmin (){
         if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
             setModifica({...modifica, show: true, prenotazione: Prenotazione}); 
         } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
-            //mess o notifica da mandare
+            setErrModifica({...errModifica, show: true, mess: "La prenotazione è già scaduta"});
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
         } else {
-            //mess o notifica di errore
+            setErrModifica({...errModifica, show: true, mess: "Impossibile modificare la prenotazione a meno di 24h dalla consegna"});
             window.location.reload();
         }
     };
 
-    const modificaVeicolo = (Prenotazione) => {
+    const modificaVeicolo = async (Prenotazione) => {
         const Dati = {prenotazione: Prenotazione};
-        dispatch(modifyVehicle(Dati));
+        await dispatch(modifyVehicle(Dati));
         window.location.href="/ModificaPrenotazioneVeicoloAdmin";
     };
 
-    const modificaArrivo = (Prenotazione) => {
-
+    const modificaArrivo = async (Prenotazione) => {
+        await dispatch(newInformation(Prenotazione));
+        window.location.href="/ModificaPrenotazioneArrivoAdmin";
     };
     
     const DeleteBooking = (Prenotazione) => {
@@ -45,21 +48,14 @@ function SchermataPrenotazioniAdmin (){
         let todayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
         if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
-            //Puoi fare rimborso
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare
-            const dati = {id: Prenotazione._id};
+            //rimborso
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
         } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
-            //notifica da mandare
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
         } else {
-            //email
-            //notifiche da rimuovere
-            //notifica da mandare
-            const dati = {id: Prenotazione._id};
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
         }
     };
@@ -70,8 +66,15 @@ function SchermataPrenotazioniAdmin (){
 
     return (
         <div>            
+            <Alert show={errModifica.show} variant="danger">
+                <Alert.Heading>Errore!</Alert.Heading>
+                    <p>
+                        {errModifica.mess}
+                    </p>
+            </Alert>
+            
             <Modal show={modifica.show} onHide={()=>setModifica({...modifica, show:false})} centered backdrop="static">
-                <Modal.Header >
+                <Modal.Header closeButton>
                             <Modal.Title>Modifica Prenotazione</Modal.Title>
                 </Modal.Header>
                 <ModalBody>
@@ -109,6 +112,10 @@ function SchermataPrenotazioniAdmin (){
             </Modal>
 
             <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
+                <br/>
+                <h3>Prenotazioni dell'Azienda</h3>
+                <br/>
+
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>
@@ -155,7 +162,7 @@ function SchermataPrenotazioniAdmin (){
                                         <td>{prenotazione.prezzo}€</td>
                                         <td>{prenotazione.statoPrenotazione}</td>
                                         <td>
-                                            <Button variant="secondary" style={{visibility: (prenotazione.statoPrenotazione!="terminata" && prenotazione.statoPrenotazione!="in_corsa") ? "visible" : "hidden"}} onClick={()=>checkModifica(prenotazione)}>
+                                            <Button variant="secondary" style={{visibility: prenotazione.statoPrenotazione=="completa" ? "visible" : "hidden"}} onClick={()=>{checkModifica(prenotazione)}}>
                                                 <BrushSharpIcon/>
                                             </Button>
                                         </td>

@@ -9,6 +9,7 @@ import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataVisualizzaVeicoli (){
     const [confermaEliminazione,setConfermaEliminazione] = useState({show:false,veicolo:{}});
@@ -149,6 +150,14 @@ function SchermataVisualizzaVeicoli (){
                         </div>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
+
                 <Row>
                     <Button variant="secondary" size="lg" href="/InserisciVeicolo">
                         Inserisci veicolo

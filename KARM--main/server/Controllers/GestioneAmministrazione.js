@@ -2,6 +2,7 @@ import utente from '../Models/utente.js';
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
 import prenotazione from '../Models/prenotazioni.js';
+import {bloccaVeicolo} from './Notifiche.js'
 import { response } from 'express';
 
 //Lista Clienti
@@ -268,7 +269,7 @@ export const cercaSostituto = async (Prenotazione, Vehicle) => {
             return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, modello: Vehicle.modello, cilindrata:Vehicle.cilindrata, nPosti: Vehicle.nPosti, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
                 for (let Veicolo of Veicoli) {
                     let idPossibileSostituto=Veicolo._id;
-                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto,statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, dataPartenza:{$gt: DataPartenza} ,oraPartenza: {$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza,dataArrivo:{$gt:DataArrivo},oraPartenza: {$lt: req.body.oraArr},oraPartenza: {$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza, dataArrivo:DataPartenza ,oraArrivo: {$gte: req.body.oraArr}, oraPartenza:{$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza ,dataArrivo:DataPartenza, oraPartenza: {$lte: req.body.oraPa}, oraArrivo:{$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza , dataArrivo:DataPartenza, oraPartenza: {$gte: req.body.oraPa}, oraArrivo:{$lte: req.body.oraArr}},{dataArrivo:DataPartenza, dataArrivo:{$lt: DataArrivo}, oraArrivo: {$gt: req.body.oraPa}},{dataArrivo:DataPartenza, dataArrivo:DataArrivo, dataPartenza:{$lt: DataPartenza}, oraArrivo: {$gt: req.body.oraPa}}]}).then(async (corsa)=>{
                         if(!corsa && !flag){
                             flag=true;
                             ris = {sostituibile: true, sostituto: Veicolo};
@@ -285,7 +286,7 @@ export const cercaSostituto = async (Prenotazione, Vehicle) => {
             return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, modello: Vehicle.modello, cilindrata:Vehicle.cilindrata, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
                 for (let Veicolo of Veicoli) {
                     let idPossibileSostituto=Veicolo._id;
-                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto,statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, dataPartenza:{$gt: DataPartenza} ,oraPartenza: {$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza,dataArrivo:{$gt:DataArrivo},oraPartenza: {$lt: req.body.oraArr},oraPartenza: {$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza, dataArrivo:DataPartenza ,oraArrivo: {$gte: req.body.oraArr}, oraPartenza:{$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza ,dataArrivo:DataPartenza, oraPartenza: {$lte: req.body.oraPa}, oraArrivo:{$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza , dataArrivo:DataPartenza, oraPartenza: {$gte: req.body.oraPa}, oraArrivo:{$lte: req.body.oraArr}},{dataArrivo:DataPartenza, dataArrivo:{$lt: DataArrivo}, oraArrivo: {$gt: req.body.oraPa}},{dataArrivo:DataPartenza, dataArrivo:DataArrivo, dataPartenza:{$lt: DataPartenza}, oraArrivo: {$gt: req.body.oraPa}}]}).then(async (corsa)=>{
                         if(!corsa && !flag){
                             flag=true;
                             ris = {sostituibile: true, sostituto: Veicolo};
@@ -302,7 +303,7 @@ export const cercaSostituto = async (Prenotazione, Vehicle) => {
             return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
                 for (let Veicolo of Veicoli) {
                     let idPossibileSostituto=Veicolo._id;
-                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto,statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, dataPartenza:{$gt: DataPartenza} ,oraPartenza: {$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza,dataArrivo:{$gt:DataArrivo},oraPartenza: {$lt: req.body.oraArr},oraPartenza: {$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza, dataArrivo:DataPartenza ,oraArrivo: {$gte: req.body.oraArr}, oraPartenza:{$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza ,dataArrivo:DataPartenza, oraPartenza: {$lte: req.body.oraPa}, oraArrivo:{$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza , dataArrivo:DataPartenza, oraPartenza: {$gte: req.body.oraPa}, oraArrivo:{$lte: req.body.oraArr}},{dataArrivo:DataPartenza, dataArrivo:{$lt: DataArrivo}, oraArrivo: {$gt: req.body.oraPa}},{dataArrivo:DataPartenza, dataArrivo:DataArrivo, dataPartenza:{$lt: DataPartenza}, oraArrivo: {$gt: req.body.oraPa}}]}).then(async (corsa)=>{
                         if(!corsa && !flag){
                             flag=true;
                             ris = {sostituibile: true, sostituto: Veicolo};
@@ -319,7 +320,7 @@ export const cercaSostituto = async (Prenotazione, Vehicle) => {
             return await veicolo.find({_id: {$ne: Vehicle._id}, tipoVeicolo: Vehicle.tipoVeicolo, statoVeicolo: {$ne: "Non Attivo" }}).then(async (Veicoli)=>{
                 for (let Veicolo of Veicoli) {
                     let idPossibileSostituto=Veicolo._id;
-                    await prenotazione.findOne({idVeicolo: idPossibileSostituto, statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, oraPartenza: {$lt: Prenotazione.oraArrivo}},{dataArrivo:DataPartenza, oraArrivo: {$gt: Prenotazione.oraPartenza}}]}).then(async (corsa)=>{
+                    await prenotazione.findOne({idVeicolo: idPossibileSostituto,statoPrenotazione: {$ne: "terminata"}, $or: [{dataPartenza: { $lt: DataArrivo}, dataArrivo: { $gte: DataArrivo}}, {dataPartenza: { $lte: DataPartenza}, dataArrivo: { $gt: DataPartenza}}, {dataPartenza: { $gt: DataPartenza}, dataArrivo: { $lt: DataArrivo }},{dataPartenza:DataArrivo, dataPartenza:{$gt: DataPartenza} ,oraPartenza: {$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza,dataArrivo:{$gt:DataArrivo},oraPartenza: {$lt: req.body.oraArr},oraPartenza: {$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza:DataPartenza, dataArrivo:DataPartenza ,oraArrivo: {$gte: req.body.oraArr}, oraPartenza:{$lt: req.body.oraArr}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza ,dataArrivo:DataPartenza, oraPartenza: {$lte: req.body.oraPa}, oraArrivo:{$gt: req.body.oraPa}},{dataPartenza:DataArrivo, dataPartenza: DataPartenza , dataArrivo:DataPartenza, oraPartenza: {$gte: req.body.oraPa}, oraArrivo:{$lte: req.body.oraArr}},{dataArrivo:DataPartenza, dataArrivo:{$lt: DataArrivo}, oraArrivo: {$gt: req.body.oraPa}},{dataArrivo:DataPartenza, dataArrivo:DataArrivo, dataPartenza:{$lt: DataPartenza}, oraArrivo: {$gt: req.body.oraPa}}]}).then(async (corsa)=>{
                         if(!corsa && !flag){
                             flag=true;
                             ris = {sostituibile: true, sostituto: Veicolo};
@@ -346,9 +347,13 @@ export const blockVehicle = async (req,res) =>{
                     ris=risposta;
                 });
                 if (ris.sostituibile){
-                    await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: ris.sostituto._id}).catch((err)=>{return res.status(500).json(err.message)});
+                    await prenotazione.findOneAndUpdate({_id: Prenotazione._id},{idVeicolo: ris.sostituto._id}).then((PRENOTAZIONE)=>{
+                        bloccaVeicolo(PRENOTAZIONE,0)
+                    }).catch((err)=>{return res.status(500).json(err.message)});
                 } else {
-                    //effettua rimborso
+                    await prenotazione.findOneAndRemove({_id:Prenotazione._id}).then((PRENOTAZIONE)=>{
+                        bloccaVeicolo(PRENOTAZIONE,1)
+                    })
                 }
             }
         }

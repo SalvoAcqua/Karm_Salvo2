@@ -8,17 +8,9 @@ import {GoogleKey} from '../../api.js';
 import classnames from "classnames";
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/api';
 import {formatRelative} from 'date-fns'
+import Mappa from '../Mappa/Mappa.js'
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
-
-const mapContainerStyle = {
-    width:"50vw",
-    height:"70vh"
-}
-const center = {
-    lat:38.115688,
-    lng:13.361267
-   
-}
 function SceltaParcheggi (){
     const [datiConsegna,setDatiConsegna] = useState({parcheggioConsegna:''});
     const [showFuoriStallo,setShowFuoriStallo] = useState("none");
@@ -38,7 +30,7 @@ function SceltaParcheggi (){
         }
     },[])
 
-    const completaOperazione = () =>{
+    const completaOperazione = async () =>{
         if((errori.parcheggioConsegna==false || nuovaPrenotazione.prenotazione.viaFuoriStallo!='') && errori.parcheggioRilascio==false){ 
             if(nuovaPrenotazione.prenotazione.viaFuoriStallo==''){
                 let DatiConsegna = {};
@@ -79,7 +71,7 @@ function SceltaParcheggi (){
                 }
                 nuovaPrenotazione.prenotazione.datiParcheggioRilascio = DatiRilascio;
             }
-            dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
+            await dispatch(newInformation(nuovaPrenotazione.prenotazione)).then(()=>{
                 window.location.href="/SchermataRiepilogo"
             });
             
@@ -102,35 +94,31 @@ function SceltaParcheggi (){
             setErrori({...errori,parcheggioRilascio:true});
         }
     },[datiRilascio.parcheggioRilascio])
-
-
-
-    //Mappa
-    /*const libraries = ["places"]
-    const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey:GoogleKey.REACT_GOOGLE_MAP_API_KEY,
-        libraries
-    })
-    if(loadError) return "Errore caricamento Mappa" 
-    if(!isLoaded) return "caricamento mappa"
-    <Col>
-    <GoogleMap mapContainerStyle={mapContainerStyle} zoom={13} center={center}>
-    </GoogleMap>
-</Col>  */ 
-
    
-
-
-
     return (
-        <div class="container pagA" >
+        
+        <div class="container" >
             <Container style={{margin:"20px"}}>
+
                 <Row>
+                    <Col>
+                        <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                        </Button>
+                    </Col>
+                </Row>
+                <br/>
+                
+                <Row>
+                    <Col>
+                        <Mappa/>
+                    </Col>
+
                     <Col>
                     <Alert style={{display:showFuoriStallo}} variant="primary" id="FuoriStallo">
                         Hai scelto un veicolo fuori stallo! La consegna avverrà in {nuovaPrenotazione.prenotazione.viaFuoriStallo}
                     </Alert>
-                        <div style={{display:showParcheggio}}>
+                        <div style={{display:showParcheggio}}><br/>
                         <label >Parcheggio di Partenza</label><br/>
                         <select type="text" id="Partenza" name="parcheggioPartenza" onChange={(e)=>setDatiConsegna({...datiConsegna,parcheggioConsegna:e.target.value})}title="Seleziona il parcheggio in cui si trova il veicolo">
                             <option value="" selected disabled>Parcheggio</option>
@@ -150,9 +138,13 @@ function SceltaParcheggi (){
                         <span className={classnames({'green-convalid':!errori.parcheggioRilascio, 'red-convalid':errori.parcheggioRilascio})}> {errori.parcheggioRilascio ? "Voce obbligatoria per il completamento della prenotazione" : "OK"} </span>
                         <span> </span>
                         <br/><br/>
-                        <Button variant="success" onClick={()=>completaOperazione()}> Completa Operazione</Button>
+                        <Row>
+                            <Button variant="success" size="lg" onClick={()=>completaOperazione()}> Completa Operazione</Button>
+                        </Row>
+                        <br/>
                     </Col>
                 </Row>
+                
             </Container>
         </div>
     )

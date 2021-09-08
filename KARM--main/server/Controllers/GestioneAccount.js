@@ -13,7 +13,14 @@ function generateRandomOTP() {
     }
     return sRnd;
   }
-
+//Set EMAIL
+export const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+    user: 'team.karm2021@gmail.com',
+    pass: 'Karm@2021' // naturally, replace both with your real credentials or an application-specific password
+},tls: {rejectUnauthorized: false}
+});
 
 //Aggiungi Utente
 export const registraUtente = async (req, res) => {
@@ -23,7 +30,6 @@ export const registraUtente = async (req, res) => {
           return res.status(400).json({ email: "Email già esistente" });
         } else {
             //Criptiamo la password
-            const passwordCriptata = await bcrypt.hash(req.body.password,10);
             let Utente = {}
             switch(req.body.ruolo){
                 case "Autista":
@@ -42,7 +48,7 @@ export const registraUtente = async (req, res) => {
                         dataScadenzaPatente: req.body.patente.dataScadenza, 
                         enteRilascio: req.body.patente.enteRilascio,
                         email: req.body.email,
-                        password: passwordCriptata,
+                        password: req.body.password,
                     }
                     break;
                 case "Addetto":
@@ -56,7 +62,7 @@ export const registraUtente = async (req, res) => {
                         provinciaNascita: req.body.provinciaNascita,
                         CF: req.body.CF,
                         email: req.body.email,
-                        password: passwordCriptata,
+                        password: req.body.password,
                         idParcheggio: req.body.parcheggioAssociato
                     }
                     break;
@@ -70,7 +76,7 @@ export const registraUtente = async (req, res) => {
                         provinciaNascita: req.body.provinciaNascita,
                         CF: req.body.CF,
                         email: req.body.email,
-                        password: passwordCriptata
+                        password: req.body.password
                     }
             }
             const newUser = new utente(Utente);
@@ -141,8 +147,7 @@ export const accessoUtente = async (req,res) => {
 
 //Cambia Password
 export const nuovaPassword = async (req,res) =>{
-    const nuovaPassword = await bcrypt.hash(req.body.nuovaPassword,10);
-    await utente.findOneAndUpdate({email : req.body.email}, {password: nuovaPassword, $unset:{OTP:""}},{new:true}).then((user)=>{
+    await utente.findOneAndUpdate({email : req.body.email}, {password: req.body.nuovaPassword, $unset:{OTP:""}},{new:true}).then((user)=>{
         return res.json(user);
     }).catch((err)=> {return res.status(500).json(err.message)})
 }
@@ -239,13 +244,7 @@ export const recuperaPassword = async (req,res) => {
     await utente.findOne({email:req.body.email}).then((User)=>{
         if(User){
             let otp=generateRandomOTP();
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                user: 'team.karm2021@gmail.com',
-                pass: 'Karm@2021' // naturally, replace both with your real credentials or an application-specific password
-            },tls: {rejectUnauthorized: false}
-            });
+           
       
         const mailOptions = {
             from: 'team.karm2021@gmail.com',

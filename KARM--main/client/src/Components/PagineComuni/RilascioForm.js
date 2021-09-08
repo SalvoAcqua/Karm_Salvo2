@@ -32,7 +32,7 @@ function RilascioForm (){
     }
 
     const clickPagamento = () => {
-        dispatch(getTariffe(corsa)).then((res)=>{
+        dispatch(getTariffe({idVeicolo: corsa.idVeicolo})).then((res)=>{
             switch (rilascio.integrita) {
                 case "0":
                     setImportoDanni(0);

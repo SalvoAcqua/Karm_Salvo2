@@ -20,6 +20,10 @@ function SchermataPrenotazioniAddetto (){
     return (
         <div>
             <Container className="container pagA" style={{marginTop:"20px", textAlign:"center"}}>
+                <br/>
+                <h3>Le tue prenotazioni</h3>
+                <br/>
+
                 <Row>
                     <Col>
                         <Table striped bordered hover size="sm" responsive>

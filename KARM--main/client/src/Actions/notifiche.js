@@ -11,3 +11,13 @@ export const prendiNotifiche = (userData) => async (dispatch) => {
         dispatch({type:"LIST_NOTIFICHE",payload:res.data})
     }).catch((err)=>{console.log(err.message)})
  }
+
+ //elimina notifiche
+
+ export const eliminaNotifiche = (userData) => async (dispatch) => {
+    await api.eliminaNotifiche(userData)
+ }
+
+ export const modificaAccettata = (userData) => async (dispatch) => {
+    await api.modificaAccettata(userData);
+ }

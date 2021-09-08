@@ -1,8 +1,11 @@
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
+import utente from '../Models/utente.js';
 import prenotazione from '../Models/prenotazioni.js';
 import {cercaSostituto} from './GestioneAmministrazione.js';
-import {convertiData, getOra} from '../gestioneDateTime.js';
+import {convertiData, getOra, convertiDataEuropa} from '../gestioneDateTime.js';
+import { transporter } from './GestioneAccount.js';
+
 
 export const verifyDelivery = async (req,res) =>{
     let oraAttuale = new Date();
@@ -17,6 +20,7 @@ export const verifyDelivery = async (req,res) =>{
                 if (dataPartenza.getTime()==todayDate.getTime() && Prenotazione.oraPartenza<=getOra(oraAttuale) && Prenotazione.oraArrivo>getOra(oraAttuale)) {
                     await prenotazione.findOneAndUpdate({_id: req.body.cod},{statoPrenotazione: "in_corsa"});
                     await veicolo.findOneAndUpdate({_id: idVeicolo},{statoVeicolo: "Occupato"});
+                    prova();
                     return res.status(200).json(Prenotazione);
                 } else {
                     if (dataPartenza.getTime()<todayDate.getTime()){
@@ -193,7 +197,32 @@ export const assegnaLuogo = async(req,res) =>{
 
 export const completaRilascio = async (req,res) => {
     await veicolo.findOneAndUpdate({_id: req.body.idVeicolo},{statoVeicolo: "Libero"}).then(async (Veicolo)=>{
-        await prenotazione.findOneAndUpdate({_id: req.body._id},{statoPrenotazione: "terminata"}).then((Prenotazione)=>{
+        await prenotazione.findOneAndUpdate({_id: req.body._id},{statoPrenotazione: "terminata"},{new:true}).then(async (Prenotazione)=>{
+            await utente.findOne({_id:Prenotazione.idCliente}).then((User)=>{
+                const mailOptions = {
+                    from: 'team.karm2021@gmail.com',
+                    to: User.email,
+                    subject: 'TeamKarm: Recupero Password',
+                    text: `${User.nome},hai terminato una corsa con KARM! Di seguito il riepilogo della prenotazione:\n
+                            Codice Prenotazione:${Prenotazione._id}\n
+                            Data e ora Partenza:${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}, ${Prenotazione.oraPartenza}\n
+                            Data e ora Arrivo:${convertiDataEuropa(new Date(Prenotazione.dataArrivo))}, ${Prenotazione.oraArrivo}\n
+                            Prezzo: ${Prenotazione.prezzo}\n
+                            Autista: ${Prenotazione.idAutista!=undefined ? "SI" : "NO"}\n
+                            \n\nGrazie per aver scelto KARM\n\n-Team Karm`
+                };
+              
+                transporter.sendMail(mailOptions, async (error, info) => {
+                    if (!error) {
+                    await utente.findOneAndUpdate({email:User.email},{OTP:otp},{new:true}).then((user)=>{
+                        return res.status(200).json(true);
+                    }).catch((err)=>{ return res.status(500).json(err)})
+                    } else {
+                        console.log(error);
+                        //res.status(500).json({email:"Non siamo riusciti a contattare questa email"});
+                    }
+                });
+            })
             return res.status(200).json(Prenotazione);
         }).catch((err)=> {return res.status(500).json(err.message)});
     }).catch((err)=> {return res.status(500).json(err.message)});

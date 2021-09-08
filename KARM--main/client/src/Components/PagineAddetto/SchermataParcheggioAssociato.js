@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getListaParcheggi} from "../../Actions/admin";
 import {setPark} from "../../Actions/utenti";
 import classnames from "classnames";
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataParcheggioAssociato (){
     const [parcheggioID,setParcheggioID] = useState("");
@@ -27,6 +28,13 @@ function SchermataParcheggioAssociato (){
     return (
         <Container className="container parch" style={{marginTop:"20px"}}>
             <div>
+                <br/>
+
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
                 <br/>
 
                     <form onSubmit={onSubmit}>

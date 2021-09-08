@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table'
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getListaClienti} from '../../Actions/admin'
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataVisualizzaClienti () {
     const listaClienti = useSelector((state)=>state.AccountAdmin.listaClienti);
@@ -17,6 +18,13 @@ function SchermataVisualizzaClienti () {
     return(
         <div class="container pag" >
             <Container style={{marginTop:"20px"}}>
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
+
                 <Row>
                     <Col> 
                         <Table striped bordered hover size="sm" responsive>
@@ -48,7 +56,6 @@ function SchermataVisualizzaClienti () {
                         </Table>
                     </Col>
                 </Row>
-
             </Container>
         </div>
     )

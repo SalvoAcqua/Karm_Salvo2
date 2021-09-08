@@ -7,7 +7,7 @@ import {addPrenotazione, newInformation, pagaAutista} from "../../Actions/prenot
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import classnames from "classnames";
 import {convertiData, convertiDataEuropa} from '../gestioneDateTime';
-
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataRiepilogo() {
     const nuovaPrenotazione = useSelector((state)=>state.Prenotazioni);
@@ -45,7 +45,7 @@ function SchermataRiepilogo() {
                         </Card.Body>
                         <ListGroup className="list-group-flush">
                             <ListGroupItem>Tipo Veicolo: {nuovaPrenotazione.prenotazione.tipoVeicolo}</ListGroupItem>
-                            <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
+                            <ListGroupItem>Data e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
                             <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
                             <ListGroupItem>Consegna : {nuovaPrenotazione.prenotazione.viaFuoriStallo!='' ? nuovaPrenotazione.prenotazione.viaFuoriStallo : `${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nome}-${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.indirizzo},${nuovaPrenotazione.prenotazione.datiParcheggioConsegna.nCivico}` }<br/></ListGroupItem>
                             <ListGroupItem>Rilascio : {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nome}- {nuovaPrenotazione.prenotazione.datiParcheggioRilascio.indirizzo},{nuovaPrenotazione.prenotazione.datiParcheggioRilascio.nCivico} <br/></ListGroupItem>
@@ -65,7 +65,7 @@ function SchermataRiepilogo() {
                         </Card.Body>
                         <ListGroup className="list-group-flush">
                             <ListGroupItem>Tipo Veicolo: Autovettura</ListGroupItem>
-                            <ListGroupItem>Date e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
+                            <ListGroupItem>Data e ora Partenza : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataPa))}, {nuovaPrenotazione.prenotazione.oraPa}</ListGroupItem>
                             <ListGroupItem>Data e ora Arrivo : {convertiDataEuropa(new Date(nuovaPrenotazione.prenotazione.dataArr))}, {nuovaPrenotazione.prenotazione.oraArr}<br/></ListGroupItem>
                             <ListGroupItem>Via Partenza : {nuovaPrenotazione.prenotazione.indirizzoPa}<br/></ListGroupItem>
                             <ListGroupItem>Via Destinazione : {nuovaPrenotazione.prenotazione.indirizzoArr} <br/></ListGroupItem>
@@ -189,6 +189,13 @@ function SchermataRiepilogo() {
                         </Row>
                     </ModalBody>
                 </Modal>
+
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                        <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
 
                 <Modal show={showMetodo} onHide={()=>setShowMetodo(false)} centered backdrop="static">
                     <Modal.Header closeButton>

@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { passwordRecovery, checkOTP, modificaPass } from "../../Actions/utenti";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import classnames from "classnames";
+import bcrypt from 'bcryptjs';
 
 function RecuperaPasswordForm(){
     let screenHeight = document.documentElement.scrollHeight - (250);
@@ -46,10 +47,11 @@ function RecuperaPasswordForm(){
         })
     }
 
-    const onSubmitPassword = (e) => {
+    const onSubmitPassword = async (e) => {
         e.preventDefault();
         if(errNuovaPass==false && errConfPass==false){
-            const nuovaPassword = {nuovaPassword: dati.nuovaPassword , email: email};
+            const passwordCriptata = await bcrypt.hash(dati.nuovaPassword,10);
+            const nuovaPassword = {nuovaPassword: passwordCriptata , email: email};
             dispatch(modificaPass(nuovaPassword))
         }
     }
@@ -115,7 +117,7 @@ function RecuperaPasswordForm(){
                         <Button type="submit" variant="success"> Avanti</Button>
                         </Col>
                         <Col>
-                        <Button variant="danger">Annulla</Button>
+                        <Button variant="danger" href="/">Annulla</Button>
                         </Col>
                         </Row>
                         </form>

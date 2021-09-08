@@ -7,6 +7,7 @@ import Table from 'react-bootstrap/Table'
 import classnames from "classnames";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {convertiData} from '../gestioneDateTime';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataMetodiPag (){
     const [confermaEliminazione,setConfermaEliminazione] = useState({show:false, id:'',numeroCarta:''});
@@ -156,6 +157,12 @@ function SchermataMetodiPag (){
                         </Container> 
                     </Modal.Body>
                 </Modal>
+
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                        <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
 
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>

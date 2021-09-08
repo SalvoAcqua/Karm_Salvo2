@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getListaParcheggi,addParcheggio} from '../../Actions/admin'
 import classnames from "classnames";
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataVisualizzaParcheggi () {
     const listaParcheggi = useSelector((state)=>state.AccountAdmin.listaParcheggi);
@@ -143,6 +144,13 @@ function SchermataVisualizzaParcheggi () {
                 <h3>Parcheggi</h3>
 
             <Container className="container pag" style={{marginTop:"20px"}}>
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
+
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
                         Inserisci un nuovo parcheggio

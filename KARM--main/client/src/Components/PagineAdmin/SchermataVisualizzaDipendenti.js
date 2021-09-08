@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getListaDipendenti, removeEmployee} from '../../Actions/admin'
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function SchermataVisualizzaDipendenti () {
     const [confermaEliminazione,setConfermaEliminazione] = useState({show:false, dipendente:{}});
@@ -53,6 +54,13 @@ function SchermataVisualizzaDipendenti () {
                             </Row>
                     </ModalBody>
                 </Modal>
+
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
 
                 <br/>
                 <h3>Dipendenti</h3>

@@ -6,6 +6,7 @@ import {getListaParcheggi, addDipendente} from '../../Actions/admin';
 import classnames from "classnames";
 import {convertiData, emptyDate} from '../gestioneDateTime';
 import CodiceFiscale from "codice-fiscale-js";
+import bcrypt from 'bcryptjs';
 
 function InserisciDipendenteForm (){
     const [dipendente,setDipendente] = useState({ruolo:'',nome:'',cognome:'',dataNascita:'', sesso:'',luogoNascita:'',
@@ -37,9 +38,10 @@ function InserisciDipendenteForm (){
     var today=convertiData(new Date()); //così ho la data di oggi formattata nel giusto modo per l'attributo max
     const dispatch = useDispatch();
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
         let Dipendente = {};
+        const passwordCriptata = await bcrypt.hash(dipendente.password,10);
         if (dipendente.ruolo=="Autista") {
             Dipendente = {
                 ruolo:dipendente.ruolo,
@@ -58,7 +60,7 @@ function InserisciDipendenteForm (){
                     enteRilascio:dipendente.enteRilascio
                 },
                 email:dipendente.email,
-                password:dipendente.password
+                password:passwordCriptata
             }
         }
         else{
@@ -73,7 +75,7 @@ function InserisciDipendenteForm (){
                 CF:dipendente.CF,
                 parcheggioAssociato:dipendente.parcheggioAssociato,
                 email:dipendente.email,
-                password:dipendente.password
+                password:passwordCriptata
             }
         }
 
@@ -270,7 +272,6 @@ function InserisciDipendenteForm (){
         } catch(err) {
             document.getElementById("CF").style.borderColor="red";
             setErrCF(true);
-            console.log(err.message)
             };  
     },[dipendente.nome,dipendente.cognome,dipendente.sesso,dipendente.dataNascita,dipendente.provinciaNascita,dipendente.luogoNascita,dipendente.CF]);
 

@@ -5,6 +5,7 @@ import {registerLicense} from '../../Actions/utenti';
 import classnames from "classnames";
 import {useDispatch, useSelector} from 'react-redux';
 import {convertiData} from '../gestioneDateTime'
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function AggiornaPatForm (){
     const [patente,setPatente] = useState({numeroPatente:'',tipoPatente:'',dataRilascio:'',dataScadenza:'', enteRilascio:''});
@@ -90,6 +91,13 @@ function AggiornaPatForm (){
     return (
         <div class="container">
            <Container >
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                        <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                <br/>
+
                 <form onSubmit={onSubmit}>
                 <br/>
                     <Row>
