@@ -3,7 +3,7 @@ import parcheggi from '../Models/parcheggi.js'
 import metodiPagamento from '../Models/metodiPagamento.js';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
-//Genera OTP
+//Genera OTP 
 function generateRandomOTP() {
     var sRnd = '';
     var sChrs = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
@@ -80,7 +80,24 @@ export const registraUtente = async (req, res) => {
                     }
             }
             const newUser = new utente(Utente);
-            newUser.save().then((user) => res.json(user)).catch((err)=>res.status(500).json(err.message))    
+            newUser.save().then((user) => {
+                const mailOptions = {
+                    from: 'team.karm2021@gmail.com',
+                    to: user.email,
+                    subject: 'TeamKarm: BENVENUTO',
+                    text: `${user.nome}, grazie per aver scelto KARM\n L'intero staff di Team Karm ti da il benvenuto!`
+                };
+              
+                transporter.sendMail(mailOptions, async (error, info) => {
+                    if (!error) {
+                    console.log("Email mandata")
+                    } else {
+                        console.log(error);
+                    }
+                });
+                return res.status(200).json(user);
+            })
+            .catch((err)=>res.status(500).json(err.message))    
         }
     })
     .catch(err => {
@@ -273,7 +290,21 @@ export const recuperaPassword = async (req,res) => {
 export const controlloOTP = async (req,res) => {
     await utente.findOne({email:req.body.email, OTP:req.body.OTP}).then((user)=>{
         if(user){
+            const mailOptions = {
+                from: 'team.karm2021@gmail.com',
+                to: user.email,
+                subject: 'TeamKarm:Password cambiata',
+                text: `${user.nome}, la tua password è stata modificata correttamente!\n\nTeam Karm`
+            };
+          
+            transporter.sendMail(mailOptions, async (error, info) => {
+                if (!error) {
+                 console.log("Email mandata")
+                } else {
+                    console.log(error);
+                }
             return res.status(200).json(true);
+            })
         } else{
             return res.status(400).json({otp:"Codice OTP non valido"});
         }

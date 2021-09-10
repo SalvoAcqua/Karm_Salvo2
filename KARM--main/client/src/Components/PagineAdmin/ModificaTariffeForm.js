@@ -4,6 +4,7 @@ import {useEffect,useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getListaVeicoli,modifyTariffe} from "../../Actions/admin";
 import BrushSharpIcon from '@material-ui/icons/BrushSharp';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function ModificaTariffeForm (){
     const [dati,setDati]=useState({prezzoFeriale:'', prezzoFestivo:''});
@@ -52,6 +53,13 @@ function ModificaTariffeForm (){
                  </Modal.Body>
              </Modal>
             <Container className="container" style={{marginTop:"20px"}}>
+                <Row>
+                    <Button variant="outline-secondary" onClick={()=>{window.location.href='/GestioneAmministrazione'}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                    </Button>
+                </Row>
+                
+                <br/>
                 <h3>Tariffe</h3>
                 <br/>
                 <Row>

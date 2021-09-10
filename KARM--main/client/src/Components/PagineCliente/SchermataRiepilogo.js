@@ -28,11 +28,9 @@ function SchermataRiepilogo() {
     var today=convertiData(new Date());
 
     useEffect(()=>{
-        console.log(nuovaPrenotazione.prenotazione)
         if(nuovaPrenotazione.prenotazione.autista==true){
             setDisplayMancia('block')  
         }
-        console.log(nuovaPrenotazione.prenotazione.viaFuoriStallo)
     },[])
 
     const mostra = () =>{
@@ -104,7 +102,6 @@ function SchermataRiepilogo() {
             
         }
     }
-
     const closePagamento = () =>{
         var select=document.getElementsByTagName("select")[0];
         select.removeAttribute("selected");
@@ -175,7 +172,7 @@ function SchermataRiepilogo() {
                             <span className={classnames({'red-convalid':numeroCarta=='', 'green-convalid':numeroCarta!=''})}>{numeroCarta=='' ? "Seleziona un metodo di pagamento" : "OK"} </span>
                             <div style={{display:displayMancia}}>
                                 <label htmlFor="number">Mancia </label> <br/>
-                                        <input name="mancia" id="mancia" type="text" min="0" defaultValue="0" onChange={(e)=>setDati({...dati,mancia:e.target.value})} />
+                                        <input name="mancia" id="mancia" type="number" min="0" defaultValue="0" onChange={(e)=>setDati({...dati,mancia:e.target.value})} />
                                         <br />
                             </div>
                         </fieldset><br/>
@@ -231,7 +228,7 @@ function SchermataRiepilogo() {
                                     <br /> 
                                     <br/>
                                     <Button type="submit" variant="secondary">
-                                    Inserisci
+                                    Aggiungi
                                     </Button>
                                 </form>
                             </Row>

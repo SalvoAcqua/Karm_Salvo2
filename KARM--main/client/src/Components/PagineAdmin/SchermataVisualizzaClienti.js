@@ -19,7 +19,7 @@ function SchermataVisualizzaClienti () {
         <div class="container pag" >
             <Container style={{marginTop:"20px"}}>
                 <Row>
-                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                    <Button variant="outline-secondary" onClick={()=>{window.location.href='/GestioneAmministrazione'}}>
                             <ArrowLeftRoundedIcon/>Indietro
                     </Button>
                 </Row>

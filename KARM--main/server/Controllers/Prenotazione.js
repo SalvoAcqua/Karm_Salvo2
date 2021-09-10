@@ -2,7 +2,9 @@ import utente from '../Models/utente.js';
 import veicolo from '../Models/veicoli.js';
 import parcheggio from '../Models/parcheggi.js';
 import prenotazione from '../Models/prenotazioni.js';
-import { notificaAccettaCorsa, notificaCorsaAccettata, removeCompletaOperazione, notificaRifiutaCorsa, annullaPrenotazione, notificaAccettaModifica,notificaRifiutaModifica} from './Notifiche.js';
+import { transporter } from './GestioneAccount.js';
+import { notificaAccettaCorsa, notificaCorsaAccettata, removeCompletaOperazione, notificaRifiutaCorsa, annullaPrenotazione, notificaAccettaModifica,notificaRifiutaModifica, notificaCompletaModifica} from './Notifiche.js';
+
 
 export const addPrenotazione = async (req,res) => {
     let Prenotazione = {};
@@ -380,12 +382,65 @@ export const accettaCorsa = async (req,res) => {
 export const deleteBooking = async (req,res) => {
     await prenotazione.findOneAndRemove({_id: req.body.id}).then(async (Prenotazione)=>{
         if(req.body.ruolo=="Autista"){
+            await utente.findOne({_id:Prenotazione.idCliente}).then((user)=>{
+                const mailOptions = {
+                    from: 'team.karm2021@gmail.com',
+                    to: user.email,
+                    subject: 'TeamKarm: Rimborso',
+                    text: `Ti è stato effettuato il rimborso di ${Prenotazione.prezzo}€ sulla carta con numero ${Prenotazione.numeroCartaPagamento}. \nGrazie per aver scelto KARM!\n\n\nTeam Karm`
+                };
+              
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (!error) {
+                        console.log("Email mandata")
+                    } else {
+                        console.log(error);
+                    }
+                });
+            })
             annullaPrenotazione(req.body.ruolo,req.body.idUtente,Prenotazione)
         } else if(req.body.ruolo=="Cliente"){
+            if(req.body.rimborso==true){
+                await utente.findOne({_id:Prenotazione.idCliente}).then((user)=>{
+                    const mailOptions = {
+                        from: 'team.karm2021@gmail.com',
+                        to: user.email,
+                        subject: 'TeamKarm: Rimborso',
+                        text: `Ti è stato effettuato il rimborso di ${Prenotazione.prezzo}€ sulla carta con numero ${Prenotazione.numeroCartaPagamento}. \nGrazie per aver scelto KARM!\n\n\nTeam Karm`
+                    };
+                  
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (!error) {
+                            console.log("Email mandata")
+                        } else {
+                            console.log(error);
+                        }
+                    });
+                })
+            }
             annullaPrenotazione(req.body.ruolo,req.body.idUtente,Prenotazione)
         } else{
+             if(req.body.rimborso==true){
+                await utente.findOne({_id:Prenotazione.idCliente}).then((user)=>{
+                    const mailOptions = {
+                        from: 'team.karm2021@gmail.com',
+                        to: user.email,
+                        subject: 'TeamKarm: Rimborso',
+                        text: `Ti è stato effettuato il rimborso di ${Prenotazione.prezzo}€ sulla carta con numero ${Prenotazione.numeroCartaPagamento}. \nGrazie per aver scelto KARM!\n\n\nTeam Karm`
+                    };
+                  
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (!error) {
+                            console.log("Email mandata")
+                        } else {
+                            console.log(error);
+                        }
+                    });
+                })
+            }
             annullaPrenotazione(req.body.ruolo,req.body.idUtente,Prenotazione)
         }
+     
         return res.status(200).json(Prenotazione);
     }).catch((err)=>{
         return res.status(500).json(err.message);
@@ -491,7 +546,8 @@ export const datiPrenotazione = async (req,res) => {
 
 //Paga Autista
 export const pagaAutista = async (req,res) =>{
-    await prenotazione.findByIdAndUpdate({_id:req.body.idPrenotazione},{statoPrenotazione:"completa",numeroCarta:req.body.numeroCarta,mancia:req.body.mancia}).then((Prenotazione)=>{
+    console.log(req.body)
+    await prenotazione.findByIdAndUpdate({_id:req.body.idPrenotazione},{statoPrenotazione:"completa",numeroCartaPagamento:req.body.numeroCarta,mancia:req.body.mancia}).then((Prenotazione)=>{
         removeCompletaOperazione(req.body.idPrenotazione);
         return res.status(200).json({success: true})
     })
@@ -510,4 +566,12 @@ export const rifiutaModifica = async (req,res) => {
         return res.status(200).json({success:true})
     });
    
+}
+
+//Completa Modifica
+export const completaModifica = async (req,res) => {
+    await prenotazione.findByIdAndUpdate({_id:req.body.idPrenotazione},{viaDestinazione:req.body.viaDestinazione, oraArrivo:req.body.oraArrivo, dataArrivo:req.body.dataArrivo, statoPrenotazione:"completa"}).then((Prenotazione)=>{
+        notificaCompletaModifica(req.body.idPrenotazione)
+        return res.status(200).json({success:true});
+    }).catch((err)=>{return res.status(500).json(err.message)})
 }

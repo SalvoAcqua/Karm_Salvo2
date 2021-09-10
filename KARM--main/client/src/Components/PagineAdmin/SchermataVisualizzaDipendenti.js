@@ -56,7 +56,7 @@ function SchermataVisualizzaDipendenti () {
                 </Modal>
 
                 <Row>
-                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                    <Button variant="outline-secondary" onClick={()=>{window.location.href='/GestioneAmministrazione'}}>
                             <ArrowLeftRoundedIcon/>Indietro
                     </Button>
                 </Row>

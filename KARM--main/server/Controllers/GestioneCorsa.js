@@ -6,7 +6,6 @@ import {cercaSostituto} from './GestioneAmministrazione.js';
 import {convertiData, getOra, convertiDataEuropa} from '../gestioneDateTime.js';
 import { transporter } from './GestioneAccount.js';
 
-
 export const verifyDelivery = async (req,res) =>{
     let oraAttuale = new Date();
     let todayDate = new Date(convertiData(oraAttuale));
@@ -127,6 +126,7 @@ export const assegnaLuogo = async(req,res) =>{
                     if (Veicolo.parcheggioAssociato!="") {    
                         await parcheggio.findOneAndUpdate({nome: Veicolo.parcheggioAssociato},{ $inc: {motoPresenti: -1}});
                     }
+                    break;
                 case "Bicicletta":
                     await parcheggio.findOne({_id: req.body.parch}).then(async (Parcheggio)=>{
                         if (Parcheggio.biciPresenti<Parcheggio.capienzaBici) {
@@ -196,13 +196,14 @@ export const assegnaLuogo = async(req,res) =>{
 };
 
 export const completaRilascio = async (req,res) => {
+
     await veicolo.findOneAndUpdate({_id: req.body.idVeicolo},{statoVeicolo: "Libero"}).then(async (Veicolo)=>{
         await prenotazione.findOneAndUpdate({_id: req.body._id},{statoPrenotazione: "terminata"},{new:true}).then(async (Prenotazione)=>{
             await utente.findOne({_id:Prenotazione.idCliente}).then((User)=>{
                 const mailOptions = {
                     from: 'team.karm2021@gmail.com',
                     to: User.email,
-                    subject: 'TeamKarm: Recupero Password',
+                    subject: 'TeamKarm: Corsa Terminata',
                     text: `${User.nome},hai terminato una corsa con KARM! Di seguito il riepilogo della prenotazione:\n
                             Codice Prenotazione:${Prenotazione._id}\n
                             Data e ora Partenza:${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}, ${Prenotazione.oraPartenza}\n
@@ -214,12 +215,9 @@ export const completaRilascio = async (req,res) => {
               
                 transporter.sendMail(mailOptions, async (error, info) => {
                     if (!error) {
-                    await utente.findOneAndUpdate({email:User.email},{OTP:otp},{new:true}).then((user)=>{
-                        return res.status(200).json(true);
-                    }).catch((err)=>{ return res.status(500).json(err)})
+                     console.log("Email mandata")
                     } else {
                         console.log(error);
-                        //res.status(500).json({email:"Non siamo riusciti a contattare questa email"});
                     }
                 });
             })
@@ -248,11 +246,59 @@ export const richiediNuovoVeicolo = async (req,res) => {
         disattivaVeicolo(Veicolo);
         return res.status(200).json({sostituto: ris.sostituto});
     } else {
-        //rimborsa+termina+disattivaVeicolo();
+        rimborsaTerminaDisattiva(Prenotazione._id, Prenotazione.idCliente, Prenotazione.prezzo, Prenotazione.numeroCartaPagamento);
         return res.status(400).json({guasto: "Nessun veicolo individuato"});
     }
 };
 
+export const rimborso = async (req,res) => {
+    let Prenotazione ={};
+    await prenotazione.findOne({_id: req.body.cod}).then((booking)=>{
+        Prenotazione=booking;
+    }).catch((err)=> {return res.status(500).json(err.message)});
+    rimborsaTerminaDisattiva(req.body.cod, Prenotazione.idCliente, Prenotazione.prezzo, Prenotazione.numeroCartaPagamento);
+    return res.status(200).json({success:true})
+}
+
+const rimborsaTerminaDisattiva = async (idPrenotazione,idCliente,prezzo,numeroCarta) => {
+    await utente.findOne({_id:idCliente}).then((User)=>{
+        const mailOptions = {
+            from: 'team.karm2021@gmail.com',
+            to: User.email,
+            subject: 'TeamKarm: Rimborso',
+            text: `Ti è stato effettuato il rimborso di ${prezzo}€ sulla carta con numero ${numeroCarta}. \nGrazie per aver scelto KARM!\n\n\nTeam Karm`
+        };
+      
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (!error) {
+                console.log("Email mandata")
+            } else {
+                console.log(error);
+            }
+        });
+    })
+
+    await prenotazione.findOneAndUpdate({_id:idPrenotazione},{statoPrenotazione:"terminata"}).then(async(booking)=>{
+        await veicolo.findOne({_id:booking.idVeicolo}).then((veicolo)=>{
+            disattivaVeicolo(veicolo);
+        })
+    })
+}
+
 const disattivaVeicolo = async (Veicolo) => {
-    await veicolo.findOneAndUpdate({_id: Veicolo._id},{statoVeicolo: "Non Attivo"});
+            const mailOptions = {
+                from: 'team.karm2021@gmail.com',
+                to: 'team.karm2021@gmail.com',
+                subject: 'TeamKarm: Guasto Veicolo',
+                text:`Il seguente veicolo:\n ${Veicolo}\n ha subito un guasto.\n Si prega di procedere al bloccaggio del veicolo`
+            }
+          
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (!error) {
+                    console.log("Email mandata");
+                } else {
+                    console.log(error);
+                }
+            })
+    await veicolo.findOneAndUpdate({_id: Veicolo._id},{statoVeicolo: "Non Attivo"})
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import {addPrenotazione,listaVeicoliPrenotazione, listaPrenotazioniAddetto, listaPrenotazioniAdmin, listaPrenotazioniAutista, listaPrenotazioniCliente, getTariffe, deleteBooking, terminaPrenotazione, modifyVehicle, completaNuovoVeicolo, verifyArrive, completeModifyArrive, aggiornaArrivoIncompleta, accettaCorsa, datiPrenotazione, pagaAutista, rifiutaCorsa, rifiutaModifica} from '../Controllers/Prenotazione.js'
+import {addPrenotazione,listaVeicoliPrenotazione, listaPrenotazioniAddetto, listaPrenotazioniAdmin, listaPrenotazioniAutista, listaPrenotazioniCliente, getTariffe, deleteBooking, terminaPrenotazione, modifyVehicle, completaNuovoVeicolo, verifyArrive, completeModifyArrive, aggiornaArrivoIncompleta, accettaCorsa, datiPrenotazione, pagaAutista, rifiutaCorsa, rifiutaModifica, completaModifica} from '../Controllers/Prenotazione.js'
 
 const router = express.Router();
 
@@ -22,6 +22,7 @@ router.post("/DatiPrenotazione",datiPrenotazione);
 router.post("/PagaAutista",pagaAutista);
 router.post("/RifiutaCorsa",rifiutaCorsa);
 router.post("/RifiutaModifica",rifiutaModifica);
+router.post("/CompletaModifica",completaModifica);
 
 
 

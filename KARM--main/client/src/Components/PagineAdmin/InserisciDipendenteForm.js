@@ -8,6 +8,7 @@ import {convertiData, emptyDate} from '../gestioneDateTime';
 import CodiceFiscale from "codice-fiscale-js";
 import bcrypt from 'bcryptjs';
 
+
 function InserisciDipendenteForm (){
     const [dipendente,setDipendente] = useState({ruolo:'',nome:'',cognome:'',dataNascita:'', sesso:'',luogoNascita:'',
         provinciaNascita:'',CF:'',numeroPatente:'',dataRilascio:'',dataScadenza:'',enteRilascio:'',parcheggioAssociato:'',email:'',password:'',confermaPassword:''});
@@ -329,12 +330,11 @@ function InserisciDipendenteForm (){
         if (patternEmail.test(dipendente.email) && errori.error.email==undefined){
             document.getElementById("email").style.borderColor="green";
             setErrEmail({...errEmail,val:false,mess:''});
-        } else {
+        } else{
             document.getElementById("email").style.borderColor="red";
             if (!patternEmail.test(dipendente.email)) {
                 setErrEmail({...errEmail,val:true,mess:"Cio' che hai inserito non costituisce un e-mail valida"});
             } else {
-                setErrEmail({...errEmail,val:true,mess:"L'email inserita e' gia' presente"});
                 //resettare errori.error.email=undefined;
             }
         }
@@ -552,7 +552,7 @@ function InserisciDipendenteForm (){
                         <br/>
                     
                         <label htmlFor="dataScadenza">Data Scadenza: </label> <br/>
-                        <input type="date" id="dataScadenza" name="dataScadenza" onChange={(e)=>setDipendente({...dipendente,dataScadenza: e.target.value})} title="Inserisci la data di scadenza della patente"/> <br/>
+                        <input type="date" id="dataScadenza" name="dataScadenza" min={today} onChange={(e)=>setDipendente({...dipendente,dataScadenza: e.target.value})} title="Inserisci la data di scadenza della patente"/> <br/>
                         <span className={classnames({'green-convalid':!errDataScadenza, 'red-convalid':errDataScadenza})}> {errDataScadenza ? "Inserisci la data di scadenza della patente" : "OK"} </span>
                         <br/>
 
@@ -578,7 +578,7 @@ function InserisciDipendenteForm (){
                         <legend class="h4">Credenziali:</legend>
                         <label htmlFor="email">E-mail </label><br/>
                         <input type="email" id="email" name="email" size="30" onChange={(e)=>setDipendente({...dipendente,email: e.target.value})} maxLength="40" title="Inserisci l'email del dipendente"/><br/>
-                        <span className={classnames({'green-convalid':!errEmail.val, 'red-convalid':errEmail.val})}> {errEmail.val && dipendente.email=="" ? "Inserisci l'email del dipendente" : (errEmail.val ? errEmail.mess : "OK")} </span>
+                        <span className={classnames({'green-convalid':(!errEmail.val || errori.error.email==undefined), 'red-convalid':(errEmail.val || errori.error.email!=undefined)})}> {errEmail.val && dipendente.email=="" ? "Inserisci l'email del dipendente" : (errEmail.val ? errEmail.mess : (errori.error.email!=undefined ? "Email già eistente" :"OK"))} </span>
                         <br/>
 
                         <label htmlFor="password">Password </label> <br/>

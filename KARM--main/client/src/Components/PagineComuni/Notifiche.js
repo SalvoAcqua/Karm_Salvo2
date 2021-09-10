@@ -2,7 +2,7 @@ import React from "react"
 import {Container,Row,Col,Button,Toast,Alert,Modal,ModalBody,Card,ListGroup,ListGroupItem} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import {accettaCorsa, completaOperazione, rifiutaCorsa, rifiutaModifica,getTariffe} from '../../Actions/prenotazioni'
+import {accettaCorsa, completaOperazione, rifiutaCorsa, rifiutaModifica,getTariffe,completaModifica} from '../../Actions/prenotazioni'
 import {prendiNotifiche, eliminaNotifiche, modificaAccettata} from '../../Actions/notifiche'
 import {convertiData, convertiDataEuropa, getOra} from '../gestioneDateTime';
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -18,7 +18,7 @@ function Notifiche(){
     const Err = useSelector((state)=>state.errori.error);
     const dispatch = useDispatch();
 
-    var Tariffe={};
+    var Sovrapprezzo = 0;
     var Prezzo = 0
     const prezzoDaPagare = (feriale,festivo,Prenotazione) => {
         let data = new Date(Prenotazione.dataPartenza);
@@ -46,6 +46,10 @@ function Notifiche(){
         dispatch(accettaCorsa({idAutista:idUtente,idPrenotazione:idPrenotazione})).then(()=>{setShowAccCorsa({...showAccettaCorsa,show:false});}).catch((err)=>{
             
         })
+    }
+
+    const CompletaModifica = (dati) => {
+        dispatch(completaModifica(dati))
     }
 
     const AccettaModifica = () =>{
@@ -122,11 +126,9 @@ function Notifiche(){
                 </div>
                 )
             case "completaModifica":
-                let Tariffe={};
-                dispatch(getTariffe({idVeicolo: notifica.idVeicolo})).then((res)=>{
-                    Tariffe={prFestivo: res.prFestivo, prFeriale: res.prFeriale};
+                 dispatch(getTariffe({idVeicolo: notifica.idVeicolo})).then((res)=>{
+                    Sovrapprezzo = prezzoDaPagare(res.prFeriale, res.prFestivo, notifica.dati) - notifica.prezzo;
                 })
-                let Sovrapprezzo = prezzoDaPagare(Tariffe.prFeriale, Tariffe.prFestivo, notifica.dati) - notifica.prezzo;
                 return(
                     <div style={{display:"flex", justifyContent:"center", marginTop:"7px", marginBottom:"7px"}}>
                     <a className="block" onClick={()=>{setShowCompletaModifica({...showCompletaModifica,show:true,dati:notifica.dati,prezzo:Sovrapprezzo})}}>
@@ -294,7 +296,7 @@ function Notifiche(){
                                 </Card>
                                 <Row>
                                     <Col>
-                                        <Button variant="success" onClick={()=>{}}>Completa Operazione</Button>{' '}
+                                        <Button variant="success" onClick={()=>{CompletaModifica(showCompletaModifica.dati)}}>Completa Operazione</Button>{' '}
                                     </Col>
                                 </Row>
                             </Row>

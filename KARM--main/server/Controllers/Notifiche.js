@@ -62,7 +62,6 @@ export const prendiNotifiche = async (req,res) => {
             await notifiche.findOneAndUpdate({_id:notifica._id},{letta:"true"})
             switch(notifica.tipo){
                 case "accettaModifica":
-                    console.log(notifica.dati)
                     await prenotazione.findOne({_id:notifica.idPrenotazione}).then((Prenotazione)=>{
                         if(Prenotazione){
                                 notificaAccettaCorsa={
@@ -113,7 +112,6 @@ export const prendiNotifiche = async (req,res) => {
                                 idPrenotazione:notifica.idPrenotazione,
                                 tipo:notifica.tipo,
                                 idVeicolo:Prenotazione.idVeicolo,
-                                prezzo:Prenotazione.prezzo,
                                 messaggio:`L'autista ${Utente.nome} ${Utente.cognome} ha accettato la tua corsa`
                             }
                             
@@ -122,7 +120,6 @@ export const prendiNotifiche = async (req,res) => {
                     NOTIFICHE.push(notificaCompletaCorsa);
                     break;
                 case "completaModifica":
-                        console.log(notifica);
                         await prenotazione.findOne({_id:notifica.idPrenotazione}).then(async(Prenotazione)=>{
                             await utente.findOne({_id:Prenotazione.idCliente}).then((Utente)=>{
                                 notificaCompletaModifica={
@@ -131,6 +128,7 @@ export const prendiNotifiche = async (req,res) => {
                                     tipo:notifica.tipo,
                                     dati:notifica.dati,
                                     idVeicolo: Prenotazione.idVeicolo,
+                                    prezzo:Prenotazione.prezzo,
                                     messaggio:`L'autista ha accettato la tua modifica`
                                 }
                             })
@@ -206,7 +204,7 @@ export const annullaPrenotazione = async (ruolo, idUtente, Prenotazione) =>{
         Notifica = {
             tipo:"cliente",
             idUtente:idUtente,
-            messaggio:`Hai annullato con successo la prenotazione in data ${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}-${Prenotazione.oraPartenza}`
+            messaggio:`Hai annullato con successo la prenotazione in data ${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}-${Prenotazione.oraPartenza}\nSe hai annullato la prenotazione prima delle 24 ore dalla partenza ti sarà effettuato il rimborso`
         }
         newNotifica = new notifiche(Notifica);
         newNotifica.save();
@@ -231,7 +229,7 @@ export const annullaPrenotazione = async (ruolo, idUtente, Prenotazione) =>{
         Notifica = {
             tipo:"cliente",
             idUtente:Prenotazione.idCliente,
-            messaggio:`La prenotazione in data ${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}-${Prenotazione.oraPartenza} è stata annullata`
+            messaggio:`La prenotazione in data ${convertiDataEuropa(new Date(Prenotazione.dataPartenza))}-${Prenotazione.oraPartenza} è stata annullata\n\nSe hai annullato la prenotazione prima delle 24 ore dalla partenza ti sarà effettuato il rimborso`
         }
         newNotifica = new notifiche(Notifica);
         newNotifica.save();
@@ -362,4 +360,8 @@ export const notificaRifiutaModifica = async (idPrenotazione,idAutista,idCliente
     newNotifica.save();
     
 }
- 
+
+//Notifica Completa Modifica
+export const notificaCompletaModifica = async(idprenotazione) =>{
+    await notifiche.findOneAndRemove({idPrenotazione:idprenotazione, tipo:"completaModifica"})
+}

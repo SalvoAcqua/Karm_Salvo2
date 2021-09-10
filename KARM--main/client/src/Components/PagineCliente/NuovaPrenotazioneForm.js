@@ -211,7 +211,7 @@ function NuovaPrenotazioneForm (){
                 }
             }
         }
-    },[prenotazione.dataPa, prenotazione.dataArr, prenotazione.oraPa, prenotazione.oraArr]);
+    },[prenotazione.dataPa, prenotazione.dataArr, prenotazione.oraPa, prenotazione.oraArr, prenotazione.autista]);
     
     useEffect(()=>{
         //Per controllare l'indirizzo di partenza

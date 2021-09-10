@@ -38,10 +38,11 @@ function ConsegnaForm (){
                         <br/>
                         <Row>
                             <br/>
-                            <input type="text" id="codPrenotazione" name="codPrenotazione" onChange={(e)=>setDati(e.target.value)} required/> <br/>
+                            <input type="text" id="codPrenotazione" name="codPrenotazione" minlength="24" maxlength="24" onChange={(e)=>setDati(e.target.value)} required/> <br/>
                             <span className={classnames({'green-convalid':dati!="", 'red-convalid':dati==""})}> {dati=="" ? "Inserisci il codice identificativo della prenotazione" : "OK"} </span>
                             <br/><br/>
                         </Row>
+                        <br/>
                         <Row>
                             <Button variant="secondary" size="lg" type="submit">
                                 Avanti

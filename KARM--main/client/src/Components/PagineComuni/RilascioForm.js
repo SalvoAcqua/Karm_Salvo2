@@ -171,14 +171,14 @@ function RilascioForm (){
                     <form onSubmit={onSubmit}>
                         <br/>
                         <Row> 
-                            <Button type="submit" variant="success" size="lg">Avanti</Button>
+                            <Button type="submit" variant="secondary" size="lg">Avanti</Button>
                         </Row>
                         <br/>
                         <h3> Rilascia il veicolo: </h3>
 
 
                         <label htmlFor="codPrenotazione"> Codice Identificativo della prenotazione:</label> <br/>
-                        <input type="text" id="codPrenotazione" name="codPrenotazione" size="30" onChange={(e)=>setRilascio({...rilascio,codPrenotazione: e.target.value})} title="Inserisci il codice identificativo della prenotazione" required/> <br/>
+                        <input type="text" id="codPrenotazione" name="codPrenotazione" size="30" minlength="24" maxlength="24" onChange={(e)=>setRilascio({...rilascio,codPrenotazione: e.target.value})} title="Inserisci il codice identificativo della prenotazione" required/> <br/>
                         <span className={classnames({'green-convalid':!errCodice, 'red-convalid':errCodice})}> {errCodice ? "Inserisci il codice identificativo della prenotazione" : "OK"} </span>
                         <br/><br/>
 
@@ -211,7 +211,7 @@ function RilascioForm (){
                         <br/><br/>
 
                         <Row> 
-                            <Button type="submit" variant="success" size="lg">Avanti</Button>
+                            <Button type="submit" variant="secondary" size="lg">Avanti</Button>
                         </Row>
                         <br/>
 

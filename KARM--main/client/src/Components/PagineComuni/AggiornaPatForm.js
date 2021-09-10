@@ -13,7 +13,7 @@ function AggiornaPatForm (){
     const user = useSelector((state) => state.utenti.utente);
     const dispatch = useDispatch();
     const patternNumPat = /^[A-Z]{2}[\d]{7}[A-Z]$/;
-
+    var today=convertiData(new Date());
     const onSubmit = (event) => {
         event.preventDefault();
         if(errNumeroPatente==false){
@@ -128,7 +128,7 @@ function AggiornaPatForm (){
                         <br/><br/>
                     
                         <label htmlFor="dataScadenza">Data Scadenza: </label> <br/>
-                        <input type="date" id="dataScadenza" name="dataScadenza" onChange={(e)=>setPatente({...patente,dataScadenza: e.target.value})} title="Inserisci la data di scadenza della patente" required /> <br/>
+                        <input type="date" id="dataScadenza" name="dataScadenza" min={today} onChange={(e)=>setPatente({...patente,dataScadenza: e.target.value})} title="Inserisci la data di scadenza della patente" required /> <br/>
                         <span className={classnames({'green-convalid':patente.dataScadenza!='', 'red-convalid':patente.dataScadenza==''})}> {patente.dataScadenza=='' ? "Inserire la data di scadenza" :  "OK"} </span>
                         <br/><br/>
 

@@ -6,6 +6,7 @@ import { passwordRecovery, checkOTP, modificaPass } from "../../Actions/utenti";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import classnames from "classnames";
 import bcrypt from 'bcryptjs';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function RecuperaPasswordForm(){
     let screenHeight = document.documentElement.scrollHeight - (250);
@@ -114,10 +115,14 @@ function RecuperaPasswordForm(){
                         <span className={classnames({'red-convalid':(errore.otp!=undefined || otp==''), 'green-convalid':(errore.otp==undefined && otp!='') })}> {otp=='' ? "Inserisci codice OTP" : (errore.otp!=undefined ? errore.otp : "OK")}</span><br/><br/>
                         <Row style={{justifyContent:"space-around"}}>
                             <Col>
-                        <Button type="submit" variant="success"> Avanti</Button>
-                        </Col>
-                        <Col>
-                        <Button variant="danger" href="/">Annulla</Button>
+                        <Button type="submit" variant="success">Verifica</Button>
+                        <Row>
+                    <Col>
+                        <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                            <ArrowLeftRoundedIcon/>Indietro
+                        </Button>
+                    </Col>
+                </Row>
                         </Col>
                         </Row>
                         </form>

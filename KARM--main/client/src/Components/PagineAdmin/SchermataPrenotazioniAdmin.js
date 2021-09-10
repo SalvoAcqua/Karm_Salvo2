@@ -19,10 +19,11 @@ function SchermataPrenotazioniAdmin (){
     const checkModifica = (Prenotazione) => {
         let oraAttuale = new Date();
         let todayDate = new Date(convertiData(oraAttuale));
+        let TodayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
         if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
             setModifica({...modifica, show: true, prenotazione: Prenotazione}); 
-        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+        } else if ((oraAttuale.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || TodayDate.getTime()>dataPartenza.getTime()) {
             setErrModifica({...errModifica, show: true, mess: "La prenotazione è già scaduta"});
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
@@ -48,10 +49,9 @@ function SchermataPrenotazioniAdmin (){
         let todayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
         if (((todayDate.setDate(todayDate.getDate()+1))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+1))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
-            //rimborso
-            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
+            const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id,rimborso:true};
             dispatch(deleteBooking(dati));
-        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+        } else if ((oraAttuale.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || oraAttuale.getTime()>dataPartenza.getTime()) {
             const dati = {id: Prenotazione._id};
             dispatch(terminaPrenotazione(dati));
         } else {

@@ -263,6 +263,14 @@ function InserisciVeicoloForm (){
     return (
         <div>
            <Container class="container">
+                <Row  style={{marginTop:"20px"}}>
+                    <Col>
+                        <div style={{backgroundColor:"#dcdcdc", marginBottom:"10px", border:"solid", padding:"5px"}}>
+                            <label>Al momento dell'inserimento verrà tenuto conto, oltre della capienza specifica per il tipo di veicolo, anche della eventuale presenza di veicoli fuori stallo (i quali devono poter rientrare, in qualsiasi momento, in almeno un parcheggio)</label>
+                        </div>
+                    </Col>
+                </Row>
+                
                 <br/>
                 <h5> Inserisci i dati per la registrazione del nuovo veicolo </h5>
                 <br/>

@@ -45,7 +45,7 @@ function NAVBAR() {
                                         </Col>
                                             
                                         <Col>
-                                            <Button variant="danger" onClick={()=>setShow(false)}>Annulla</Button>{' '}
+                                            <Button variant="danger" href="/HomePage"> Annulla</Button>{' '}
                                         </Col>
                                     </Row>
                                 </Container>
@@ -100,7 +100,7 @@ function NAVBAR() {
                                             </Col>
                                                 
                                             <Col>
-                                                <Button variant="danger" onClick={()=>setShow(false)}>Annulla</Button>{' '}
+                                                <Button variant="danger" href="/HomePage"> Annulla</Button>{' '}
                                             </Col>
                                         </Row>
                                     </Container>
@@ -149,7 +149,7 @@ function NAVBAR() {
                                             <Button variant="success" onClick={logout}>Conferma</Button>{' '}
                                         </Col>
                                         <Col>
-                                            <Button variant="danger" onClick={()=>setShow(false)}>Annulla</Button>{' '}
+                                        <Button variant="danger" href="/HomePage"> Annulla</Button>{' '}
                                         </Col>
                                     </Row>
                                 </Container>
@@ -198,7 +198,7 @@ function NAVBAR() {
                                             <Button variant="success" onClick={logout}>Conferma</Button>{' '}
                                         </Col>
                                         <Col>
-                                            <Button variant="danger" onClick={()=>setShow(false)}>Annulla</Button>{' '}
+                                            <Button variant="danger" href="/HomePage"> Annulla</Button>{' '}
                                         </Col>
                                     </Row>
                                 </Container>

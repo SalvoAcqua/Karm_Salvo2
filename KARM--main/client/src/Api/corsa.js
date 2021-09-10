@@ -24,3 +24,8 @@ export const completaRilascio = (dati) => {
 export const richiediNuovoVeicolo = (dati) => {
     return axios.post('/Routers/GestioneCorsa/richiediNuovoVeicolo', dati);
 }
+
+//Rimborsa Termina e Disattiva
+export const rimborso = (dati) => {
+    return axios.post('/Routers/GestioneCorsa/rimborso', dati);
+}

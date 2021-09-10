@@ -9,6 +9,7 @@
     if(mm<10){
         mm='0'+mm
     }
+   
     date = yyyy+'-'+mm+'-'+dd;
     return date;
 }

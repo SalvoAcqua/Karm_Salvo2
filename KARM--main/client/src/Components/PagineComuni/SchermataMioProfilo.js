@@ -47,9 +47,7 @@ function SchermataMioProfilo () {
                         </Row>
 
                         <Row>
-                            <Button className="button" size="lg" variant="secondary" href="/ModificaPassword"> Cambia Password </Button> 
-                                
-                            <Button className="button" size="lg" variant="secondary" href="/AggiornaEmail"> Cambia Email </Button>
+                            <Button className="button" size="lg" variant="secondary" href="/ModificaPassword"> Cambia Password </Button>
                         </Row>
                     </Container>
                 </div>

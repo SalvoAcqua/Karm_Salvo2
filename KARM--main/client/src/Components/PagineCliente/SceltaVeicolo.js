@@ -1,5 +1,5 @@
 import React from "react";
-import {Container,Row,Col, Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Container,Row,Col, Button, Card, ListGroup, ListGroupItem,Alert} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {listVehicle} from '../../Actions/prenotazioni'
@@ -70,7 +70,9 @@ function SceltaVeicolo(){
                     <br/>
 
                     <Row>
-                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                        {nuovaPrenotazione.listaVeicoli.length==0 ? <Alert variant="warning">
+                        Non ci sono veicoli disponibili!
+                    </Alert> :nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
                             <Col>
                             <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
                             <Card.Img variant="top" src={Autovettura} alt="immagine" />
@@ -105,7 +107,9 @@ function SceltaVeicolo(){
                         <br/>
 
                         <Row>
-                            {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                            {nuovaPrenotazione.listaVeicoli.length==0 ? <Alert variant="warning">
+                        Non ci sono veicoli disponibili!
+                    </Alert> :nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
                                 <Col>
                                 <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
                                 <Card.Img variant="top" src={Moto} alt="immagine" />
@@ -138,7 +142,9 @@ function SceltaVeicolo(){
                     <br/>
 
                     <Row>
-                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                        {nuovaPrenotazione.listaVeicoli.length==0 ? <Alert variant="warning">
+                        Non ci sono veicoli disponibili!
+                    </Alert> : nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
                             <Col>
                             <Card  style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary">
                             <Card.Img variant="top" src={Bicicletta} alt="immagine" />
@@ -171,7 +177,9 @@ function SceltaVeicolo(){
                     <br/>
 
                     <Row>
-                        {nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
+                        {nuovaPrenotazione.listaVeicoli.length==0 ? <Alert variant="warning">
+                        Non ci sono veicoli disponibili!
+                    </Alert> :nuovaPrenotazione.listaVeicoli.map((veicolo)=>(
                         <Col>
                             <Card style={{ width: '18rem', backgroundColor: "rgb(214, 214, 214)"}} border="secondary" >
                             <Card.Img variant="top" src={Monopattino} alt="immagine" />

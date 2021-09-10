@@ -39,3 +39,9 @@ export const richiediNuovoVeicolo = (userData) => async (dispatch) =>{
         dispatch({type:'GET_ERROR', payload:err.response.data});
     });
 };
+
+export const rimborso = (userData) => async (dispatch) => {
+    await api.rimborso(userData).then((res)=>{
+        window.location.href="/HomePage";
+    }).catch((err)=>{console.log(err.message)});
+}

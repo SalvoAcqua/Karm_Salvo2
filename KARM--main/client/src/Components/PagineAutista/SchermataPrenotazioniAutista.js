@@ -1,5 +1,5 @@
 import React from "react"
-import {Container,Row,Col, Button,Modal,ModalBody} from "react-bootstrap";
+import {Container,Row,Col, Button,Modal,ModalBody,Alert} from "react-bootstrap";
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {getPrenotazioniAutista,deleteBooking,terminaPrenotazione} from "../../Actions/prenotazioni";
@@ -12,22 +12,28 @@ function SchermataPrenotazioniAutista (){
     const [annullamento,setAnnullamento] = useState({prenotazione: {}, show: false});
     //const [modifica,setModifica] = useState({prenotazione: {}, show: false});
     const user = useSelector ((state)=>state.utenti.utente);
+    const [showErr,setShowErr] = useState(false)
     const listaPrenotazioni = useSelector((state)=>state.Prenotazioni.listaPrenotazioni);
     const dispatch = useDispatch();
     
     const DeleteBooking = (Prenotazione) => {
         let oraAttuale = new Date();
+        let Attuale = new Date(convertiData(oraAttuale));
         let todayDate = new Date(convertiData(oraAttuale));
         let dataPartenza = new Date(Prenotazione.dataPartenza);
-        if (((todayDate.setDate(todayDate.getDate()+4))<dataPartenza.getTime())||((todayDate.setDate(todayDate.getDate()+4))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
+        if (((oraAttuale.setDate(oraAttuale.getDate()+4))<dataPartenza.getTime())||((oraAttuale.setDate(oraAttuale.getDate()+4))==dataPartenza.getTime() && getOra(oraAttuale)<getOra(Prenotazione.oraPartenza))) {
             //rimborso
             const dati = {id:Prenotazione._id, ruolo:Utente.ruolo, idUtente:Utente._id};
             dispatch(deleteBooking(dati));
-        } else if ((todayDate.getTime()==dataPartenza.getTime() && getOra(oraAttuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+        } else if ((Attuale.getTime()==dataPartenza.getTime() && getOra(Attuale)>getOra(Prenotazione.oraPartenza)) || todayDate.getTime()>dataPartenza.getTime()) {
+            console.log(Attuale)
+            console.log(dataPartenza<Attuale)
             const dati = {id: Prenotazione._id};
-            dispatch(terminaPrenotazione(dati));
+           // dispatch(terminaPrenotazione(dati));
         } else {
-            window.location.reload();
+            setShowErr(true);
+            setAnnullamento({...annullamento,show:false})
+            
         }
     };
     
@@ -38,6 +44,8 @@ function SchermataPrenotazioniAutista (){
 
     return (
         <div>
+            
+            
             <Modal show={annullamento.show} onHide={()=>setAnnullamento({...annullamento, show:false})} centered backdrop="static">
                 <Modal.Header >
                             <Modal.Title>Sei sicuro di voler annullare questa prenotazione?</Modal.Title>
@@ -61,6 +69,12 @@ function SchermataPrenotazioniAutista (){
                 <br/>
                 <h3>Le tue prenotazioni</h3>
                 <br/>
+                <Row>
+                    <Alert show={showErr} variant="danger" onClose={() => setShowErr(false)} dismissible>
+                        <Alert.Heading>Errore!</Alert.Heading>
+                        <p>Non puoi annullare una prenotazione a meno di quattro giorni dall'inizio.</p><br/>
+                    </Alert>
+                </Row>
 
                 <Row>
                     <Col>
@@ -114,6 +128,7 @@ function SchermataPrenotazioniAutista (){
                     </Col>
                 </Row>
             </Container>
+            
         </div>
     )
 }

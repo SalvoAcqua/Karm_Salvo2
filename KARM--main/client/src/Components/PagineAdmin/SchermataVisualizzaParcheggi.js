@@ -145,7 +145,7 @@ function SchermataVisualizzaParcheggi () {
 
             <Container className="container pag" style={{marginTop:"20px"}}>
                 <Row>
-                    <Button variant="outline-secondary" onClick={()=>{window.history.back()}}>
+                    <Button variant="outline-secondary" onClick={()=>{window.location.href='/GestioneAmministrazione'}}>
                             <ArrowLeftRoundedIcon/>Indietro
                     </Button>
                 </Row>
@@ -153,7 +153,7 @@ function SchermataVisualizzaParcheggi () {
 
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
-                        Inserisci un nuovo parcheggio
+                        Inserisci parcheggio
                     </Button>
                 </Row>
                 <br/>
@@ -193,7 +193,7 @@ function SchermataVisualizzaParcheggi () {
                 <br/>
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
-                        Inserisci un nuovo parcheggio
+                        Inserisci parcheggio
                     </Button>
                 </Row>
                 <br/>

@@ -16,7 +16,6 @@ function SchermataMetodiPag (){
     const [errNumeroCarta,setErrNumeroCarta] = useState(true);
     const [errIntestatario,setErrIntestatario] = useState(true);
     const [errCvv,setErrCvv] = useState(true);
-    const [errDataScadenza,setErrDataScadenza] = useState(true)
     const emailUtente = useSelector((state)=>state.utenti.utente.email);
     const listaMetodiPag = useSelector((state)=>state.AccountCliente.listaMetodi);
     const dispatch = useDispatch();
@@ -72,14 +71,6 @@ function SchermataMetodiPag (){
         }
     },[dati.cvv])
 
-    /*useEffect(()=>{
-        if(dati.dataScadenza!=''){
-            setErrDataScadenza(false);
-        } else{
-            setErrDataScadenza(true);
-        }
-    },[dati.dataScadenza])*/
-
     const deleteMethod = (idCarta) => {
         const datiCarta = {id: idCarta}
         dispatch(removeMetodoDiPagamento(datiCarta)).then(()=>{
@@ -118,7 +109,7 @@ function SchermataMetodiPag (){
 
                 <Modal show={show} onHide={()=>setShow(false)} centered backdrop="static">
                     <Modal.Header closeButton>
-                        <Modal.Title>Inserisci i dati della carta</Modal.Title>
+                        <Modal.Title>Inserisci nuova carta</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Container>
@@ -150,7 +141,7 @@ function SchermataMetodiPag (){
                                     <br /> 
                                     <br/>
                                     <Button type="submit" variant="secondary">
-                                    Inserisci
+                                    Aggiungi
                                     </Button>
                                 </form>
                             </Row>
@@ -166,7 +157,7 @@ function SchermataMetodiPag (){
 
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
-                        Inserisci Nuovo Metodo di Pagamento
+                        Inserisci nuova carta
                     </Button>
                 </Row>
                 
@@ -210,7 +201,7 @@ function SchermataMetodiPag (){
 
                 <Row style={{marginTop:"20px"}}>
                     <Button variant="secondary" size="lg" onClick={()=>setShow(true)}>
-                        Inserisci Nuovo Metodo di Pagamento
+                        Inserisci nuova carta
                     </Button>
                 </Row>
                 <br/>

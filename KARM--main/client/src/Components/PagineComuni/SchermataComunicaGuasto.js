@@ -2,7 +2,7 @@ import React from "react";
 import {Container,Row,Col,Button,Alert,Modal,ModalBody} from "react-bootstrap";
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {verifyRelease, richiediNuovoVeicolo} from '../../Actions/corsa';
+import {verifyRelease, richiediNuovoVeicolo,rimborso} from '../../Actions/corsa';
 import classnames from "classnames";
 
 function SchermataComunicaGuasto (){
@@ -22,7 +22,8 @@ function SchermataComunicaGuasto (){
     }
 
     const Rimborso = () => {
-        //rimborso leggi RAD + termina + statoveicolo
+        const DatiRimborso = {cod: idPrenotazione};
+        dispatch(rimborso(DatiRimborso));
     }
 
     const NuovoVeicolo = () => {
@@ -77,10 +78,10 @@ function SchermataComunicaGuasto (){
                     <ModalBody>
                             <Row>
                                 <Col>
-                                    <Button onClick={()=>Rimborso()}>Termina e ottieni rimborso</Button>
+                                    <Button variant="secondary" onClick={()=>Rimborso()}>Termina e ottieni rimborso</Button>
                                 </Col>
                                 <Col>
-                                    <Button onClick={()=>NuovoVeicolo()}>Richiedi nuovo veicolo</Button>
+                                    <Button variant="secondary" onClick={()=>NuovoVeicolo()}>Richiedi nuovo veicolo</Button>
                                 </Col>
                             </Row>
                     </ModalBody>
@@ -104,10 +105,11 @@ function SchermataComunicaGuasto (){
                         <br/>
                         <Row>
                             <br/>
-                            <input type="text" id="codPrenotazione" name="codPrenotazione" onChange={(e)=>setIdPrenotazione(e.target.value)} required/> <br/>
+                            <input type="text" id="codPrenotazione" name="codPrenotazione" minlength="24" maxlength="24" onChange={(e)=>setIdPrenotazione(e.target.value)} required/> <br/>
                             <span className={classnames({'green-convalid':idPrenotazione!="", 'red-convalid':idPrenotazione==""})}> {idPrenotazione=="" ? "Inserisci il codice identificativo della prenotazione" : "OK"} </span>
                             <br/><br/>
                         </Row>
+                        <br/>
                         <Row>
                             <Button variant="secondary" size="lg" type="submit">
                                 Avanti

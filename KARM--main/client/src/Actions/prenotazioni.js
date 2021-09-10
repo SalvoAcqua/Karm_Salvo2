@@ -131,11 +131,17 @@ export const pagaAutista = (userData) => async (dispatch) => {
 //Rifiuta Corsa
 export const rifiutaCorsa = (userData) => async (dispatch) => {
         await api.rifiutaCorsa(userData)
-        window.location.href="/NotificheAutista"
+        window.location.href="/SchermataPrenotazioniAutista"
 }
 
 //Rifiuta Modifica
 export const rifiutaModifica = (userData) => async(dispatch) =>{
         await api.rifiutaModifica(userData)
         window.location.href="/NotificheAutista"
+}
+
+//Completa Modifica
+export const completaModifica = (userData) => async(dispatch) => {
+        await api.completaModifica(userData)
+        window.location.href="/SchermataPrenotazioniCliente"
 }

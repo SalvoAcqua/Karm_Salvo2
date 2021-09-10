@@ -146,20 +146,7 @@ function ModPrenotazioneArrivo (){
                 </Container>
             </div>
         );
-    } else if (err.modificaArrivo!=undefined){
-        return (
-            <div >
-                <Container>  
-                    <Alert variant="danger">
-                        <Alert.Heading>Errore!</Alert.Heading>
-                        <p>
-                            {err.modificaArrivo};
-                        </p>
-                    </Alert>
-                </Container>
-            </div>
-        );
-    }
+    } 
     
     if (Prenotazione.idAutista==undefined){
         return (
@@ -171,6 +158,12 @@ function ModPrenotazioneArrivo (){
                     </Col>
                     </Row>
                     <Row>
+                    <Alert variant="danger" show={err.modificaArrivo!=undefined}>
+                        <Alert.Heading>Errore!</Alert.Heading>
+                        <p>
+                            {err.modificaArrivo}
+                        </p>
+                    </Alert>
                         <form onSubmit={onSubmit}>
                             <br/>
                             <Row> 
@@ -216,6 +209,14 @@ function ModPrenotazioneArrivo (){
                     <Col>
                         <Mappa/>
                     </Col>
+                    </Row>
+                    <Row> 
+                        <Alert variant="danger" show={err.modificaArrivo!=undefined}>
+                        <Alert.Heading>Errore!</Alert.Heading>
+                        <p>
+                            {err.modificaArrivo}
+                        </p>
+                    </Alert> 
                     </Row>
                     <Row>
                         <form onSubmit={onSubmit}>

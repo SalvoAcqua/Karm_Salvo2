@@ -94,3 +94,8 @@ export const rifiutaCorsa = (dati) => {
 export const rifiutaModifica = (dati) => {
     return axios.post("/Routers/Prenotazione/RifiutaModifica",dati);
 }
+
+//Completa Modifica
+export const completaModifica = (dati) => {
+    return axios.post("/Routers/Prenotazione/CompletaModifica",dati);
+}
